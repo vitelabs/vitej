@@ -20,13 +20,27 @@ import java.util.Collections;
 
 public class Vitej implements ViteRpcMethods {
     private final RpcService rpcService;
+    private KeyPair keyPair;
 
     public Vitej(RpcService rpcService) {
         this.rpcService = rpcService;
     }
 
+    public Vitej(RpcService rpcService, KeyPair keyPair) {
+        this.rpcService = rpcService;
+        this.keyPair = keyPair;
+    }
+
     public RpcService getRpcService() {
         return rpcService;
+    }
+
+    public KeyPair getKeyPair() {
+        return keyPair;
+    }
+
+    public void setKeyPair(KeyPair keyPair) {
+        this.keyPair = keyPair;
     }
 
     @Override
@@ -75,12 +89,24 @@ public class Vitej implements ViteRpcMethods {
     }
 
     @Override
+    public Request<?, AccountBlocksResponse> getSelfAccountBlocksByAddress(int pageIndex, int pageSize) {
+        Preconditions.checkNotNull(keyPair);
+        return getAccountBlocksByAddress(keyPair.getAddress(), pageIndex, pageSize);
+    }
+
+    @Override
     public Request<?, AccountBlockResponse> getAccountBlockByHeight(Address address, Long height) {
         return new Request<>(
                 "ledger_getAccountBlockByHeight",
                 Arrays.asList(address.toString(), height.toString()),
                 rpcService,
                 AccountBlockResponse.class);
+    }
+
+    @Override
+    public Request<?, AccountBlockResponse> getSelfAccountBlockByHeight(Long height) {
+        Preconditions.checkNotNull(keyPair);
+        return getAccountBlockByHeight(keyPair.getAddress(), height);
     }
 
     @Override
@@ -102,12 +128,24 @@ public class Vitej implements ViteRpcMethods {
     }
 
     @Override
+    public Request<?, AccountBlockResponse> getSelfLatestAccountBlock() {
+        Preconditions.checkNotNull(keyPair);
+        return getLatestAccountBlock(keyPair.getAddress());
+    }
+
+    @Override
     public Request<?, AccountBlocksResponse> getAccountBlocks(Address address, Hash startBlockHash, TokenId tokenId, int count) {
         return new Request<>(
                 "ledger_getAccountBlocks",
                 Arrays.asList(address.toString(), startBlockHash.toString(), tokenId == null ? null : tokenId.toString(), count),
                 rpcService,
                 AccountBlocksResponse.class);
+    }
+
+    @Override
+    public Request<?, AccountBlocksResponse> getSelfAccountBlocks(Hash startBlockHash, TokenId tokenId, int count) {
+        Preconditions.checkNotNull(keyPair);
+        return getAccountBlocks(keyPair.getAddress(), startBlockHash, tokenId, count);
     }
 
     @Override
@@ -120,6 +158,12 @@ public class Vitej implements ViteRpcMethods {
     }
 
     @Override
+    public Request<?, AccountInfoResponse> getSelfAccountInfo() {
+        Preconditions.checkNotNull(keyPair);
+        return getAccountInfoByAddress(keyPair.getAddress());
+    }
+
+    @Override
     public Request<?, AccountBlocksResponse> getUnreceivedBlocksByAddress(Address address, int index, int count) {
         return new Request<>(
                 "ledger_getUnreceivedBlocksByAddress",
@@ -129,12 +173,24 @@ public class Vitej implements ViteRpcMethods {
     }
 
     @Override
+    public Request<?, AccountBlocksResponse> getSelfUnreceivedBlocks(int pageIndex, int pageSize) {
+        Preconditions.checkNotNull(keyPair);
+        return getUnreceivedBlocksByAddress(keyPair.getAddress(), pageIndex, pageSize);
+    }
+
+    @Override
     public Request<?, UnreceivedTransactionSummaryResponse> getUnreceivedTransactionSummaryByAddress(Address address) {
         return new Request<>(
                 "ledger_getUnreceivedTransactionSummaryByAddress",
                 Arrays.asList(address.toString()),
                 rpcService,
                 UnreceivedTransactionSummaryResponse.class);
+    }
+
+    @Override
+    public Request<?, UnreceivedTransactionSummaryResponse> getSelfUnreceivedTransactionSummary() {
+        Preconditions.checkNotNull(keyPair);
+        return getUnreceivedTransactionSummaryByAddress(keyPair.getAddress());
     }
 
     @Override
@@ -228,12 +284,24 @@ public class Vitej implements ViteRpcMethods {
     }
 
     @Override
+    public Request<?, QuotaResponse> getSelfQuota() {
+        Preconditions.checkNotNull(keyPair);
+        return getQuotaByAccount(keyPair.getAddress());
+    }
+
+    @Override
     public Request<?, StakeListResponse> getStakeList(Address address, int index, int count) {
         return new Request<>(
                 "contract_getStakeList",
                 Arrays.asList(address.toString(), index, count),
                 rpcService,
                 StakeListResponse.class);
+    }
+
+    @Override
+    public Request<?, StakeListResponse> getSelfStakeList(int pageIndex, int pageSize) {
+        Preconditions.checkNotNull(keyPair);
+        return getStakeList(keyPair.getAddress(), pageIndex, pageSize);
     }
 
     @Override
@@ -252,6 +320,12 @@ public class Vitej implements ViteRpcMethods {
                 Arrays.asList(stakeAddress.toString()),
                 rpcService,
                 SBPListResponse.class);
+    }
+
+    @Override
+    public Request<?, SBPListResponse> getSelfSBPList() {
+        Preconditions.checkNotNull(keyPair);
+        return getSBPList(keyPair.getAddress());
     }
 
     @Override
@@ -300,6 +374,12 @@ public class Vitej implements ViteRpcMethods {
     }
 
     @Override
+    public Request<?, VotedSBPResponse> getSelfVotedSBP() {
+        Preconditions.checkNotNull(keyPair);
+        return getVotedSBP(keyPair.getAddress());
+    }
+
+    @Override
     public Request<?, SBPVoteDetailsResponse> getSBPVoteDetailsByCycle(Long cycle) {
         return new Request<>(
                 "contract_getSBPVoteDetailsByCycle",
@@ -333,6 +413,12 @@ public class Vitej implements ViteRpcMethods {
                 Arrays.asList(address.toString()),
                 rpcService,
                 TokenInfoListResponse.class);
+    }
+
+    @Override
+    public Request<?, TokenInfoListResponse> getSelfTokenInfoList() {
+        Preconditions.checkNotNull(keyPair);
+        return getTokenInfoListByOwner(keyPair.getAddress());
     }
 
     @Override
@@ -427,6 +513,12 @@ public class Vitej implements ViteRpcMethods {
                 Arrays.asList(transaction),
                 rpcService,
                 EmptyResponse.class);
+    }
+
+    @Override
+    public Request<?, EmptyResponse> selfSendTransaction(TransactionParams transaction, Boolean autoPoW) throws IOException {
+        Preconditions.checkNotNull(keyPair);
+        return sendTransaction(keyPair, transaction, autoPoW);
     }
 
     @Override

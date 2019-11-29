@@ -29,6 +29,11 @@ public class NetSyncDetailResponse extends Response<NetSyncDetailResponse.Result
         private List<String> tasks;
         private List<SyncConnectionStatus> connections;
 
+        /**
+         * 获取同步的起始高度
+         *
+         * @return 同步的起始高度
+         */
         public Long getFrom() {
             return from;
         }
@@ -37,6 +42,11 @@ public class NetSyncDetailResponse extends Response<NetSyncDetailResponse.Result
             this.from = from;
         }
 
+        /**
+         * 获取同步的目标高度
+         *
+         * @return 同步的目标高度
+         */
         public Long getTo() {
             return to;
         }
@@ -45,6 +55,11 @@ public class NetSyncDetailResponse extends Response<NetSyncDetailResponse.Result
             this.to = to;
         }
 
+        /**
+         * 获取当前快照链的高度
+         *
+         * @return 当前快照链的高度
+         */
         public Long getCurrent() {
             return current;
         }
@@ -53,6 +68,11 @@ public class NetSyncDetailResponse extends Response<NetSyncDetailResponse.Result
             this.current = current;
         }
 
+        /**
+         * 获取同步状态的描述
+         *
+         * @return 同步状态的描述
+         */
         public String getStatus() {
             return status;
         }
@@ -61,6 +81,11 @@ public class NetSyncDetailResponse extends Response<NetSyncDetailResponse.Result
             this.status = status;
         }
 
+        /**
+         * 获取同步任务队列
+         *
+         * @return 同步任务队列，例如"692001-693000 done"表示高度范围在692001-693000的快照块已经同步完成
+         */
         public List<String> getTasks() {
             return tasks;
         }
@@ -69,6 +94,11 @@ public class NetSyncDetailResponse extends Response<NetSyncDetailResponse.Result
             this.tasks = tasks;
         }
 
+        /**
+         * 获取用于同步账本的连接
+         *
+         * @return 用于同步账本的连接
+         */
         public List<SyncConnectionStatus> getConnections() {
             return connections;
         }
@@ -83,6 +113,11 @@ public class NetSyncDetailResponse extends Response<NetSyncDetailResponse.Result
         private String speed;
         private String task;
 
+        /**
+         * 获取节点地址描述，例如"24a160122317e6e4940ef2a91242b07f@118.25.49.80:8484",
+         *
+         * @return 节点地址描述
+         */
         public String getAddress() {
             return address;
         }
@@ -91,6 +126,11 @@ public class NetSyncDetailResponse extends Response<NetSyncDetailResponse.Result
             this.address = address;
         }
 
+        /**
+         * 获取节点的同步速度
+         *
+         * @return 节点的同步速度，例如"0.00 Byte/s",
+         */
         public String getSpeed() {
             return speed;
         }
@@ -99,6 +139,11 @@ public class NetSyncDetailResponse extends Response<NetSyncDetailResponse.Result
             this.speed = speed;
         }
 
+        /**
+         * 获取节点的同步任务
+         *
+         * @return 节点的同步任务
+         */
         public String getTask() {
             return task;
         }

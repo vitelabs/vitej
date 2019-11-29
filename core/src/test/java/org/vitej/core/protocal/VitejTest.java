@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class VitejTest {
     private Vitej vitej = new Vitej(new HttpService("http://127.0.0.1:48132"));
@@ -224,6 +225,20 @@ public class VitejTest {
             AccountBlocksResponse response = vitej.getAccountBlocksByAddress(
                     new Address("vite_ab24ef68b84e642c0ddca06beec81c9acb1977bbd7da27a87a"), 0, 10
             ).send();
+            Assert.assertNull(response.getError());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail("Got exception");
+        }
+    }
+
+    @Test
+    public void testAsyncGetAccountBlocksByAddress() {
+        try {
+            CompletableFuture<AccountBlocksResponse> future = vitej.getAccountBlocksByAddress(
+                    new Address("vite_ab24ef68b84e642c0ddca06beec81c9acb1977bbd7da27a87a"), 0, 10
+            ).sendAsync();
+            AccountBlocksResponse response = future.get();
             Assert.assertNull(response.getError());
         } catch (Exception e) {
             e.printStackTrace();

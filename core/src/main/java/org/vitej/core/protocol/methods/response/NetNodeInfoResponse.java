@@ -25,15 +25,16 @@ public class NetNodeInfoResponse extends Response<NetNodeInfoResponse.Result> {
         private String id;
         private String name;
         private Integer netId;
-        private Integer version;
-        private String address;
         private Integer peerCount;
         private Long height;
-        private Integer nodes;
         private Float broadCheckFailedRatio;
-        private List<NetSyncDetailResponse.SyncConnectionStatus> connections;
         private List<PeerInfo> peers;
 
+        /**
+         * 获取本节点的NodeID
+         *
+         * @return 本节点的NodeID
+         */
         public String getId() {
             return id;
         }
@@ -42,6 +43,11 @@ public class NetNodeInfoResponse extends Response<NetNodeInfoResponse.Result> {
             this.id = id;
         }
 
+        /**
+         * 获取本节点的名称，通过 node_config.json 中的 Identity 字段设置
+         *
+         * @return 本节点的名称
+         */
         public String getName() {
             return name;
         }
@@ -50,6 +56,11 @@ public class NetNodeInfoResponse extends Response<NetNodeInfoResponse.Result> {
             this.name = name;
         }
 
+        /**
+         * 获取本节点的网络Id
+         *
+         * @return 本节点的网络Id
+         */
         public Integer getNetId() {
             return netId;
         }
@@ -58,22 +69,11 @@ public class NetNodeInfoResponse extends Response<NetNodeInfoResponse.Result> {
             this.netId = netId;
         }
 
-        public Integer getVersion() {
-            return version;
-        }
-
-        public void setVersion(Integer version) {
-            this.version = version;
-        }
-
-        public String getAddress() {
-            return address;
-        }
-
-        public void setAddress(String address) {
-            this.address = address;
-        }
-
+        /**
+         * 获取本节点所连接的peer数量
+         *
+         * @return 本节点所连接的peer数量
+         */
         public Integer getPeerCount() {
             return peerCount;
         }
@@ -82,6 +82,11 @@ public class NetNodeInfoResponse extends Response<NetNodeInfoResponse.Result> {
             this.peerCount = peerCount;
         }
 
+        /**
+         * 获取当前快照链的高度
+         *
+         * @return 当前快照链的高度
+         */
         public Long getHeight() {
             return height;
         }
@@ -90,14 +95,11 @@ public class NetNodeInfoResponse extends Response<NetNodeInfoResponse.Result> {
             this.height = height;
         }
 
-        public Integer getNodes() {
-            return nodes;
-        }
-
-        public void setNodes(Integer nodes) {
-            this.nodes = nodes;
-        }
-
+        /**
+         * 获取节点广播失败率
+         *
+         * @return 节点广播失败率
+         */
         public Float getBroadCheckFailedRatio() {
             return broadCheckFailedRatio;
         }
@@ -106,14 +108,11 @@ public class NetNodeInfoResponse extends Response<NetNodeInfoResponse.Result> {
             this.broadCheckFailedRatio = broadCheckFailedRatio;
         }
 
-        public List<NetSyncDetailResponse.SyncConnectionStatus> getConnections() {
-            return connections;
-        }
-
-        public void setConnections(List<NetSyncDetailResponse.SyncConnectionStatus> connections) {
-            this.connections = connections;
-        }
-
+        /**
+         * 获取连接的peer信息
+         *
+         * @return 连接的peer信息
+         */
         public List<PeerInfo> getPeers() {
             return peers;
         }
@@ -126,17 +125,16 @@ public class NetNodeInfoResponse extends Response<NetNodeInfoResponse.Result> {
     public static class PeerInfo {
         private String id;
         private String name;
-        private Long version;
         private Long height;
         private String address;
-        private Integer flag;
-        private Boolean superior;
-        private Boolean reliable;
         private String createAt;
-        private Integer readQueue;
-        private Integer writeQueue;
         private List<String> peers;
 
+        /**
+         * 获取节点的NodeID
+         *
+         * @return 节点的NodeID
+         */
         public String getId() {
             return id;
         }
@@ -145,6 +143,11 @@ public class NetNodeInfoResponse extends Response<NetNodeInfoResponse.Result> {
             this.id = id;
         }
 
+        /**
+         * 获取节点的名称
+         *
+         * @return 节点的名称
+         */
         public String getName() {
             return name;
         }
@@ -153,14 +156,11 @@ public class NetNodeInfoResponse extends Response<NetNodeInfoResponse.Result> {
             this.name = name;
         }
 
-        public Long getVersion() {
-            return version;
-        }
-
-        public void setVersion(Long version) {
-            this.version = version;
-        }
-
+        /**
+         * 获取节点的当前快照链的高度
+         *
+         * @return 节点的当前快照链的高度
+         */
         public Long getHeight() {
             return height;
         }
@@ -169,6 +169,11 @@ public class NetNodeInfoResponse extends Response<NetNodeInfoResponse.Result> {
             this.height = height;
         }
 
+        /**
+         * 获取节点的地址信息
+         *
+         * @return 节点的地址信息
+         */
         public String getAddress() {
             return address;
         }
@@ -177,52 +182,17 @@ public class NetNodeInfoResponse extends Response<NetNodeInfoResponse.Result> {
             this.address = address;
         }
 
-        public Integer getFlag() {
-            return flag;
-        }
-
-        public void setFlag(Integer flag) {
-            this.flag = flag;
-        }
-
-        public Boolean getSuperior() {
-            return superior;
-        }
-
-        public void setSuperior(Boolean superior) {
-            this.superior = superior;
-        }
-
-        public Boolean getReliable() {
-            return reliable;
-        }
-
-        public void setReliable(Boolean reliable) {
-            this.reliable = reliable;
-        }
-
+        /**
+         * 获取节点的接入时间
+         *
+         * @return 节点的接入时间（北京时间），例如"2019-11-26 11:33:02"
+         */
         public String getCreateAt() {
             return createAt;
         }
 
         public void setCreateAt(String createAt) {
             this.createAt = createAt;
-        }
-
-        public Integer getReadQueue() {
-            return readQueue;
-        }
-
-        public void setReadQueue(Integer readQueue) {
-            this.readQueue = readQueue;
-        }
-
-        public Integer getWriteQueue() {
-            return writeQueue;
-        }
-
-        public void setWriteQueue(Integer writeQueue) {
-            this.writeQueue = writeQueue;
         }
 
         public List<String> getPeers() {

@@ -28,6 +28,11 @@ public class NetSyncInfoResponse extends Response<NetSyncInfoResponse.Result> {
         private Integer state;
         private String status;
 
+        /**
+         * 获取同步的起始高度
+         *
+         * @return 同步的起始高度
+         */
         public Long getFrom() {
             return NumericUtils.stringToLong(from);
         }
@@ -40,6 +45,11 @@ public class NetSyncInfoResponse extends Response<NetSyncInfoResponse.Result> {
             this.from = from;
         }
 
+        /**
+         * 获取同步的目标高度
+         *
+         * @return 同步的目标高度
+         */
         public Long getTo() {
             return NumericUtils.stringToLong(to);
         }
@@ -52,6 +62,11 @@ public class NetSyncInfoResponse extends Response<NetSyncInfoResponse.Result> {
             this.to = to;
         }
 
+        /**
+         * 获取当前快照链的高度
+         *
+         * @return 当前快照链的高度
+         */
         public Long getCurrent() {
             return NumericUtils.stringToLong(current);
         }
@@ -64,6 +79,11 @@ public class NetSyncInfoResponse extends Response<NetSyncInfoResponse.Result> {
             this.current = current;
         }
 
+        /**
+         * 获取同步状态
+         *
+         * @return 同步状态：0 未开始同步，1 同步中，2 同步完成，3 同步出错，4 同步取消，5 同步数据已全部下载
+         */
         public Integer getState() {
             return state;
         }
@@ -72,6 +92,11 @@ public class NetSyncInfoResponse extends Response<NetSyncInfoResponse.Result> {
             this.state = state;
         }
 
+        /**
+         * 获取同步状态的描述
+         *
+         * @return 同步状态的描述
+         */
         public String getStatus() {
             return status;
         }
