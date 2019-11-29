@@ -25,7 +25,7 @@ go-vite java sdk
 Vitej vitej = new Vitej(new HttpService());
 指定go-vite http url
 Vitej vitej = new Vitej(new HttpService("http://127.0.0.1:48132"));
-指定go-vite http url和默认地址
+指定go-vite http url和默认地址，后续发交易或者查询时默认使用keyPair地址
 KeyPair keyPairDefault = new Wallet(Arrays.asList("alarm", "canal", "scheme", "actor", "left", "length", "bracket", "slush", "tuna", "garage", "prepare", "scout", "school", "pizza", "invest", "rose", "fork", "scorpion", "make", "enact", "false", "kidney", "mixed", "vast")).deriveKeyPair();
 Vitej vitej = new Vitej(new HttpService("http://127.0.0.1:48132"), keyPairDefault);
 ```
