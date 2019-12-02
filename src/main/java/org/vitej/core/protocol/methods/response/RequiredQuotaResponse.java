@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.vitej.core.protocol.ProtocolHelper;
-import org.vitej.core.protocol.methods.Response;
 import org.vitej.core.utils.NumericUtils;
 
 import java.io.IOException;
@@ -21,6 +20,11 @@ public class RequiredQuotaResponse extends Response<RequiredQuotaResponse.Result
         super.setResult(result);
     }
 
+    /**
+     * 获取交易需要的配额
+     *
+     * @return 交易需要的配额
+     */
     public Long getRequiredQuota() {
         return getResult() == null ? null : NumericUtils.stringToLong(getResult().getRequiredQuota());
     }

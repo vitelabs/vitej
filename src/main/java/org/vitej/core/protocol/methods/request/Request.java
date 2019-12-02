@@ -1,12 +1,19 @@
-package org.vitej.core.protocol.methods;
+package org.vitej.core.protocol.methods.request;
 
 import org.vitej.core.protocol.RpcService;
+import org.vitej.core.protocol.methods.response.Response;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ * vite通用RPC请求对象
+ *
+ * @param <S> 参数类型
+ * @param <T> 返回值类型
+ */
 public class Request<S, T extends Response> {
     private static AtomicLong nextId = new AtomicLong(0);
 

@@ -1,7 +1,12 @@
-package org.vitej.core.protocol.methods;
+package org.vitej.core.protocol.methods.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+/**
+ * vite通用RPC返回值类型
+ *
+ * @param <T> 返回值类型
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Response<T> {
     private long id;

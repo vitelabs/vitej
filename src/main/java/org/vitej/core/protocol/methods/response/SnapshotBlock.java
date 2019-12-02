@@ -1,12 +1,17 @@
-package org.vitej.core.protocol.methods;
+package org.vitej.core.protocol.methods.response;
 
 import org.joda.time.DateTime;
+import org.vitej.core.protocol.methods.Address;
+import org.vitej.core.protocol.methods.Hash;
 import org.vitej.core.utils.BytesUtils;
 import org.vitej.core.utils.TimeUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 快照块信息
+ */
 public class SnapshotBlock {
     private String hash;
     private String previousHash;
@@ -20,6 +25,11 @@ public class SnapshotBlock {
     private Map<String, HashHeight> snapshotData;
     private Long timestamp;
 
+    /**
+     * 获取快照块hash
+     *
+     * @return 快照块hash
+     */
     public Hash getHash() {
         return Hash.stringToHash(hash);
     }
@@ -32,6 +42,11 @@ public class SnapshotBlock {
         this.hash = hash;
     }
 
+    /**
+     * 获取快照链上上一个快照块的hash
+     *
+     * @return 快照链上上一个快照块的hash
+     */
     public Hash getPreviousHash() {
         return Hash.stringToHash(previousHash);
     }
@@ -44,6 +59,11 @@ public class SnapshotBlock {
         this.previousHash = previousHash;
     }
 
+    /**
+     * 获取快照块高度
+     *
+     * @return 快照块高度
+     */
     public Long getHeight() {
         return height;
     }
@@ -52,6 +72,11 @@ public class SnapshotBlock {
         this.height = height;
     }
 
+    /**
+     * 获取出块地址
+     *
+     * @return 出块地址
+     */
     public Address getProducer() {
         return Address.stringToAddress(producer);
     }
@@ -64,6 +89,11 @@ public class SnapshotBlock {
         this.producer = producer;
     }
 
+    /**
+     * 获取打包快照块的超级节点的公钥
+     *
+     * @return 打包快照块的超级节点的公钥
+     */
     public byte[] getPublicKey() {
         return BytesUtils.base64ToBytes(publicKey);
     }
@@ -76,6 +106,11 @@ public class SnapshotBlock {
         this.publicKey = publicKey;
     }
 
+    /**
+     * 获取签名
+     *
+     * @return 签名
+     */
     public byte[] getSignature() {
         return BytesUtils.base64ToBytes(signature);
     }
@@ -88,6 +123,11 @@ public class SnapshotBlock {
         this.signature = signature;
     }
 
+    /**
+     * 获取出块节点上一轮生成的随机数
+     *
+     * @return 出块节点上一轮生成的随机数
+     */
     public Long getSeed() {
         return seed;
     }
@@ -96,6 +136,11 @@ public class SnapshotBlock {
         this.seed = seed;
     }
 
+    /**
+     * 获取出块节点本轮生成的随机数的hash
+     *
+     * @return 出块节点本轮生成的随机数的hash
+     */
     public Hash getNextSeedHash() {
         return Hash.stringToHash(nextSeedHash);
     }
@@ -108,6 +153,11 @@ public class SnapshotBlock {
         this.nextSeedHash = nextSeedHash;
     }
 
+    /**
+     * 获取出块节点硬分叉版本号
+     *
+     * @return 出块节点硬分叉版本号
+     */
     public Integer getVersion() {
         return version;
     }
@@ -116,6 +166,11 @@ public class SnapshotBlock {
         this.version = version;
     }
 
+    /**
+     * 获取快照的账户块高度和hash
+     *
+     * @return 快照的账户块高度和hash
+     */
     public Map<Address, HashHeight> getSnapshotData() {
         Map<Address, HashHeight> map = new HashMap<>(snapshotData.size());
         snapshotData.forEach((key, value) -> {
@@ -132,6 +187,11 @@ public class SnapshotBlock {
         this.snapshotData = snapshotData;
     }
 
+    /**
+     * 获取出块时间
+     *
+     * @return 出块时间
+     */
     public DateTime getTimestamp() {
         return TimeUtils.longToDateTime(timestamp);
     }
@@ -144,10 +204,18 @@ public class SnapshotBlock {
         this.timestamp = timestamp;
     }
 
+    /**
+     * hash和高度
+     */
     public static class HashHeight {
         private Long height;
         private String hash;
 
+        /**
+         * 获取块高度
+         *
+         * @return 块高度
+         */
         public Long getHeight() {
             return height;
         }
@@ -156,6 +224,11 @@ public class SnapshotBlock {
             this.height = height;
         }
 
+        /**
+         * 获取hash
+         *
+         * @return hash
+         */
         public Hash getHash() {
             return Hash.stringToHash(hash);
         }

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.deser.ResolvableDeserializer;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import org.vitej.core.protocol.methods.Response;
+import org.vitej.core.protocol.methods.response.Response;
 
 import java.io.IOException;
 import java.io.InputStream;

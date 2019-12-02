@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.vitej.core.protocol.ProtocolHelper;
 import org.vitej.core.protocol.methods.Address;
-import org.vitej.core.protocol.methods.Response;
 import org.vitej.core.utils.NumericUtils;
 
 import java.io.IOException;
@@ -26,6 +25,11 @@ public class UnreceivedTransactionSummaryResponse extends Response<UnreceivedTra
         private String address;
         private String blockCount;
 
+        /**
+         * 获取账户地址
+         *
+         * @return 账户地址
+         */
         public Address getAddress() {
             return Address.stringToAddress(address);
         }
@@ -38,6 +42,11 @@ public class UnreceivedTransactionSummaryResponse extends Response<UnreceivedTra
             this.address = address;
         }
 
+        /**
+         * 获取待接收账户块数量
+         *
+         * @return 待接收账户块数量
+         */
         public Long getBlockCount() {
             return NumericUtils.stringToLong(blockCount);
         }

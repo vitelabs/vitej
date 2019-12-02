@@ -8,14 +8,15 @@ import org.vitej.core.protocol.HttpService;
 import org.vitej.core.protocol.Vitej;
 import org.vitej.core.protocol.methods.Address;
 import org.vitej.core.protocol.methods.Hash;
-import org.vitej.core.protocol.methods.Request;
 import org.vitej.core.protocol.methods.TokenId;
 import org.vitej.core.protocol.methods.enums.EBlockType;
+import org.vitej.core.protocol.methods.request.Request;
 import org.vitej.core.protocol.methods.request.TransactionParams;
 import org.vitej.core.protocol.methods.request.VmLogFilter;
 import org.vitej.core.protocol.methods.response.*;
 import org.vitej.core.utils.BytesUtils;
 import org.vitej.core.utils.ContractUtils;
+import org.vitej.core.utils.ProtocolUtils;
 import org.vitej.core.utils.abi.Abi;
 import org.vitej.core.wallet.KeyPair;
 import org.vitej.core.wallet.Wallet;
@@ -100,7 +101,7 @@ public class VitejTest {
             Assert.fail("Got exception");
         }
         try {
-            Boolean callSuccess = vitej.checkCallContractResult(sendBlockHash);
+            Boolean callSuccess = ProtocolUtils.checkCallContractResult(vitej, sendBlockHash);
             Assert.assertTrue(callSuccess);
         } catch (IOException e) {
             e.printStackTrace();
@@ -133,7 +134,7 @@ public class VitejTest {
             Assert.fail("Got exception");
         }
         try {
-            Boolean callSuccess = vitej.checkCallContractResult(sendBlockHash);
+            Boolean callSuccess = ProtocolUtils.checkCallContractResult(vitej, sendBlockHash);
             Assert.assertTrue(callSuccess);
         } catch (IOException e) {
             e.printStackTrace();

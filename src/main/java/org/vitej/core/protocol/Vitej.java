@@ -1,11 +1,13 @@
 package org.vitej.core.protocol;
 
 import com.google.common.base.Preconditions;
-import org.apache.commons.collections4.CollectionUtils;
 import org.vitej.core.constants.CommonConstants;
-import org.vitej.core.protocol.methods.*;
+import org.vitej.core.protocol.methods.Address;
+import org.vitej.core.protocol.methods.Hash;
+import org.vitej.core.protocol.methods.TokenId;
 import org.vitej.core.protocol.methods.enums.EBlockType;
 import org.vitej.core.protocol.methods.request.CallOffChainMethodParams;
+import org.vitej.core.protocol.methods.request.Request;
 import org.vitej.core.protocol.methods.request.TransactionParams;
 import org.vitej.core.protocol.methods.request.VmLogFilter;
 import org.vitej.core.protocol.methods.response.*;
@@ -544,56 +546,6 @@ public class Vitej implements ViteRpcMethods {
                 Arrays.asList(transaction),
                 rpcService,
                 RequiredQuotaResponse.class);
-    }
-
-    @Override
-    public boolean checkCallContractResult(Hash sendBlockHash) throws IOException {
-        return checkCallContractResult(sendBlockHash, CommonConstants.RETRY_TIMES);
-    }
-
-    @Override
-    public boolean checkCallContractResult(Hash sendBlockHash, int retryTimes) throws IOException {
-        AccountBlockResponse response = getAccountBlockByHash(sendBlockHash).send();
-        Preconditions.checkArgument(response.getError() == null, response.getError());
-        Preconditions.checkNotNull(response.getResult());
-        Preconditions.checkArgument(
-                (EBlockType.SEND_CALL.getValue() == response.getResult().getBlockType() && response.getResult().getToAddress().isContract()) ||
-                        (EBlockType.SEND_CREATE.getValue() == response.getResult().getBlockType()),
-                "invalid transaction type");
-        Hash receiveBlockHash = response.getResult().getReceiveBlockHash();
-        int index = 2;
-        while (receiveBlockHash == null) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            response = getAccountBlockByHash(sendBlockHash).send();
-            Preconditions.checkArgument(response.getError() == null, response.getError());
-            Preconditions.checkNotNull(response.getResult());
-            receiveBlockHash = response.getResult().getReceiveBlockHash();
-            if (index >= retryTimes) {
-                return false;
-            }
-            index++;
-        }
-        response = getAccountBlockByHash(receiveBlockHash).send();
-        Preconditions.checkArgument(response.getError() == null, response.getError());
-        Preconditions.checkNotNull(response.getResult());
-        if (!response.getResult().isContractReceiveSuccess()) {
-            return false;
-        } else if (CollectionUtils.isEmpty(response.getResult().getTriggeredSendBlockList())) {
-            return true;
-        } else {
-            for (AccountBlock sendBlock : response.getResult().getTriggeredSendBlockList()) {
-                if (sendBlock.getToAddress().isContract()) {
-                    if (!checkCallContractResult(sendBlock.getHash(), retryTimes)) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
     }
 
     private void updateTransactionPreviousHashAndHeight(TransactionParams transaction) throws IOException {

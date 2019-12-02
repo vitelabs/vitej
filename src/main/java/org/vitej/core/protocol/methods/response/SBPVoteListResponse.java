@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.vitej.core.protocol.ProtocolHelper;
 import org.vitej.core.protocol.methods.Address;
-import org.vitej.core.protocol.methods.Response;
 import org.vitej.core.utils.NumericUtils;
 
 import java.io.IOException;
@@ -26,11 +25,19 @@ public class SBPVoteListResponse extends Response<List<SBPVoteListResponse.Resul
         super.setResult(result);
     }
 
+    /**
+     * 超姐节点获得的投票数
+     */
     public static class Result {
         private String sbpName;
         private String blockProducingAddress;
         private String votes;
 
+        /**
+         * 获取超级节点名称
+         *
+         * @return 超级节点名称
+         */
         public String getSbpName() {
             return sbpName;
         }
@@ -39,6 +46,11 @@ public class SBPVoteListResponse extends Response<List<SBPVoteListResponse.Resul
             this.sbpName = sbpName;
         }
 
+        /**
+         * 获取当前出块地址
+         *
+         * @return 当前出块地址
+         */
         public Address getBlockProducingAddress() {
             return Address.stringToAddress(blockProducingAddress);
         }
@@ -51,6 +63,11 @@ public class SBPVoteListResponse extends Response<List<SBPVoteListResponse.Resul
             this.blockProducingAddress = blockProducingAddress;
         }
 
+        /**
+         * 获取当前获得的总投票数
+         *
+         * @return 当前获得的总投票数
+         */
         public BigInteger getVotes() {
             return NumericUtils.stringToBigInteger(votes);
         }

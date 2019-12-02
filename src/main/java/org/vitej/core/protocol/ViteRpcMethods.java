@@ -1,5 +1,9 @@
-package org.vitej.core.protocol.methods;
+package org.vitej.core.protocol;
 
+import org.vitej.core.protocol.methods.Address;
+import org.vitej.core.protocol.methods.Hash;
+import org.vitej.core.protocol.methods.TokenId;
+import org.vitej.core.protocol.methods.request.Request;
 import org.vitej.core.protocol.methods.request.TransactionParams;
 import org.vitej.core.protocol.methods.request.VmLogFilter;
 import org.vitej.core.protocol.methods.response.*;
@@ -8,6 +12,9 @@ import org.vitej.core.wallet.KeyPair;
 import java.io.IOException;
 import java.math.BigInteger;
 
+/**
+ * go-vite提供的rpc接口
+ */
 public interface ViteRpcMethods {
 
     /**
@@ -35,7 +42,10 @@ public interface ViteRpcMethods {
      * 计算PoW
      *
      * @param difficulty PoW难度，可以通过getPoWDifficulty接口获取
-     * @param data       Blake2b (address + previousHash)，例如，当 address 为 vite_ab24ef68b84e642c0ddca06beec81c9acb1977bbd7da27a87a ，previousHash 为 0000000000000000000000000000000000000000000000000000000000000000 时，结果为 8689fc3e7d0bcad0a1213fd90ab53437ce745408750f7303a16c75bad28da8c3
+     * @param data       Blake2b (address + previousHash)，
+     *                   例如，当 address 为 vite_ab24ef68b84e642c0ddca06beec81c9acb1977bbd7da27a87a ，
+     *                   previousHash 为 0000000000000000000000000000000000000000000000000000000000000000 时，
+     *                   结果为 8689fc3e7d0bcad0a1213fd90ab53437ce745408750f7303a16c75bad28da8c3
      * @return PoW的nonce，对应AccountBlock的nonce字段
      */
     Request<?, PoWNonceResponse> getPoWNonce(BigInteger difficulty, Hash data);
@@ -234,12 +244,12 @@ public interface ViteRpcMethods {
     Request<?, ContractInfoResponse> getContractInfo(Address address);
 
     /**
-     * 离线调用合约的 getter 方法。
+     * 离线调用合约的getter方法。
      *
      * @param address      合约账户地址
-     * @param offchainCode 用于离线查询的合约代码。即编译代码时指定 --bin 参数后得到的 OffChain Binary 代码
-     * @param data         按 ABI 定义编码后的调用参数，类似调用合约时的交易 data
-     * @return
+     * @param offchainCode 用于离线查询的合约代码。即编译代码时指定--bin参数后得到的OffChain Binary代码
+     * @param data         按ABI定义编码后的调用参数，类似调用合约时的交易data
+     * @return getter方法返回值，可以用ABI反解析
      */
     Request<?, CallOffChainMethodResponse> callOffChainMethod(Address address, byte[] offchainCode, byte[] data);
 
@@ -427,23 +437,4 @@ public interface ViteRpcMethods {
      * @return 交易所所需配额
      */
     Request<?, RequiredQuotaResponse> getRequiredQuota(TransactionParams transaction);
-
-    /**
-     * 检查调用合约交易是否成功
-     *
-     * @param sendBlockHash 请求交易哈希
-     * @param retryTimes    检查交易是否被接收时的重试次数
-     * @return true-请求成功，false-请求交易不存在，请求交易长时间不接收，或者接收失败
-     * @throws IOException 本接口会产生网络请求，可能会抛出IOException
-     */
-    boolean checkCallContractResult(Hash sendBlockHash, int retryTimes) throws IOException;
-
-    /**
-     * 同checkCallContractResult，检查交易是否被接收时默认重试十次
-     *
-     * @param sendBlockHash 请求交易哈希
-     * @return true-请求成功，false-请求交易不存在，请求交易长时间不接收，或者接收失败
-     * @throws IOException 本接口会产生网络请求，可能会抛出IOException
-     */
-    boolean checkCallContractResult(Hash sendBlockHash) throws IOException;
 }

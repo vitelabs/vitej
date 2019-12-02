@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.vitej.core.protocol.ProtocolHelper;
-import org.vitej.core.protocol.methods.Response;
 import org.vitej.core.utils.NumericUtils;
 
 import java.io.IOException;
@@ -27,6 +26,11 @@ public class VotedSBPResponse extends Response<VotedSBPResponse.Result> {
         private Integer status; // 1 - sbp active, 2 - sbp revoked
         private String votes;
 
+        /**
+         * 获取超级节点名称
+         *
+         * @return 超级节点名称
+         */
         public String getBlockProducerName() {
             return blockProducerName;
         }
@@ -35,10 +39,20 @@ public class VotedSBPResponse extends Response<VotedSBPResponse.Result> {
             this.blockProducerName = blockProducerName;
         }
 
+        /**
+         * 判断超级节点状态注册状态
+         *
+         * @return true-超级节点注册状态正常，false-超级节点已取消注册
+         */
         public Boolean isSBPActive() {
             return status == 1;
         }
 
+        /**
+         * 获取超级节点注册状态
+         *
+         * @return 超级节点注册状态，1-正常，2-已取消注册
+         */
         public Integer getStatus() {
             return status;
         }
@@ -47,6 +61,11 @@ public class VotedSBPResponse extends Response<VotedSBPResponse.Result> {
             this.status = status;
         }
 
+        /**
+         * 获取投票总数
+         *
+         * @return 投票总数，即投票账户余额之和
+         */
         public BigInteger getVotes() {
             return NumericUtils.stringToBigInteger(votes);
         }

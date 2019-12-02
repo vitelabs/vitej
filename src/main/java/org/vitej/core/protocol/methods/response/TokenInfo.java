@@ -1,9 +1,14 @@
-package org.vitej.core.protocol.methods;
+package org.vitej.core.protocol.methods.response;
 
+import org.vitej.core.protocol.methods.Address;
+import org.vitej.core.protocol.methods.TokenId;
 import org.vitej.core.utils.NumericUtils;
 
 import java.math.BigInteger;
 
+/**
+ * 代币信息
+ */
 public class TokenInfo {
     private String tokenName;
     private String tokenSymbol;
@@ -16,6 +21,11 @@ public class TokenInfo {
     private Boolean isOwnerBurnOnly;
     private Integer index;
 
+    /**
+     * 获取代币名称
+     *
+     * @return 代币名称
+     */
     public String getTokenName() {
         return tokenName;
     }
@@ -24,6 +34,11 @@ public class TokenInfo {
         this.tokenName = tokenName;
     }
 
+    /**
+     * 获取代币简称
+     *
+     * @return 代币简称
+     */
     public String getTokenSymbol() {
         return tokenSymbol;
     }
@@ -32,6 +47,11 @@ public class TokenInfo {
         this.tokenSymbol = tokenSymbol;
     }
 
+    /**
+     * 获取发行总量
+     *
+     * @return 发行总量
+     */
     public BigInteger getTotalSupply() {
         return NumericUtils.stringToBigInteger(totalSupply);
     }
@@ -44,6 +64,11 @@ public class TokenInfo {
         this.totalSupply = totalSupply;
     }
 
+    /**
+     * 获取小数位数
+     *
+     * @return 小数位数
+     */
     public Integer getDecimals() {
         return decimals;
     }
@@ -52,6 +77,11 @@ public class TokenInfo {
         this.decimals = decimals;
     }
 
+    /**
+     * 获取代币所有者
+     *
+     * @return 所有者
+     */
     public Address getOwner() {
         return new Address(owner);
     }
@@ -64,6 +94,11 @@ public class TokenInfo {
         this.owner = owner;
     }
 
+    /**
+     * 获取代币id
+     *
+     * @return 代币id
+     */
     public TokenId getTokenId() {
         return TokenId.stringToTokenId(tokenId);
     }
@@ -76,6 +111,11 @@ public class TokenInfo {
         this.tokenId = tokenId;
     }
 
+    /**
+     * 获取最大发行量，不可增发代币此字段值为 0
+     *
+     * @return 最大发行量
+     */
     public BigInteger getMaxSupply() {
         return NumericUtils.stringToBigInteger(maxSupply);
     }
@@ -88,6 +128,11 @@ public class TokenInfo {
         this.maxSupply = maxSupply;
     }
 
+    /**
+     * 获取是否可增发
+     *
+     * @return 是否可增发，true 可增发 false 不可增发
+     */
     public Boolean getReIssuable() {
         return isReIssuable;
     }
@@ -96,6 +141,11 @@ public class TokenInfo {
         isReIssuable = reIssuable;
     }
 
+    /**
+     * 获取是否仅所有者可销毁，不可增发代币此字段值为 false
+     *
+     * @return true 仅所有者可销毁 false 所有持币账户可销毁
+     */
     public Boolean getOwnerBurnOnly() {
         return isOwnerBurnOnly;
     }
@@ -104,6 +154,11 @@ public class TokenInfo {
         isOwnerBurnOnly = ownerBurnOnly;
     }
 
+    /**
+     * 获取代币序号
+     *
+     * @return 从 0 开始，同名 tokenSymbol 的序号按铸币顺序递增
+     */
     public Integer getIndex() {
         return index;
     }

@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.vitej.core.protocol.ProtocolHelper;
-import org.vitej.core.protocol.methods.Response;
 
 import java.io.IOException;
 import java.util.List;

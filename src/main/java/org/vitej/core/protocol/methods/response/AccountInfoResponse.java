@@ -9,9 +9,7 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.vitej.core.protocol.ProtocolHelper;
 import org.vitej.core.protocol.methods.Address;
-import org.vitej.core.protocol.methods.Response;
 import org.vitej.core.protocol.methods.TokenId;
-import org.vitej.core.protocol.methods.TokenInfo;
 import org.vitej.core.utils.NumericUtils;
 
 import java.io.IOException;
@@ -32,6 +30,11 @@ public class AccountInfoResponse extends Response<AccountInfoResponse.Result> {
         private String blockCount;
         private Map<String, BalanceInfo> balanceInfoMap;
 
+        /**
+         * 获取账户地址
+         *
+         * @return 账户地址
+         */
         public Address getAddress() {
             return Address.stringToAddress(address);
         }
@@ -44,6 +47,11 @@ public class AccountInfoResponse extends Response<AccountInfoResponse.Result> {
             this.address = address;
         }
 
+        /**
+         * 获取账户链上的账户块数量
+         *
+         * @return 账户链上的账户块数量
+         */
         public Long getBlockCount() {
             return NumericUtils.stringToLong(blockCount);
         }
@@ -56,6 +64,11 @@ public class AccountInfoResponse extends Response<AccountInfoResponse.Result> {
             this.blockCount = blockCount;
         }
 
+        /**
+         * 获取账户余额
+         *
+         * @return 账户余额
+         */
         public Map<TokenId, BalanceInfo> getBalanceInfoMap() {
             Map<TokenId, BalanceInfo> map = new HashMap<>(balanceInfoMap.size());
             balanceInfoMap.forEach((key, value) -> {
@@ -78,6 +91,11 @@ public class AccountInfoResponse extends Response<AccountInfoResponse.Result> {
         private String balance;
         private String transactionCount;
 
+        /**
+         * 获取代币信息
+         *
+         * @return 代币信息
+         */
         public TokenInfo getTokenInfo() {
             return tokenInfo;
         }
@@ -86,6 +104,11 @@ public class AccountInfoResponse extends Response<AccountInfoResponse.Result> {
             this.tokenInfo = tokenInfo;
         }
 
+        /**
+         * 获取代币余额
+         *
+         * @return 代币余额
+         */
         public BigInteger getBalance() {
             return NumericUtils.stringToBigInteger(balance);
         }
@@ -98,6 +121,11 @@ public class AccountInfoResponse extends Response<AccountInfoResponse.Result> {
             this.balance = balance;
         }
 
+        /**
+         * 获取账户链上和该币种相关的账户块数量
+         *
+         * @return 账户链上和该币种相关的账户块数量
+         */
         public Long getTransactionCount() {
             return NumericUtils.stringToLong(transactionCount);
         }

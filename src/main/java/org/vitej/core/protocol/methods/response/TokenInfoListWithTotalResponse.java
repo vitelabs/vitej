@@ -8,8 +8,6 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.vitej.core.protocol.ProtocolHelper;
-import org.vitej.core.protocol.methods.Response;
-import org.vitej.core.protocol.methods.TokenInfo;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,6 +24,11 @@ public class TokenInfoListWithTotalResponse extends Response<TokenInfoListWithTo
         private Integer totalCount;
         private List<TokenInfo> tokenInfoList;
 
+        /**
+         * 获取代币信息总数
+         *
+         * @return 代币信息总数
+         */
         public Integer getTotalCount() {
             return totalCount;
         }
@@ -34,6 +37,11 @@ public class TokenInfoListWithTotalResponse extends Response<TokenInfoListWithTo
             this.totalCount = totalCount;
         }
 
+        /**
+         * 获取代币信息
+         *
+         * @return 代币信息
+         */
         public List<TokenInfo> getTokenInfoList() {
             return tokenInfoList;
         }

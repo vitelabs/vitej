@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.vitej.core.protocol.ProtocolHelper;
-import org.vitej.core.protocol.methods.Response;
 import org.vitej.core.utils.NumericUtils;
 
 import java.io.IOException;
@@ -22,12 +21,20 @@ public class SBPRewardResponse extends Response<SBPRewardResponse.Result> {
         super.setResult(result);
     }
 
+    /**
+     * 待提取奖励明细
+     */
     public static class Result {
         private String blockProducingReward;
         private String votingReward;
         private String totalReward;
         private Boolean allRewardWithdrawed;
 
+        /**
+         * 获取待提取按块奖励
+         *
+         * @return 待提取按块奖励
+         */
         public BigInteger getBlockProducingReward() {
             return NumericUtils.stringToBigInteger(blockProducingReward);
         }
@@ -40,6 +47,11 @@ public class SBPRewardResponse extends Response<SBPRewardResponse.Result> {
             this.blockProducingReward = blockProducingReward;
         }
 
+        /**
+         * 获取待提取按票奖励
+         *
+         * @return 待提取按票奖励
+         */
         public BigInteger getVotingReward() {
             return NumericUtils.stringToBigInteger(votingReward);
         }
@@ -52,6 +64,11 @@ public class SBPRewardResponse extends Response<SBPRewardResponse.Result> {
             this.votingReward = votingReward;
         }
 
+        /**
+         * 获取待提取奖励
+         *
+         * @return 待提取奖励
+         */
         public BigInteger getTotalReward() {
             return NumericUtils.stringToBigInteger(totalReward);
         }
@@ -64,6 +81,11 @@ public class SBPRewardResponse extends Response<SBPRewardResponse.Result> {
             this.totalReward = totalReward;
         }
 
+        /**
+         * 判断这个节点是否已取消，并且奖励已经都提取完了
+         *
+         * @return 值为true时表示节点已取消，并且所有的奖励已提取完
+         */
         public Boolean getAllRewardWithdrawed() {
             return allRewardWithdrawed;
         }

@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.vitej.core.protocol.ProtocolHelper;
-import org.vitej.core.protocol.methods.Response;
 import org.vitej.core.utils.NumericUtils;
 
 import java.io.IOException;
@@ -23,12 +22,20 @@ public class SBPRewardDetailResponse extends Response<SBPRewardDetailResponse.Re
         super.setResult(result);
     }
 
+    /**
+     * 本周期所有超级节点的奖励信息
+     */
     public static class Result {
         private Map<String, RewardInfoDetail> rewardMap;
         private Long startTime;
         private Long endTime;
         private String cycle;
 
+        /**
+         * 获取本周期所有超级节点的奖励明细
+         *
+         * @return 超级节点名称-本周期获得的奖励
+         */
         public Map<String, RewardInfoDetail> getRewardMap() {
             return rewardMap;
         }
@@ -37,6 +44,11 @@ public class SBPRewardDetailResponse extends Response<SBPRewardDetailResponse.Re
             this.rewardMap = rewardMap;
         }
 
+        /**
+         * 获取周期开始时间
+         *
+         * @return 周期开始时间
+         */
         public Long getStartTime() {
             return startTime;
         }
@@ -45,6 +57,11 @@ public class SBPRewardDetailResponse extends Response<SBPRewardDetailResponse.Re
             this.startTime = startTime;
         }
 
+        /**
+         * 获取周期结束时间
+         *
+         * @return 周期结束时间
+         */
         public Long getEndTime() {
             return endTime;
         }
@@ -53,6 +70,11 @@ public class SBPRewardDetailResponse extends Response<SBPRewardDetailResponse.Re
             this.endTime = endTime;
         }
 
+        /**
+         * 获取周期
+         *
+         * @return 周期
+         */
         public Long getCycle() {
             return NumericUtils.stringToLong(cycle);
         }
@@ -66,6 +88,9 @@ public class SBPRewardDetailResponse extends Response<SBPRewardDetailResponse.Re
         }
     }
 
+    /**
+     * 奖励信息明细
+     */
     public static class RewardInfoDetail {
         private String blockProducingReward;
         private String votingReward;
@@ -73,6 +98,11 @@ public class SBPRewardDetailResponse extends Response<SBPRewardDetailResponse.Re
         private String producedBlocks;
         private String targetBlocks;
 
+        /**
+         * 获取按块奖励
+         *
+         * @return 按块奖励
+         */
         public BigInteger getBlockProducingReward() {
             return NumericUtils.stringToBigInteger(blockProducingReward);
         }
@@ -85,6 +115,11 @@ public class SBPRewardDetailResponse extends Response<SBPRewardDetailResponse.Re
             this.blockProducingReward = blockProducingReward;
         }
 
+        /**
+         * 获取按票奖励
+         *
+         * @return 按票奖励
+         */
         public BigInteger getVotingReward() {
             return NumericUtils.stringToBigInteger(votingReward);
         }
@@ -97,6 +132,11 @@ public class SBPRewardDetailResponse extends Response<SBPRewardDetailResponse.Re
             this.votingReward = votingReward;
         }
 
+        /**
+         * 获取总奖励金额
+         *
+         * @return 总奖励金额
+         */
         public BigInteger getTotalReward() {
             return NumericUtils.stringToBigInteger(totalReward);
         }
@@ -109,6 +149,11 @@ public class SBPRewardDetailResponse extends Response<SBPRewardDetailResponse.Re
             this.totalReward = totalReward;
         }
 
+        /**
+         * 获取一个周期内的实际出块数
+         *
+         * @return 一个周期内的实际出块数
+         */
         public Long getProducedBlocks() {
             return NumericUtils.stringToLong(producedBlocks);
         }
@@ -121,6 +166,11 @@ public class SBPRewardDetailResponse extends Response<SBPRewardDetailResponse.Re
             this.producedBlocks = producedBlocks;
         }
 
+        /**
+         * 获取一个周期内的应出块数
+         *
+         * @return 一个周期内的应出块数
+         */
         public Long getTargetBlocks() {
             return NumericUtils.stringToLong(targetBlocks);
         }

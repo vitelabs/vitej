@@ -1,8 +1,8 @@
 package org.vitej.core.protocol;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.vitej.core.protocol.methods.Request;
-import org.vitej.core.protocol.methods.Response;
+import org.vitej.core.protocol.methods.request.Request;
+import org.vitej.core.protocol.methods.response.Response;
 
 import java.io.IOException;
 import java.io.InputStream;

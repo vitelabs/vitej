@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.vitej.core.protocol.ProtocolHelper;
-import org.vitej.core.protocol.methods.Response;
 import org.vitej.core.utils.NumericUtils;
 
 import java.io.IOException;
@@ -27,6 +26,11 @@ public class QuotaResponse extends Response<QuotaResponse.Result> {
         private String maxQuota;
         private String stakeAmount;
 
+        /**
+         * 获取当前可用配额
+         *
+         * @return 当前可用配额
+         */
         public Long getCurrentQuota() {
             return NumericUtils.stringToLong(currentQuota);
         }
@@ -39,6 +43,11 @@ public class QuotaResponse extends Response<QuotaResponse.Result> {
             this.currentQuota = currentQuota;
         }
 
+        /**
+         * 获取最大可用配额，即utpe对应的配额
+         *
+         * @return 最大可用配额
+         */
         public Long getMaxQuota() {
             return NumericUtils.stringToLong(maxQuota);
         }
@@ -51,6 +60,11 @@ public class QuotaResponse extends Response<QuotaResponse.Result> {
             this.maxQuota = maxQuota;
         }
 
+        /**
+         * 获取抵押金额
+         *
+         * @return 抵押金额
+         */
         public BigInteger getStakeAmount() {
             return NumericUtils.stringToBigInteger(stakeAmount);
         }

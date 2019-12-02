@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.vitej.core.protocol.ProtocolHelper;
-import org.vitej.core.protocol.methods.Response;
 import org.vitej.core.utils.NumericUtils;
 
 import java.io.IOException;
@@ -28,6 +27,11 @@ public class PoWDifficultyResponse extends Response<PoWDifficultyResponse.Result
         private String qc;
         private Boolean isCongestion;
 
+        /**
+         * 获取交易需要的配额
+         *
+         * @return 交易需要的配额
+         */
         public Long getRequiredQuota() {
             return NumericUtils.stringToLong(requiredQuota);
         }
@@ -40,6 +44,11 @@ public class PoWDifficultyResponse extends Response<PoWDifficultyResponse.Result
             this.requiredQuota = requiredQuota;
         }
 
+        /**
+         * 获取需要计算的PoW难度
+         *
+         * @return 需要计算的PoW难度，如果为空字符串，说明不需要计算PoW
+         */
         public BigInteger getDifficulty() {
             return NumericUtils.stringToBigInteger(difficulty);
         }
@@ -52,6 +61,11 @@ public class PoWDifficultyResponse extends Response<PoWDifficultyResponse.Result
             this.difficulty = difficulty;
         }
 
+        /**
+         * 获取拥堵系数
+         *
+         * @return 拥堵系数，单位：1e18，例如，返回2e18表示当前拥堵程度为预期的2倍
+         */
         public BigInteger getQc() {
             return NumericUtils.stringToBigInteger(qc);
         }
@@ -64,6 +78,11 @@ public class PoWDifficultyResponse extends Response<PoWDifficultyResponse.Result
             this.qc = qc;
         }
 
+        /**
+         * 判断全网是否拥堵
+         *
+         * @return 全网是否拥堵，true 表示当前全网拥堵，此时配额成本提高，false 表示不拥堵
+         */
         public Boolean getCongestion() {
             return isCongestion;
         }
