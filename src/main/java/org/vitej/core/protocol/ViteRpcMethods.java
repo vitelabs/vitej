@@ -187,6 +187,13 @@ public interface ViteRpcMethods {
     Request<?, LatestSnapshotHashResponse> getLatestSnapshotHash();
 
     /**
+     * 获取最新的快照块
+     *
+     * @return 最新的快照块
+     */
+    Request<?, SnapshotBlockResponse> getLatestSnapshotBlock();
+
+    /**
      * 获取当前快照链高度
      *
      * @return 快照链高度
@@ -208,6 +215,15 @@ public interface ViteRpcMethods {
      * @return 快照块
      */
     Request<?, SnapshotBlockResponse> getSnapshotBlockByHeight(Long height);
+
+    /**
+     * 批量查询快照块，从起始高度开始往前查
+     *
+     * @param height 起始高度
+     * @param count  数量
+     * @return 快照块列表
+     */
+    Request<?, SnapshotBlocksResponse> getSnapshotBlocks(Long height, int count);
 
     /**
      * 查询vmlog

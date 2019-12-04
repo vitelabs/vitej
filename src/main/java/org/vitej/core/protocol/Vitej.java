@@ -205,6 +205,15 @@ public class Vitej implements ViteRpcMethods {
     }
 
     @Override
+    public Request<?, SnapshotBlockResponse> getLatestSnapshotBlock() {
+        return new Request<>(
+                "ledger_getLatestSnapshotBlock",
+                Collections.emptyList(),
+                rpcService,
+                SnapshotBlockResponse.class);
+    }
+
+    @Override
     public Request<?, SnapshotChainHeightResponse> getSnapshotChainHeight() {
         return new Request<>(
                 "ledger_getSnapshotChainHeight",
@@ -225,10 +234,19 @@ public class Vitej implements ViteRpcMethods {
     @Override
     public Request<?, SnapshotBlockResponse> getSnapshotBlockByHeight(Long height) {
         return new Request<>(
-                "ledger_getSnapshotBlockByHeight",
+                "ledger_getLatestSnapshotBlock",
                 Arrays.asList(height),
                 rpcService,
                 SnapshotBlockResponse.class);
+    }
+
+    @Override
+    public Request<?, SnapshotBlocksResponse> getSnapshotBlocks(Long height, int count) {
+        return new Request<>(
+                "ledger_getSnapshotBlocks",
+                Arrays.asList(height.toString(), count),
+                rpcService,
+                SnapshotBlocksResponse.class);
     }
 
     @Override

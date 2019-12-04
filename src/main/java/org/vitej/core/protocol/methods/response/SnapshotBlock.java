@@ -6,6 +6,7 @@ import org.vitej.core.protocol.methods.Hash;
 import org.vitej.core.utils.BytesUtils;
 import org.vitej.core.utils.TimeUtils;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +20,7 @@ public class SnapshotBlock {
     private String producer;
     private String publicKey;
     private String signature;
-    private Long seed;
+    private BigInteger seed;
     private String nextSeedHash;
     private Integer version;
     private Map<String, HashHeight> snapshotData;
@@ -128,11 +129,11 @@ public class SnapshotBlock {
      *
      * @return 出块节点上一轮生成的随机数
      */
-    public Long getSeed() {
+    public BigInteger getSeed() {
         return seed;
     }
 
-    public void setSeed(Long seed) {
+    public void setSeed(BigInteger seed) {
         this.seed = seed;
     }
 
