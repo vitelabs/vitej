@@ -59,6 +59,6 @@ public class BlockUtils {
     }
 
     public static Hash getPoWData(TransactionParams transaction) {
-        return Hash.dataToHash(transaction.getAddress().getBytes(), transaction.getPreviousHash().getBytes());
+        return Hash.dataToHash(BytesUtils.merge(transaction.getAddressRaw().getBytes(), transaction.getPreviousHashRaw().getBytes()));
     }
 }
