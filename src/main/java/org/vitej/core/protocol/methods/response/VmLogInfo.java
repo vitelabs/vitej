@@ -5,7 +5,7 @@ import org.vitej.core.protocol.methods.Hash;
 import org.vitej.core.utils.NumericUtils;
 
 /**
- * vmlog和所属的合约账户块信息
+ * Event log and contract account block info
  */
 public class VmLogInfo {
     private Vmlog vmlog;
@@ -14,9 +14,9 @@ public class VmLogInfo {
     private String address;
 
     /**
-     * 获取vmlog
+     * Return event log of smart contract
      *
-     * @return vmlog
+     * @return Event log of smart contract
      */
     public Vmlog getVmlog() {
         return vmlog;
@@ -27,9 +27,9 @@ public class VmLogInfo {
     }
 
     /**
-     * 获取vmlog所属的账户块hash
+     * Return sash of account block
      *
-     * @return vmlog所属的账户块hash
+     * @return Hash of account block
      */
     public Hash getAccountBlockHash() {
         return Hash.stringToHash(accountBlockHash);
@@ -44,9 +44,9 @@ public class VmLogInfo {
     }
 
     /**
-     * 获取vmlog所属的账户块高度
+     * Return height of account block
      *
-     * @return vmlog所属的账户块高度
+     * @return Height of account block
      */
     public Long getAccountBlockHeight() {
         return NumericUtils.stringToLong(accountBlockHeight);
@@ -61,9 +61,9 @@ public class VmLogInfo {
     }
 
     /**
-     * 获取vmlog所属的账户地址
+     * Return address of account
      *
-     * @return vmlog所属的账户地址
+     * @return Address of account
      */
     public Address getAddress() {
         return Address.stringToAddress(address);

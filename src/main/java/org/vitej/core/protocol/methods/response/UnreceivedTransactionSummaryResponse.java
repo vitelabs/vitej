@@ -26,9 +26,9 @@ public class UnreceivedTransactionSummaryResponse extends Response<UnreceivedTra
         private String blockCount;
 
         /**
-         * 获取账户地址
+         * Return account address
          *
-         * @return 账户地址
+         * @return Account address
          */
         public Address getAddress() {
             return Address.stringToAddress(address);
@@ -43,9 +43,9 @@ public class UnreceivedTransactionSummaryResponse extends Response<UnreceivedTra
         }
 
         /**
-         * 获取待接收账户块数量
+         * Return unreceived transaction count
          *
-         * @return 待接收账户块数量
+         * @return Unreceived transaction count
          */
         public Long getBlockCount() {
             return NumericUtils.stringToLong(blockCount);

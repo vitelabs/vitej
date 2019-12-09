@@ -25,7 +25,7 @@ public class StakeListResponse extends Response<StakeListResponse.Result> {
     }
 
     /**
-     * 抵押列表信息
+     * Staking records
      */
     public static class Result {
         private String totalStakeAmount;
@@ -33,9 +33,9 @@ public class StakeListResponse extends Response<StakeListResponse.Result> {
         private List<StakeInfo> stakeList;
 
         /**
-         * 获取抵押的总金额
+         * Return the total staking amount of the account
          *
-         * @return 抵押的总金额
+         * @return The total staking amount of the account
          */
         public BigInteger getTotalStakeAmount() {
             return NumericUtils.stringToBigInteger(totalStakeAmount);
@@ -50,9 +50,9 @@ public class StakeListResponse extends Response<StakeListResponse.Result> {
         }
 
         /**
-         * 获取抵押信息总条数
+         * Return the total number of staking records
          *
-         * @return 抵押信息总条数
+         * @return The total number of staking records
          */
         public Integer getTotalStakeCount() {
             return totalStakeCount;
@@ -63,9 +63,9 @@ public class StakeListResponse extends Response<StakeListResponse.Result> {
         }
 
         /**
-         * 获取抵押信息列表
+         * Return staking record list
          *
-         * @return 抵押信息列表
+         * @return Staking record list
          */
         public List<StakeInfo> getStakeList() {
             return stakeList;
@@ -77,7 +77,7 @@ public class StakeListResponse extends Response<StakeListResponse.Result> {
     }
 
     /**
-     * 抵押信息明细
+     * Staking record
      */
     public static class StakeInfo {
         private String stakeAmount;
@@ -88,9 +88,9 @@ public class StakeListResponse extends Response<StakeListResponse.Result> {
         private String id;
 
         /**
-         * 获取抵押金额
+         * Return smount of staking
          *
-         * @return 抵押金额
+         * @return Amount of staking
          */
         public BigInteger getStakeAmount() {
             return NumericUtils.stringToBigInteger(stakeAmount);
@@ -105,9 +105,9 @@ public class StakeListResponse extends Response<StakeListResponse.Result> {
         }
 
         /**
-         * 获取配额受益地址
+         * Return address of staking beneficiary
          *
-         * @return 配额受益地址
+         * @return Address of staking beneficiary
          */
         public Address getBeneficiary() {
             return Address.stringToAddress(beneficiary);
@@ -122,9 +122,9 @@ public class StakeListResponse extends Response<StakeListResponse.Result> {
         }
 
         /**
-         * 获取到期快照块高度，到期后可以取回抵押
+         * Return target unlocking height
          *
-         * @return 到期快照块高度
+         * @return Target unlocking height
          */
         public Long getExpirationHeight() {
             return NumericUtils.stringToLong(expirationHeight);
@@ -139,9 +139,9 @@ public class StakeListResponse extends Response<StakeListResponse.Result> {
         }
 
         /**
-         * 获取预估到期时间，注意如果抵押未到期，则预估到期时间会随出块率而变化
+         * Return estimated target unlocking time
          *
-         * @return 预估到期时间
+         * @return Estimated target unlocking time
          */
         public Long getExpirationTime() {
             return expirationTime;
@@ -153,9 +153,9 @@ public class StakeListResponse extends Response<StakeListResponse.Result> {
 
 
         /**
-         * 获取抵押地址
+         * Return address of staking account
          *
-         * @return 抵押地址
+         * @return Address of staking account
          */
         public Address getStakeAddress() {
             return Address.stringToAddress(stakeAddress);
@@ -170,9 +170,9 @@ public class StakeListResponse extends Response<StakeListResponse.Result> {
         }
 
         /**
-         * 获取抵押id，即抵押请求交易hash
+         * Return staking record id
          *
-         * @return 抵押id
+         * @return Staking record id
          */
         public Hash getId() {
             return Hash.stringToHash(id);

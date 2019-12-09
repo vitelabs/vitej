@@ -26,7 +26,7 @@ public class SBPVoteListResponse extends Response<List<SBPVoteListResponse.Resul
     }
 
     /**
-     * 超姐节点获得的投票数
+     * Current number of votes of a SBP node
      */
     public static class Result {
         private String sbpName;
@@ -34,9 +34,9 @@ public class SBPVoteListResponse extends Response<List<SBPVoteListResponse.Resul
         private String votes;
 
         /**
-         * 获取超级节点名称
+         * Return name of SBP
          *
-         * @return 超级节点名称
+         * @return Name of SBP
          */
         public String getSbpName() {
             return sbpName;
@@ -47,9 +47,9 @@ public class SBPVoteListResponse extends Response<List<SBPVoteListResponse.Resul
         }
 
         /**
-         * 获取当前出块地址
+         * Return block producing addresss
          *
-         * @return 当前出块地址
+         * @return Block producing addresss
          */
         public Address getBlockProducingAddress() {
             return Address.stringToAddress(blockProducingAddress);
@@ -64,9 +64,9 @@ public class SBPVoteListResponse extends Response<List<SBPVoteListResponse.Resul
         }
 
         /**
-         * 获取当前获得的总投票数
+         * Return number of votes
          *
-         * @return 当前获得的总投票数
+         * @return Number of votes
          */
         public BigInteger getVotes() {
             return NumericUtils.stringToBigInteger(votes);

@@ -7,7 +7,7 @@ import org.vitej.core.utils.NumericUtils;
 import java.math.BigInteger;
 
 /**
- * 代币信息
+ * Token information
  */
 public class TokenInfo {
     private String tokenName;
@@ -22,9 +22,9 @@ public class TokenInfo {
     private Integer index;
 
     /**
-     * 获取代币名称
+     * Return token name
      *
-     * @return 代币名称
+     * @return Token name
      */
     public String getTokenName() {
         return tokenName;
@@ -35,9 +35,9 @@ public class TokenInfo {
     }
 
     /**
-     * 获取代币简称
+     * Return token symbol
      *
-     * @return 代币简称
+     * @return Token symbol
      */
     public String getTokenSymbol() {
         return tokenSymbol;
@@ -48,9 +48,9 @@ public class TokenInfo {
     }
 
     /**
-     * 获取发行总量
+     * Return total supply
      *
-     * @return 发行总量
+     * @return Total supply
      */
     public BigInteger getTotalSupply() {
         return NumericUtils.stringToBigInteger(totalSupply);
@@ -65,9 +65,9 @@ public class TokenInfo {
     }
 
     /**
-     * 获取小数位数
+     * Return decimals
      *
-     * @return 小数位数
+     * @return Decimals
      */
     public Integer getDecimals() {
         return decimals;
@@ -78,9 +78,9 @@ public class TokenInfo {
     }
 
     /**
-     * 获取代币所有者
+     * Return token owner
      *
-     * @return 所有者
+     * @return Token owner
      */
     public Address getOwner() {
         return new Address(owner);
@@ -95,9 +95,9 @@ public class TokenInfo {
     }
 
     /**
-     * 获取代币id
+     * Return token id
      *
-     * @return 代币id
+     * @return Token id
      */
     public TokenId getTokenId() {
         return TokenId.stringToTokenId(tokenId);
@@ -112,9 +112,9 @@ public class TokenInfo {
     }
 
     /**
-     * 获取最大发行量，不可增发代币此字段值为 0
+     * Return max supply. 0 for non-reissuable token
      *
-     * @return 最大发行量
+     * @return Max supply
      */
     public BigInteger getMaxSupply() {
         return NumericUtils.stringToBigInteger(maxSupply);
@@ -129,9 +129,9 @@ public class TokenInfo {
     }
 
     /**
-     * 获取是否可增发
+     * Return whether this token is reissuable
      *
-     * @return 是否可增发，true 可增发 false 不可增发
+     * @return If true, the token is reissuable, otherwise non-reissuable
      */
     public Boolean getReIssuable() {
         return isReIssuable;
@@ -142,9 +142,10 @@ public class TokenInfo {
     }
 
     /**
-     * 获取是否仅所有者可销毁，不可增发代币此字段值为 false
+     * Return whether this token can be burned by non-owner address
      *
-     * @return true 仅所有者可销毁 false 所有持币账户可销毁
+     * @return true If true, only token owner can burn token, otherwise every token holder can.
+     * False for non-reissuable token
      */
     public Boolean getOwnerBurnOnly() {
         return isOwnerBurnOnly;
@@ -155,9 +156,9 @@ public class TokenInfo {
     }
 
     /**
-     * 获取代币序号
+     * Return token index
      *
-     * @return 从 0 开始，同名 tokenSymbol 的序号按铸币顺序递增
+     * @return Token index between 0-999. Index will be allocated in ascending order for tokens having the same symbol
      */
     public Integer getIndex() {
         return index;

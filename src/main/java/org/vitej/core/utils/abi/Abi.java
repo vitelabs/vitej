@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.collections4.Predicate;
 import org.vitej.core.utils.BytesUtils;
@@ -23,6 +23,9 @@ import static org.apache.commons.lang3.ArrayUtils.subarray;
 import static org.apache.commons.lang3.StringUtils.join;
 import static org.apache.commons.lang3.StringUtils.stripEnd;
 
+/**
+ * Abi utils
+ */
 public class Abi extends ArrayList<Abi.Entry> {
     private final static ObjectMapper DEFAULT_MAPPER = new ObjectMapper()
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
@@ -109,13 +112,11 @@ public class Abi extends ArrayList<Abi.Entry> {
     }
 
     private <T extends Abi.Entry> T find(Class<T> resultClass, final Abi.Entry.Type type, final Predicate<T> searchPredicate) {
-        return (T) CollectionUtils.find(this, entry -> entry.type == type && searchPredicate.evaluate((T) entry));
+        return (T) IterableUtils.find(this, entry -> entry.type == type && searchPredicate.evaluate((T) entry));
     }
 
     public Function findFunctionByData(byte[] encoded) {
-        Predicate<Function> p = (v1) -> {
-            return Arrays.equals(v1.encodeSignature(), Abi.Function.extractSignature(encoded));
-        };
+        Predicate<Function> p = (v1) -> Arrays.equals(v1.encodeSignature(), Function.extractSignature(encoded));
         Abi.Function f = find(Function.class, Abi.Entry.Type.function, p);
         if (f != null) {
             return f;

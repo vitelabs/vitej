@@ -4,9 +4,9 @@ import org.vitej.core.protocol.methods.Hash;
 
 public class LatestSnapshotHashResponse extends Response<String> {
     /**
-     * 获取快照块hash
+     * Return snapshot block hash
      *
-     * @return 快照块hash
+     * @return Snapshot block hash
      */
     public Hash getHash() {
         return Hash.stringToHash(getResult());

@@ -3,7 +3,7 @@ package org.vitej.core.protocol.methods.response;
 import org.vitej.core.utils.BytesUtils;
 
 /**
- * 合约信息
+ * Contract information
  *
  * @see <a href="https://mainnet.vite.wiki/zh/tutorial/contract/contract.html">https://mainnet.vite.wiki/zh/tutorial/contract/contract.html</a>
  */
@@ -14,9 +14,9 @@ public class ContractInfo {
     private Integer quotaMultiplier;
 
     /**
-     * 获取合约代码
+     * Return code of contract
      *
-     * @return 合约代码
+     * @return Code of contract
      */
     public byte[] getCode() {
         return BytesUtils.base64ToBytes(code);
@@ -31,9 +31,9 @@ public class ContractInfo {
     }
 
     /**
-     * 获取确认数
+     * Return response latency
      *
-     * @return 确认数
+     * @return Response latency
      */
     public Integer getResponseLatency() {
         return responseLatency;
@@ -44,9 +44,9 @@ public class ContractInfo {
     }
 
     /**
-     * 获取随机数确认数
+     * Return random degree
      *
-     * @return 随机数确认数
+     * @return Random degree
      */
     public Integer getRandomDegree() {
         return randomDegree;
@@ -57,9 +57,9 @@ public class ContractInfo {
     }
 
     /**
-     * 获取配额翻倍数
+     * Return quota multiplier
      *
-     * @return 配额翻倍数，单位：10，例如返回值为15表示调用合约请求交易收取1.5倍配额
+     * @return Quota multiplier
      */
     public Integer getQuotaMultiplier() {
         return quotaMultiplier;

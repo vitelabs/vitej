@@ -4,9 +4,9 @@ import org.vitej.core.utils.NumericUtils;
 
 public class SnapshotChainHeightResponse extends Response<String> {
     /**
-     * 获取最新的快照块高度
+     * Return snapshot block height
      *
-     * @return 最新的快照块高度
+     * @return Snapshot block height
      */
     public Long getHeight() {
         return NumericUtils.stringToLong(getResult());

@@ -29,9 +29,9 @@ public class NetSyncDetailResponse extends Response<NetSyncDetailResponse.Result
         private List<SyncConnectionStatus> connections;
 
         /**
-         * 获取同步的起始高度
+         * Return start height
          *
-         * @return 同步的起始高度
+         * @return Start height
          */
         public Long getFrom() {
             return from;
@@ -42,9 +42,9 @@ public class NetSyncDetailResponse extends Response<NetSyncDetailResponse.Result
         }
 
         /**
-         * 获取同步的目标高度
+         * Return target height
          *
-         * @return 同步的目标高度
+         * @return Target height
          */
         public Long getTo() {
             return to;
@@ -55,9 +55,9 @@ public class NetSyncDetailResponse extends Response<NetSyncDetailResponse.Result
         }
 
         /**
-         * 获取当前快照链的高度
+         * Return current snapshot chain height
          *
-         * @return 当前快照链的高度
+         * @return Current snapshot chain height
          */
         public Long getCurrent() {
             return current;
@@ -68,9 +68,9 @@ public class NetSyncDetailResponse extends Response<NetSyncDetailResponse.Result
         }
 
         /**
-         * 获取同步状态的描述
+         * Return synchron status description
          *
-         * @return 同步状态的描述
+         * @return Synchron status description
          */
         public String getStatus() {
             return status;
@@ -81,9 +81,9 @@ public class NetSyncDetailResponse extends Response<NetSyncDetailResponse.Result
         }
 
         /**
-         * 获取同步任务队列
+         * Return download tasks
          *
-         * @return 同步任务队列，例如"692001-693000 done"表示高度范围在692001-693000的快照块已经同步完成
+         * @return Download tasks
          */
         public List<String> getTasks() {
             return tasks;
@@ -94,9 +94,9 @@ public class NetSyncDetailResponse extends Response<NetSyncDetailResponse.Result
         }
 
         /**
-         * 获取用于同步账本的连接
+         * Return network connections to download ledger chunks
          *
-         * @return 用于同步账本的连接
+         * @return Network connections to download ledger chunks
          */
         public List<SyncConnectionStatus> getConnections() {
             return connections;
@@ -113,9 +113,9 @@ public class NetSyncDetailResponse extends Response<NetSyncDetailResponse.Result
         private String task;
 
         /**
-         * 获取节点地址描述，例如"24a160122317e6e4940ef2a91242b07f@118.25.49.80:8484",
+         * Return ip address,
          *
-         * @return 节点地址描述
+         * @return Ip address
          */
         public String getAddress() {
             return address;
@@ -126,9 +126,9 @@ public class NetSyncDetailResponse extends Response<NetSyncDetailResponse.Result
         }
 
         /**
-         * 获取节点的同步速度
+         * Return sync speed
          *
-         * @return 节点的同步速度，例如"0.00 Byte/s",
+         * @return Sync speed
          */
         public String getSpeed() {
             return speed;
@@ -139,9 +139,9 @@ public class NetSyncDetailResponse extends Response<NetSyncDetailResponse.Result
         }
 
         /**
-         * 获取节点的同步任务
+         * Return sync task
          *
-         * @return 节点的同步任务
+         * @return Sync task
          */
         public String getTask() {
             return task;

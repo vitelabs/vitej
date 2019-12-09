@@ -9,10 +9,10 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * vite通用RPC请求对象
+ * Vite RPC request
  *
- * @param <S> 参数类型
- * @param <T> 返回值类型
+ * @param <S> Parameter type
+ * @param <T> Response type
  */
 public class Request<S, T extends Response> {
     private static AtomicLong nextId = new AtomicLong(0);

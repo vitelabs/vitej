@@ -8,17 +8,17 @@ import org.vitej.core.wallet.Crypto;
 import java.util.Arrays;
 
 /**
- * 代币id
+ * Token id
  */
 public class TokenId {
     private byte[] tokenIdCore;
     private byte[] checksum;
 
     /**
-     * 生成代币id对象
+     * Create TokenId instance
      *
-     * @param tokenIdCore 核心代币id，例如5649544520544f4b454e
-     * @param checksum    校验码，例如6e40
+     * @param tokenIdCore Token id core, for example: 5649544520544f4b454e
+     * @param checksum    Token id checksum, for example: 6e40
      */
     public TokenId(byte[] tokenIdCore, byte[] checksum) {
         this.tokenIdCore = tokenIdCore;
@@ -26,9 +26,9 @@ public class TokenId {
     }
 
     /**
-     * 生成代币id对象
+     * Create TokenId instance
      *
-     * @param tokenId string类型的代币id，例如tti_5649544520544f4b454e6e40
+     * @param tokenId String type of token id, for example: tti_5649544520544f4b454e6e40
      */
     public TokenId(String tokenId) {
         Preconditions.checkArgument(isValid(tokenId), "Invalid tokenId");
@@ -37,9 +37,9 @@ public class TokenId {
     }
 
     /**
-     * 生成代币id对象，并计算校验码
+     * Create TokenId instance
      *
-     * @param tokenIdCore 核心代币id，例如5649544520544f4b454e
+     * @param tokenIdCore Token id core, for example: 5649544520544f4b454e
      */
     public TokenId(byte[] tokenIdCore) {
         this.tokenIdCore = tokenIdCore;
@@ -47,9 +47,9 @@ public class TokenId {
     }
 
     /**
-     * 获取核心代币id
+     * Convert token id to byte array
      *
-     * @return 核心代币id，例如5649544520544f4b454e
+     * @return Byte array token id core, for example: 5649544520544f4b454e
      */
     public byte[] getBytes() {
         return tokenIdCore;
@@ -77,20 +77,20 @@ public class TokenId {
     }
 
     /**
-     * 生成代币id对象
+     * Create TokenId instance
      *
-     * @param s string类型的代币id，例如tti_5649544520544f4b454e6e40
-     * @return 如果入参为空，则返回空，否则返回代币id对象
+     * @param s String type token id, for example: tti_5649544520544f4b454e6e40
+     * @return If input is null, return null, else return tokenId
      */
     public static TokenId stringToTokenId(String s) {
         return StringUtils.isEmpty(s) ? null : new TokenId(s);
     }
 
     /**
-     * 判断string类型的代币id是否合法
+     * Return whether a token id is valid
      *
-     * @param tokenId string类型的代币id，例如tti_5649544520544f4b454e6e40
-     * @return true-合法，false-不合法
+     * @param tokenId String type token id
+     * @return True for valid token id, false for invalid token id
      */
     public static boolean isValid(String tokenId) {
         if (StringUtils.isEmpty(tokenId) || tokenId.length() != 28) {
@@ -105,10 +105,10 @@ public class TokenId {
     }
 
     /**
-     * 生成校验码
+     * Calculate token if checksum
      *
-     * @param tokenIdCore 核心代币id，长度为10的字节数组
-     * @return 校验码，长度为2的字节数组
+     * @param tokenIdCore Token id core
+     * @return Token id checksum
      */
     public static byte[] getCheckSum(byte[] tokenIdCore) {
         return Crypto.digest(2, tokenIdCore);

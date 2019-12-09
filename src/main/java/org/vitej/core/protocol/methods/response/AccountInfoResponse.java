@@ -31,9 +31,9 @@ public class AccountInfoResponse extends Response<AccountInfoResponse.Result> {
         private Map<String, BalanceInfo> balanceInfoMap;
 
         /**
-         * 获取账户地址
+         * Return cccount address
          *
-         * @return 账户地址
+         * @return Account address
          */
         public Address getAddress() {
             return Address.stringToAddress(address);
@@ -48,9 +48,9 @@ public class AccountInfoResponse extends Response<AccountInfoResponse.Result> {
         }
 
         /**
-         * 获取账户链上的账户块数量
+         * Return the total transaction number associated with the account
          *
-         * @return 账户链上的账户块数量
+         * @return The total transaction number associated with the account
          */
         public Long getBlockCount() {
             return NumericUtils.stringToLong(blockCount);
@@ -65,9 +65,9 @@ public class AccountInfoResponse extends Response<AccountInfoResponse.Result> {
         }
 
         /**
-         * 获取账户余额
+         * Return cccount balance
          *
-         * @return 账户余额
+         * @return Account balance
          */
         public Map<TokenId, BalanceInfo> getBalanceInfoMap() {
             Map<TokenId, BalanceInfo> map = new HashMap<>(balanceInfoMap.size());
@@ -92,9 +92,9 @@ public class AccountInfoResponse extends Response<AccountInfoResponse.Result> {
         private String transactionCount;
 
         /**
-         * 获取代币信息
+         * Return token info
          *
-         * @return 代币信息
+         * @return Token info
          */
         public TokenInfo getTokenInfo() {
             return tokenInfo;
@@ -105,9 +105,9 @@ public class AccountInfoResponse extends Response<AccountInfoResponse.Result> {
         }
 
         /**
-         * 获取代币余额
+         * Return account balance
          *
-         * @return 代币余额
+         * @return Account balance
          */
         public BigInteger getBalance() {
             return NumericUtils.stringToBigInteger(balance);
@@ -122,9 +122,9 @@ public class AccountInfoResponse extends Response<AccountInfoResponse.Result> {
         }
 
         /**
-         * 获取账户链上和该币种相关的账户块数量
+         * Return the total transaction number associated with the token
          *
-         * @return 账户链上和该币种相关的账户块数量
+         * @return The total transaction number associated with the token
          */
         public Long getTransactionCount() {
             return NumericUtils.stringToLong(transactionCount);

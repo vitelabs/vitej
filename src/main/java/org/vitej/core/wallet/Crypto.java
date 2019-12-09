@@ -23,6 +23,9 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
+/**
+ * Blake2b crypto utils
+ */
 public class Crypto {
     private static Field ED25519_FIELD = new Field(
             256,
@@ -47,11 +50,25 @@ public class Crypto {
 
     private static Provider BLAKE2B_PROVIDER = new Blake2bProvider();
 
+    /**
+     * Generate public key by private key
+     *
+     * @param privateKey Private key
+     * @return Public key
+     */
     public static byte[] getPublicKey(byte[] privateKey) {
         EdDSAPrivateKeySpec key = new EdDSAPrivateKeySpec(privateKey, ED25519_BLAKE2B_CURVES_PEC);
         return key.getA().toByteArray();
     }
 
+    /**
+     * Generate signature
+     *
+     * @param message    Data to sign
+     * @param privateKey Private key
+     * @return Signature
+     * @throws IllegalStateException Throws IllegalStateException when sign failed
+     */
     public static byte[] sign(byte[] message, byte[] privateKey) throws IllegalStateException {
         try {
             EdDSAEngine edDSAEngine = new EdDSAEngine(MessageDigest.getInstance(Blake2b.BLAKE2_B_512, BLAKE2B_PROVIDER));
@@ -66,20 +83,36 @@ public class Crypto {
         }
     }
 
-    public static boolean verify(byte[] signature, byte[] hash, byte[] publicKey) throws IllegalStateException {
+    /**
+     * Check whether a signature is valid
+     *
+     * @param signature Signature
+     * @param message   Data to sign
+     * @param publicKey Public key
+     * @return True for valid, false for invalid
+     * @throws IllegalStateException Throws IllegalStateException when calculate hash failed
+     */
+    public static boolean verify(byte[] signature, byte[] message, byte[] publicKey) throws IllegalStateException {
         try {
             EdDSAEngine edDSAEngine = new EdDSAEngine(MessageDigest.getInstance(Blake2b.BLAKE2_B_512, BLAKE2B_PROVIDER));
             EdDSAPublicKeySpec edDSAPublicKeySpec = new EdDSAPublicKeySpec(publicKey, ED25519_BLAKE2B_CURVES_PEC);
             EdDSAPublicKey edDSAPublicKey = new EdDSAPublicKey(edDSAPublicKeySpec);
             edDSAEngine.initVerify(edDSAPublicKey);
             edDSAEngine.setParameter(EdDSAEngine.ONE_SHOT_MODE);
-            edDSAEngine.update(hash);
+            edDSAEngine.update(message);
             return edDSAEngine.verify(signature);
         } catch (GeneralSecurityException e) {
-            throw new IllegalStateException("verify failed, " + Arrays.toString(hash), e);
+            throw new IllegalStateException("verify failed, " + Arrays.toString(message), e);
         }
     }
 
+    /**
+     * Generate encoded data
+     *
+     * @param digestSize Output size
+     * @param byteArrays Input data
+     * @return Encoded data
+     */
     public static byte[] digest(int digestSize, byte[]... byteArrays) {
         requireNonNull(byteArrays, "byteArrays can't be null");
         Blake2b blake2b = new Blake2b(null, digestSize, null, null);
@@ -89,6 +122,12 @@ public class Crypto {
         return output;
     }
 
+    /**
+     * Generate encoded data
+     *
+     * @param data Input data
+     * @return Encoded data
+     */
     public static byte[] digest(byte[] data) {
         return digest(32, data);
     }

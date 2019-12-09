@@ -4,22 +4,21 @@ import org.vitej.core.protocol.methods.Address;
 import org.vitej.core.utils.BytesUtils;
 
 /**
- * 离线调用合约getter方法参数
+ * Call contract's offchain method parameters
  */
 public class CallOffChainMethodParams {
-    /**
-     * 合约账户地址
-     */
     private String address;
-    /**
-     * 用于离线查询的合约代码。即编译代码时指定--bin参数后得到的OffChain Binary代码
-     */
     private String offChainCode;
-    /**
-     * 按ABI定义编码后的调用参数，类似调用合约时的交易data。
-     */
     private String data;
 
+    /**
+     * Call contract's offchain method parameters
+     *
+     * @param address      Address of contract
+     * @param offChainCode Binary code for offchain query. This is the value of "OffChain Binary" section generated
+     *                     when compiling the contract with --bin
+     * @param data         Encoded passed-in parameters
+     */
     public CallOffChainMethodParams(Address address, byte[] offChainCode, byte[] data) {
         this.address = address.toString();
         this.offChainCode = BytesUtils.bytesToHexString(offChainCode);

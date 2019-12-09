@@ -13,7 +13,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 /**
- * 用户账户块信息
+ * Account block info
  */
 public class AccountBlock {
     private Integer blockType;
@@ -45,9 +45,9 @@ public class AccountBlock {
     private Long timestamp;
 
     /**
-     * 获取交易类型
+     * Return block type
      *
-     * @return 交易类型，参考 {@link org.vitej.core.protocol.methods.enums.EBlockType}
+     * @return Block type, {@link org.vitej.core.protocol.methods.enums.EBlockType}
      */
     public Integer getBlockType() {
         return blockType;
@@ -58,27 +58,27 @@ public class AccountBlock {
     }
 
     /**
-     * 获取是否请求交易
+     * Return is send block
      *
-     * @return true-请求交易，false-响应交易
+     * @return True - send block，false - receive block
      */
     public Boolean isSendBlock() {
         return BlockUtils.isSendBlock(blockType);
     }
 
     /**
-     * 获取是否响应交易
+     * Return is receive block
      *
-     * @return true-响应交易，false-请求交易
+     * @return True - receive block，false - send block
      */
     public Boolean isReceiveBlock() {
         return BlockUtils.isReceiveBlock(blockType);
     }
 
     /**
-     * 获取账户块高度
+     * Return block height
      *
-     * @return 账户块高度
+     * @return Block height
      */
     public Long getHeight() {
         return NumericUtils.stringToLong(height);
@@ -93,9 +93,9 @@ public class AccountBlock {
     }
 
     /**
-     * 获取交易哈希
+     * Return transaction hash
      *
-     * @return 交易哈希
+     * @return Transaction hash
      */
     public Hash getHash() {
         return Hash.stringToHash(hash);
@@ -110,10 +110,10 @@ public class AccountBlock {
     }
 
     /**
-     * 获取账户链上上一笔交易的哈希
-     * 账户链上第一笔交易的值为 `0000000000000000000000000000000000000000000000000000000000000000``
+     * Return the hash of previous transaction. For the first transaction of account,
+     * 0000000000000000000000000000000000000000000000000000000000000000 is filled
      *
-     * @return 账户链上上一笔交易的哈希
+     * @return The hash of previous transaction
      */
     public Hash getPreviousHash() {
         return Hash.stringToHash(previousHash);
@@ -128,9 +128,9 @@ public class AccountBlock {
     }
 
     /**
-     * 获取账户块所属的账户地址
+     * Return account address
      *
-     * @return 账户块所属的账户地址
+     * @return Account address
      */
     public Address getAddress() {
         return Address.stringToAddress(address);
@@ -145,9 +145,9 @@ public class AccountBlock {
     }
 
     /**
-     * 获取账户公钥
+     * Return public key
      *
-     * @return 账户公钥
+     * @return Public key
      */
     public byte[] getPublicKey() {
         return BytesUtils.base64ToBytes(publicKey);
@@ -162,10 +162,10 @@ public class AccountBlock {
     }
 
     /**
-     * 获取出块账户地址
-     * 用户账户块的出块地址为用户账户地址，合约账户块的出块地址为委托共识组的出块节点地址
+     * Return block producer's address. For user account, producer is account address. For contract
+     * account, producer is the supernode of delegate consensus group
      *
-     * @return 出块账户地址
+     * @return Block producer's address
      */
     public Address getProducer() {
         return Address.stringToAddress(producer);
@@ -180,10 +180,9 @@ public class AccountBlock {
     }
 
     /**
-     * 获取请求账户地址
-     * 对于请求交易，address和fromAddress相同
+     * Return the address of the account the transaction was sent from
      *
-     * @return 请求账户地址
+     * @return The address of the account the transaction was sent from
      */
     public Address getFromAddress() {
         return Address.stringToAddress(fromAddress);
@@ -198,10 +197,9 @@ public class AccountBlock {
     }
 
     /**
-     * 获取响应账户地址
-     * 对于响应交易，address和toAddress相同
+     * Return the address of the account the transaction is sent to
      *
-     * @return 响应账户地址
+     * @return The address of the account the transaction is sent to
      */
     public Address getToAddress() {
         return Address.stringToAddress(toAddress);
@@ -216,11 +214,10 @@ public class AccountBlock {
     }
 
     /**
-     * 获取请求交易hash
-     * 交易类型为请求时值为0000000000000000000000000000000000000000000000000000000000000000
-     * 交易类型为响应时值为对应请求的hash
+     * Return the hash of corresponding request transaction. For response transaction only.
+     * 0000000000000000000000000000000000000000000000000000000000000000 is filled in for request
      *
-     * @return 请求交易hash
+     * @return The hash of corresponding request transaction
      */
     public Hash getSendBlockHash() {
         return Hash.stringToHash(sendBlockHash);
@@ -235,9 +232,9 @@ public class AccountBlock {
     }
 
     /**
-     * 获取代币id
+     * Return token id
      *
-     * @return 代币 id
+     * @return Token id
      */
     public TokenId getTokenId() {
         return TokenId.stringToTokenId(tokenId);
@@ -252,9 +249,9 @@ public class AccountBlock {
     }
 
     /**
-     * 获取转账金额
+     * Return transfer amount
      *
-     * @return 转账金额
+     * @return Transfer amount
      */
     public BigInteger getAmount() {
         return NumericUtils.stringToBigInteger(amount);
@@ -269,10 +266,9 @@ public class AccountBlock {
     }
 
     /**
-     * 获取手续费
-     * 目前只有创建合约、铸币等交易收取手续费
+     * Return fee
      *
-     * @return 手续费
+     * @return Fee
      */
     public BigInteger getFee() {
         return NumericUtils.stringToBigInteger(fee);
@@ -287,12 +283,9 @@ public class AccountBlock {
     }
 
     /**
-     * 备注
-     * 请求交易可以填写备注
-     * 用户响应交易为空
-     * 合约响应交易为执行结果
+     * Optional data the transaction may carry
      *
-     * @return 备注
+     * @return Data
      */
     public byte[] getData() {
         return BytesUtils.base64ToBytes(data);
@@ -307,18 +300,19 @@ public class AccountBlock {
     }
 
     /**
-     * 判断这笔交易是不是合约响应交易，并且执行成功
+     * Chcek whether this block is a contract receive block and is executed successfully
      *
-     * @return true-是合约响应交易并且执行成功，false-不是合约响应交易或者执行失败
+     * @return True - this block is a contract receive block and is executed successfully，
+     * false - otherwise
      */
     public Boolean isContractReceiveSuccess() {
         return BlockUtils.isContractReceiveSuccess(getAddress(), blockType, getData());
     }
 
     /**
-     * 获取PoW的难度
+     * Return PoW difficulty
      *
-     * @return PoW难度，为空时表示没有计算PoW
+     * @return PoW difficulty
      */
     public BigInteger getDifficulty() {
         return NumericUtils.stringToBigInteger(difficulty);
@@ -333,9 +327,9 @@ public class AccountBlock {
     }
 
     /**
-     * 获取PoW的nonce，和difficulty字段成对出现
+     * Return PoW nonce
      *
-     * @return PoW的nonce，为空时表示没有计算PoW
+     * @return PoW nonce
      */
     public byte[] getNonce() {
         return BytesUtils.base64ToBytes(nonce);
@@ -350,9 +344,9 @@ public class AccountBlock {
     }
 
     /**
-     * 获取签名
+     * Return signature
      *
-     * @return 签名
+     * @return Signature
      */
     public byte[] getSignature() {
         return BytesUtils.base64ToBytes(signature);
@@ -367,9 +361,9 @@ public class AccountBlock {
     }
 
     /**
-     * 获取消耗的配额，不包含计算 PoW 获得的一次性配额
+     * Return quota consumed by the transaction, excluding quota obtained through PoW
      *
-     * @return 配额
+     * @return Quota consumed by the transaction, excluding quota obtained through PoW
      */
     public Long getQuotaByStake() {
         return NumericUtils.stringToLong(quotaByStake);
@@ -384,9 +378,9 @@ public class AccountBlock {
     }
 
     /**
-     * 获取消耗的配额，包含计算 PoW 获得的一次性配额
+     * Return quota consumed by the transaction. PoW quota included.
      *
-     * @return 配额
+     * @return Quota consumed by the transaction. PoW quota included.
      */
     public Long getTotalQuota() {
         return NumericUtils.stringToLong(totalQuota);
@@ -401,9 +395,9 @@ public class AccountBlock {
     }
 
     /**
-     * 获取合约响应交易的vmlog的哈希
+     * Return the hash of Vmlog generated by smart contract response
      *
-     * @return 合约响应交易的vmlog的哈希
+     * @return The hash of Vmlog generated by smart contract response
      */
     public Hash getVmLogHash() {
         return Hash.stringToHash(vmLogHash);
@@ -418,9 +412,9 @@ public class AccountBlock {
     }
 
     /**
-     * 获取合约响应交易发起的请求交易列表
+     * Return a list of request transactions sent from within the block. RS block only表
      *
-     * @return 合约响应交易发起的请求交易列表
+     * @return A list of request transactions sent from within the block
      */
     public List<AccountBlock> getTriggeredSendBlockList() {
         return triggeredSendBlockList;
@@ -431,9 +425,9 @@ public class AccountBlock {
     }
 
     /**
-     * 获取转账的代币信息
+     * Return token info
      *
-     * @return 转账的代币信息
+     * @return Token info
      */
     public TokenInfo getTokenInfo() {
         return tokenInfo;
@@ -444,9 +438,9 @@ public class AccountBlock {
     }
 
     /**
-     * 获取交易被快照块确认的次数
+     * Return confirmation number
      *
-     * @return 交易被快照块确认的次数
+     * @return Confirmation number
      */
     public Long getConfirmations() {
         return NumericUtils.stringToLong(confirmations);
@@ -461,9 +455,9 @@ public class AccountBlock {
     }
 
     /**
-     * 获取快照这笔交易的快照块哈希
+     * Return the hash of snapshot block by which the transaction is snapshotted
      *
-     * @return 快照这笔交易的快照块哈希，值为空表示未被快照
+     * @return The hash of snapshot block by which the transaction is snapshotted
      */
     public Hash getFirstSnapshotHash() {
         return Hash.stringToHash(firstSnapshotHash);
@@ -478,10 +472,9 @@ public class AccountBlock {
     }
 
     /**
-     * 获取请求交易对应的响应交易的块高度
-     * 响应交易本字段为空
+     * Return the height of the corresponding response transaction. Request only
      *
-     * @return 请求交易对应的响应交易的块高度
+     * @return The height of the corresponding response transaction
      */
     public Long getReceiveBlockHeight() {
         return NumericUtils.stringToLong(receiveBlockHeight);
@@ -496,10 +489,9 @@ public class AccountBlock {
     }
 
     /**
-     * 获取请求交易对应的响应交易哈希
-     * 响应交易本字段为空
+     * Return the hash of the corresponding response transaction. Request only
      *
-     * @return 请求交易对应的响应交易哈希，值为空表示请求交易未被接收
+     * @return The hash of the corresponding response transaction
      */
     public Hash getReceiveBlockHash() {
         return Hash.stringToHash(receiveBlockHash);
@@ -514,9 +506,9 @@ public class AccountBlock {
     }
 
     /**
-     * 获取交易被快照的时间，单位秒
+     * Return the timestamp (in second) when the transaction is snapshotted
      *
-     * @return 交易被快照的时间，值为空表示交易未被快照
+     * @return The timestamp (in second) when the transaction is snapshotted
      */
     public DateTime getTimestamp() {
         return TimeUtils.longToDateTime(timestamp);

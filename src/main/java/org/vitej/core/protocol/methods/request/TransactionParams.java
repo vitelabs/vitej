@@ -14,90 +14,105 @@ import java.math.BigInteger;
  */
 public class TransactionParams {
     /**
-     * 交易类型，参考 {@link org.vitej.core.protocol.methods.enums.EBlockType}
-     * 不填默认为SEND_CALL
+     * Block type, {@link org.vitej.core.protocol.methods.enums.EBlockType}
+     * If not set, use SEND_CALL for default
      */
     private Integer blockType;
     /**
-     * 账户块高度
-     * 不填默认取账户链上上一个块的高度+1
+     * Block height
+     * If not set, use latest account block height + 1 for default
      */
     private Long height;
     /**
-     * 账户链上上一笔交易的哈希
-     * 不填默认取账户链上上一个块的hash
+     * The hash of previous transaction
+     * If not set, use latest account block hash for default
      */
     private Hash previousHash;
     /**
-     * 账户块所属的账户地址
-     * 不填默认取keypair对应的地址
+     * Account address
+     * If not set, use key pair address for default
      */
     private Address address;
     /**
-     * 响应账户地址
-     * 创建合约时自动生成，其他请求交易类型必填
-     * 响应交易不填默认根据sendBlockHash填充
+     * The address of the account the transaction is sent to
+     * Required to be set in request transaction
+     * Generated automatically in create contract transaction
+     * Set to toAddress of send block in response transaction
      */
     private Address toAddress;
     /**
-     * 交易类型为请求时无需填写,
-     * 交易类型为响应时值为对应请求的哈希
+     * Required to be set in response transaction
+     * No need to be set in request transaction
      */
     private Hash sendBlockHash;
     /**
-     * 代币id
-     * 不填默认使用VITE的代币id
+     * Token id
+     * If not set, use VITE token id for default
      */
     private TokenId tokenId;
     /**
-     * 转账金额
-     * 不填默认为0
+     * Transfer amount
+     * If not set, use 0 for default
      */
     private BigInteger amount;
     /**
-     * 手续费
-     * 目前只有创建合约和铸币交易需要填这个字段，默认为0
+     * Fee
+     * If not set, use 0 for default
+     * Automatically set to 10 VITE in create contract transaction
      */
     private BigInteger fee;
     /**
-     * 备注
-     * 不填默认为空
+     * Optional data the transaction may carry
+     * If not set, use null for default
      */
     private byte[] data;
     /**
-     * PoW的难度
-     * 无需填写，如果autoPoW为true则自动填充此字段
+     * PoW difficulty
+     * If not set and autoPoW is true, automatically fill in this field
      */
     private BigInteger difficulty;
     /**
-     * PoW的nonce
-     * 无需填写，如果autoPoW为true则自动填充此字段
+     * PoW nonce
+     * If not set and autoPoW is true, automatically fill in this field
      */
     private byte[] nonce;
     /**
-     * 交易哈希
-     * 无需填写，自动计算
+     * Transaction hash
+     * Automatically filled in
      */
     private Hash hash;
     /**
-     * 签名
-     * 无需填写，自动计算
+     * Signature
+     * Automatically filled in by key pair
      */
     private byte[] signature;
     /**
-     * 账户公钥
-     * 无需填写，自动计算
+     * Public key
+     * Automatically filled in by key pair
      */
     private byte[] publicKey;
 
     public TransactionParams() {
     }
 
+    /**
+     * Create receive transaction
+     *
+     * @param sendBlockHash The hash of corresponding request transaction
+     */
     public TransactionParams(Hash sendBlockHash) {
         this.blockType = EBlockType.RECEIVE.getValue();
         this.sendBlockHash = sendBlockHash;
     }
 
+    /**
+     * Create transfer transaction or call contract transaction
+     *
+     * @param toAddress The address of the account the transaction is sent to
+     * @param tokenId   Token id
+     * @param amount    Transfer amount
+     * @param data      Transfer comment or call contract data
+     */
     public TransactionParams(Address toAddress, TokenId tokenId, BigInteger amount, byte[] data) {
         this.blockType = EBlockType.SEND_CALL.getValue();
         this.toAddress = toAddress;
@@ -106,6 +121,13 @@ public class TransactionParams {
         this.data = data;
     }
 
+    /**
+     * Create create contract transaction
+     *
+     * @param tokenId Token id
+     * @param amount  Transfer amount when calling constructor method of the contract
+     * @param data    Create contract data
+     */
     public TransactionParams(TokenId tokenId, BigInteger amount, byte[] data) {
         this.blockType = EBlockType.SEND_CREATE.getValue();
         this.tokenId = tokenId;

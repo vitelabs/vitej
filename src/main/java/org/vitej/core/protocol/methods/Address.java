@@ -9,7 +9,7 @@ import org.vitej.core.wallet.Crypto;
 import java.util.Arrays;
 
 /**
- * 账户地址
+ * Account address
  *
  * @see <a href="https://mainnet.vite.wiki/zh/vep/vep-16.html">https://mainnet.vite.wiki/zh/vep/vep-16.html</a>
  */
@@ -21,11 +21,11 @@ public class Address {
     private byte[] checksum;
 
     /**
-     * 生成账户地址对象
+     * Create address instance
      *
-     * @param addressCore 核心账户地址，例如ab24ef68b84e642c0ddca06beec81c9acb1977bb
-     * @param type        账户类型，0-用户地址，1-合约地址
-     * @param checksum    校验码，例如d7da27a87a
+     * @param addressCore Address core, for example: ab24ef68b84e642c0ddca06beec81c9acb1977bb
+     * @param type        Address type, 0 for user account, 1 for contract account
+     * @param checksum    Checksum, for example: d7da27a87a
      */
     public Address(byte[] addressCore, int type, byte[] checksum) {
         this.addressCore = addressCore;
@@ -34,10 +34,10 @@ public class Address {
     }
 
     /**
-     * 生成账户地址对象，根据账户类型自动生成校验码
+     * Create address instance
      *
-     * @param addressCore 核心账户地址，例如ab24ef68b84e642c0ddca06beec81c9acb1977bb
-     * @param type        账户类型，0-用户地址，1-合约地址
+     * @param addressCore Address core, for example: ab24ef68b84e642c0ddca06beec81c9acb1977bb
+     * @param type        Address type, 0 for user account, 1 for contract account
      */
     public Address(byte[] addressCore, int type) {
         this.addressCore = addressCore;
@@ -46,9 +46,9 @@ public class Address {
     }
 
     /**
-     * 生成账户地址对象，并校验有效性
+     * Create address instance and check whether the address is valid
      *
-     * @param address 账户地址，例如vite_ab24ef68b84e642c0ddca06beec81c9acb1977bbd7da27a87a
+     * @param address String type address, for example: vite_ab24ef68b84e642c0ddca06beec81c9acb1977bbd7da27a87a
      */
     public Address(String address) {
         Preconditions.checkArgument(isValid(address), "Invalid address");
@@ -58,9 +58,9 @@ public class Address {
     }
 
     /**
-     * 生成账户地址对象
+     * Create address instance
      *
-     * @param bytes 区块链上使用的21字节账户地址，例如ab24ef68b84e642c0ddca06beec81c9acb1977bb00
+     * @param bytes Byte array type of address, for example: ab24ef68b84e642c0ddca06beec81c9acb1977bb00
      */
     public Address(byte[] bytes) {
         Preconditions.checkArgument(bytes.length == 21);
@@ -71,36 +71,36 @@ public class Address {
     }
 
     /**
-     * 获取账户类型
+     * Return address type
      *
-     * @return 账户类型，0-用户地址，1-合约地址
+     * @return Address type, 0 for user account, 1 for contract account
      */
     public int getType() {
         return type;
     }
 
     /**
-     * 判断是否合约账户
+     * Return whether the address is for contract
      *
-     * @return true-合约账户，false-用户账户
+     * @return True for contract address, false for user address
      */
     public boolean isContract() {
         return type == contractType;
     }
 
     /**
-     * 判断是否用户账户
+     * Return whether the address is for user
      *
-     * @return true-用户账户，false-合约账户
+     * @return true for user address, false for contract address
      */
     public boolean isUser() {
         return type == userType;
     }
 
     /**
-     * 获取21字节的账户地址
+     * return byte array type of address
      *
-     * @return 21字节的账户地址，例如ab24ef68b84e642c0ddca06beec81c9acb1977bb00
+     * @return Byte array type of address
      */
     public byte[] getBytes() {
         return BytesUtils.merge(addressCore, new byte[]{(byte) type});
@@ -128,10 +128,10 @@ public class Address {
     }
 
     /**
-     * 判断一个string类型的地址是否合法
+     * Return whether an address is valid
      *
-     * @param address string类型的地址，例如vite_ab24ef68b84e642c0ddca06beec81c9acb1977bbd7da27a87a
-     * @return true-合法，false-不合法
+     * @param address String type address, for example: vite_ab24ef68b84e642c0ddca06beec81c9acb1977bbd7da27a87a
+     * @return True for valid, false for invalid
      */
     public static boolean isValid(String address) {
         if (StringUtils.isEmpty(address) || address.length() != 55) {
@@ -147,11 +147,11 @@ public class Address {
     }
 
     /**
-     * 生成校验码
+     * Calculate checksum for an address
      *
-     * @param addressCore 核心账户地址，例如ab24ef68b84e642c0ddca06beec81c9acb1977bb
-     * @param type        账户类型，0-用户地址，1-合约地址
-     * @return 校验码，例如d7da27a87a
+     * @param addressCore Address core, for example: ab24ef68b84e642c0ddca06beec81c9acb1977bb
+     * @param type        Address type, 0 for user account, 1 for contract account
+     * @return Checksum, for example: d7da27a87a
      */
     public static byte[] getCheckSum(byte[] addressCore, int type) {
         byte[] checkSum = Crypto.digest(5, addressCore);
@@ -159,20 +159,20 @@ public class Address {
     }
 
     /**
-     * 生成账户地址对象
+     * Create address instance
      *
-     * @param s string类型的地址，例如vite_ab24ef68b84e642c0ddca06beec81c9acb1977bbd7da27a87a
-     * @return 如果入参为空，返回空，否则返回地址
+     * @param s String type address, for example: vite_ab24ef68b84e642c0ddca06beec81c9acb1977bbd7da27a87a
+     * @return If input is null, return null, else return address instance
      */
     public static Address stringToAddress(String s) {
         return StringUtils.isEmpty(s) ? null : new Address(s);
     }
 
     /**
-     * 根据公钥生成账户地址对象
+     * Generate user account address by public key
      *
-     * @param pubKey 公钥
-     * @return 公钥对应的用户地址
+     * @param pubKey Public key
+     * @return Account address
      */
     public static Address publicKeyToAddress(byte[] pubKey) {
         return new Address(Crypto.digest(20, pubKey), 0);

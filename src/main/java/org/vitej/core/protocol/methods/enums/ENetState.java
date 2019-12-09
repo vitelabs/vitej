@@ -1,27 +1,27 @@
 package org.vitej.core.protocol.methods.enums;
 
 /**
- * 网络同步状态
+ * Node sync status
  */
 public enum ENetState {
     /**
-     * 初始化
+     * Initialized
      */
     INIT(0),
     /**
-     * 同步中
+     * Syncing
      */
     SYNCING(1),
     /**
-     * 同步完成
+     * Sync finished
      */
     DONE(2),
     /**
-     * 同步错误
+     * Sync failed
      */
     ERROR(3),
     /**
-     * 同步取消
+     * Sync cancelled
      */
     CANCEL(4);
 

@@ -21,9 +21,6 @@ public class SBPRewardResponse extends Response<SBPRewardResponse.Result> {
         super.setResult(result);
     }
 
-    /**
-     * 待提取奖励明细
-     */
     public static class Result {
         private String blockProducingReward;
         private String votingReward;
@@ -31,9 +28,9 @@ public class SBPRewardResponse extends Response<SBPRewardResponse.Result> {
         private Boolean allRewardWithdrawed;
 
         /**
-         * 获取待提取按块奖励
+         * Return un-retrieved block creation rewards
          *
-         * @return 待提取按块奖励
+         * @return Un-retrieved block creation rewards
          */
         public BigInteger getBlockProducingReward() {
             return NumericUtils.stringToBigInteger(blockProducingReward);
@@ -48,9 +45,9 @@ public class SBPRewardResponse extends Response<SBPRewardResponse.Result> {
         }
 
         /**
-         * 获取待提取按票奖励
+         * Return un-retrieved candidate additional rewards(voting rewards)
          *
-         * @return 待提取按票奖励
+         * @return Un-retrieved candidate additional rewards(voting rewards)
          */
         public BigInteger getVotingReward() {
             return NumericUtils.stringToBigInteger(votingReward);
@@ -65,9 +62,9 @@ public class SBPRewardResponse extends Response<SBPRewardResponse.Result> {
         }
 
         /**
-         * 获取待提取奖励
+         * Return the total rewards that have not been retrieved
          *
-         * @return 待提取奖励
+         * @return The total rewards that have not been retrieved
          */
         public BigInteger getTotalReward() {
             return NumericUtils.stringToBigInteger(totalReward);
@@ -82,9 +79,9 @@ public class SBPRewardResponse extends Response<SBPRewardResponse.Result> {
         }
 
         /**
-         * 判断这个节点是否已取消，并且奖励已经都提取完了
+         * Return whether the SBP node has been cancelled and all rewards have been withdrawn
          *
-         * @return 值为true时表示节点已取消，并且所有的奖励已提取完
+         * @return If true , the SBP node has been cancelled and all rewards have been withdrawn
          */
         public Boolean getAllRewardWithdrawed() {
             return allRewardWithdrawed;

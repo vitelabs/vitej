@@ -25,9 +25,9 @@ public class TokenInfoListWithTotalResponse extends Response<TokenInfoListWithTo
         private List<TokenInfo> tokenInfoList;
 
         /**
-         * 获取代币信息总数
+         * Return the total number of tokens
          *
-         * @return 代币信息总数
+         * @return The total number of tokens
          */
         public Integer getTotalCount() {
             return totalCount;
@@ -38,9 +38,9 @@ public class TokenInfoListWithTotalResponse extends Response<TokenInfoListWithTo
         }
 
         /**
-         * 获取代币信息
+         * Return token information list
          *
-         * @return 代币信息
+         * @return Token information list
          */
         public List<TokenInfo> getTokenInfoList() {
             return tokenInfoList;

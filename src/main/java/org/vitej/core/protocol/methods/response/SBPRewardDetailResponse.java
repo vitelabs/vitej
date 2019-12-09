@@ -22,9 +22,6 @@ public class SBPRewardDetailResponse extends Response<SBPRewardDetailResponse.Re
         super.setResult(result);
     }
 
-    /**
-     * 本周期所有超级节点的奖励信息
-     */
     public static class Result {
         private Map<String, RewardInfoDetail> rewardMap;
         private Long startTime;
@@ -32,9 +29,9 @@ public class SBPRewardDetailResponse extends Response<SBPRewardDetailResponse.Re
         private String cycle;
 
         /**
-         * 获取本周期所有超级节点的奖励明细
+         * Return SBP rewards of all SBP nodes in the cycle
          *
-         * @return 超级节点名称-本周期获得的奖励
+         * @return SBP rewards of all SBP nodes in the cycle
          */
         public Map<String, RewardInfoDetail> getRewardMap() {
             return rewardMap;
@@ -45,9 +42,9 @@ public class SBPRewardDetailResponse extends Response<SBPRewardDetailResponse.Re
         }
 
         /**
-         * 获取周期开始时间
+         * Return cycle start time
          *
-         * @return 周期开始时间
+         * @return Cycle start time
          */
         public Long getStartTime() {
             return startTime;
@@ -58,9 +55,9 @@ public class SBPRewardDetailResponse extends Response<SBPRewardDetailResponse.Re
         }
 
         /**
-         * 获取周期结束时间
+         * Return cycle end time
          *
-         * @return 周期结束时间
+         * @return Cycle end time
          */
         public Long getEndTime() {
             return endTime;
@@ -71,9 +68,9 @@ public class SBPRewardDetailResponse extends Response<SBPRewardDetailResponse.Re
         }
 
         /**
-         * 获取周期
+         * Return index of cycle
          *
-         * @return 周期
+         * @return Index of cycle
          */
         public Long getCycle() {
             return NumericUtils.stringToLong(cycle);
@@ -89,7 +86,7 @@ public class SBPRewardDetailResponse extends Response<SBPRewardDetailResponse.Re
     }
 
     /**
-     * 奖励信息明细
+     * Reward info detail
      */
     public static class RewardInfoDetail {
         private String blockProducingReward;
@@ -99,9 +96,9 @@ public class SBPRewardDetailResponse extends Response<SBPRewardDetailResponse.Re
         private String targetBlocks;
 
         /**
-         * 获取按块奖励
+         * Return block creation rewards
          *
-         * @return 按块奖励
+         * @return Block creation rewards
          */
         public BigInteger getBlockProducingReward() {
             return NumericUtils.stringToBigInteger(blockProducingReward);
@@ -116,9 +113,9 @@ public class SBPRewardDetailResponse extends Response<SBPRewardDetailResponse.Re
         }
 
         /**
-         * 获取按票奖励
+         * Return candidate additional rewards(voting rewards)
          *
-         * @return 按票奖励
+         * @return Candidate additional rewards(voting rewards)
          */
         public BigInteger getVotingReward() {
             return NumericUtils.stringToBigInteger(votingReward);
@@ -133,9 +130,9 @@ public class SBPRewardDetailResponse extends Response<SBPRewardDetailResponse.Re
         }
 
         /**
-         * 获取总奖励金额
+         * Return total rewards
          *
-         * @return 总奖励金额
+         * @return Total rewards
          */
         public BigInteger getTotalReward() {
             return NumericUtils.stringToBigInteger(totalReward);
@@ -150,9 +147,9 @@ public class SBPRewardDetailResponse extends Response<SBPRewardDetailResponse.Re
         }
 
         /**
-         * 获取一个周期内的实际出块数
+         * Return actual blocks produced
          *
-         * @return 一个周期内的实际出块数
+         * @return Actual blocks produced
          */
         public Long getProducedBlocks() {
             return NumericUtils.stringToLong(producedBlocks);
@@ -167,9 +164,9 @@ public class SBPRewardDetailResponse extends Response<SBPRewardDetailResponse.Re
         }
 
         /**
-         * 获取一个周期内的应出块数
+         * Return target blocks should be produced
          *
-         * @return 一个周期内的应出块数
+         * @return Target blocks should be produced
          */
         public Long getTargetBlocks() {
             return NumericUtils.stringToLong(targetBlocks);

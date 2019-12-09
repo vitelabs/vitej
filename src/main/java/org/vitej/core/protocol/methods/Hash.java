@@ -8,15 +8,15 @@ import org.vitej.core.wallet.Crypto;
 import java.util.Arrays;
 
 /**
- * 哈希
+ * 32 byte length blake2b hash in Vite
  */
 public class Hash {
     private byte[] hash;
 
     /**
-     * 生成哈希对象
+     * Create hash instance
      *
-     * @param hash 字节数组类型的哈希，长度为32字节，例如d517e8d4dc9c676876b72ad0cbb4c45890804aa438edd1f171ffc66276202a95
+     * @param hash Byte array type hash
      */
     public Hash(byte[] hash) {
         Preconditions.checkArgument(hash.length == 32);
@@ -24,9 +24,9 @@ public class Hash {
     }
 
     /**
-     * 生成哈希对象
+     * Create hash instance
      *
-     * @param s 十六进制string类型的哈希，长度为32字节，例如d517e8d4dc9c676876b72ad0cbb4c45890804aa438edd1f171ffc66276202a95
+     * @param s Hexadecimal format string type hash
      */
     public Hash(String s) {
         Preconditions.checkArgument(StringUtils.isNotEmpty(s) && s.length() == 64);
@@ -34,9 +34,9 @@ public class Hash {
     }
 
     /**
-     * 获取字节数组类型的哈希
+     * Return byte array type hash
      *
-     * @return 字节数组类型的哈希
+     * @return Byte array type hash
      */
     public byte[] getBytes() {
         return hash;
@@ -64,20 +64,20 @@ public class Hash {
     }
 
     /**
-     * 生成哈希对象
+     * Create hash instance
      *
-     * @param s 十六进制string类型的哈希，长度为32字节，d517e8d4dc9c676876b72ad0cbb4c45890804aa438edd1f171ffc66276202a95
-     * @return 如果入参为空，则返回值为空，否则返回相应的哈希对象
+     * @param s Hexadecimal format string type hash
+     * @return If input is null, return null, else return hash instance
      */
     public static Hash stringToHash(String s) {
         return StringUtils.isEmpty(s) ? null : new Hash(s);
     }
 
     /**
-     * 计算字节数组对应的32位blake2b哈希
+     * Calculate 32 byte length blake2b hash of input data
      *
-     * @param byteArrays 数据内容
-     * @return 哈希
+     * @param byteArrays input data
+     * @return hash
      */
     public static Hash dataToHash(byte[]... byteArrays) {
         Preconditions.checkNotNull(byteArrays);

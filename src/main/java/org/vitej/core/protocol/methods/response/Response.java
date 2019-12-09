@@ -3,9 +3,9 @@ package org.vitej.core.protocol.methods.response;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
- * vite通用RPC返回值类型
+ * Vite RPC response
  *
- * @param <T> 返回值类型
+ * @param <T> response type
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Response<T> {

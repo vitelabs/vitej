@@ -28,9 +28,9 @@ public class PoWDifficultyResponse extends Response<PoWDifficultyResponse.Result
         private Boolean isCongestion;
 
         /**
-         * 获取交易需要的配额
+         * Return quota required for sending the transaction
          *
-         * @return 交易需要的配额
+         * @return Quota required for sending the transaction
          */
         public Long getRequiredQuota() {
             return NumericUtils.stringToLong(requiredQuota);
@@ -45,9 +45,9 @@ public class PoWDifficultyResponse extends Response<PoWDifficultyResponse.Result
         }
 
         /**
-         * 获取需要计算的PoW难度
+         * Return PoW difficulty
          *
-         * @return 需要计算的PoW难度，如果为空字符串，说明不需要计算PoW
+         * @return PoW difficulty. If '' , sending the transaction does not need PoW
          */
         public BigInteger getDifficulty() {
             return NumericUtils.stringToBigInteger(difficulty);
@@ -62,9 +62,9 @@ public class PoWDifficultyResponse extends Response<PoWDifficultyResponse.Result
         }
 
         /**
-         * 获取拥堵系数
+         * Return congestion factor
          *
-         * @return 拥堵系数，单位：1e18，例如，返回2e18表示当前拥堵程度为预期的2倍
+         * @return Congestion factor * 1e18
          */
         public BigInteger getQc() {
             return NumericUtils.stringToBigInteger(qc);
@@ -79,9 +79,9 @@ public class PoWDifficultyResponse extends Response<PoWDifficultyResponse.Result
         }
 
         /**
-         * 判断全网是否拥堵
+         * Return whether the network is congested
          *
-         * @return 全网是否拥堵，true 表示当前全网拥堵，此时配额成本提高，false 表示不拥堵
+         * @return If true , there is a network congestion. In this case, sending the transaction will consume more quota
          */
         public Boolean getCongestion() {
             return isCongestion;

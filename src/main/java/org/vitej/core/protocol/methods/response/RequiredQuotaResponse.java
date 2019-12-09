@@ -21,9 +21,9 @@ public class RequiredQuotaResponse extends Response<RequiredQuotaResponse.Result
     }
 
     /**
-     * 获取交易需要的配额
+     * Return require quota
      *
-     * @return 交易需要的配额
+     * @return Require quota
      */
     public Long getRequiredQuota() {
         return getResult() == null ? null : NumericUtils.stringToLong(getResult().getRequiredQuota());

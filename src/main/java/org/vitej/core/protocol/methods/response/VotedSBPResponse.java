@@ -27,9 +27,9 @@ public class VotedSBPResponse extends Response<VotedSBPResponse.Result> {
         private String votes;
 
         /**
-         * 获取超级节点名称
+         * Return name of SBP
          *
-         * @return 超级节点名称
+         * @return Name of SBP
          */
         public String getBlockProducerName() {
             return blockProducerName;
@@ -40,18 +40,18 @@ public class VotedSBPResponse extends Response<VotedSBPResponse.Result> {
         }
 
         /**
-         * 判断超级节点状态注册状态
+         * Return whether the SBP node is valid
          *
-         * @return true-超级节点注册状态正常，false-超级节点已取消注册
+         * @return true for valid SBP node, false for cancelled SBP node
          */
         public Boolean isSBPActive() {
             return status == 1;
         }
 
         /**
-         * 获取超级节点注册状态
+         * Return status of registration
          *
-         * @return 超级节点注册状态，1-正常，2-已取消注册
+         * @return Status of registration. 1 for valid SBP node, 2 for cancelled SBP node
          */
         public Integer getStatus() {
             return status;
@@ -62,9 +62,9 @@ public class VotedSBPResponse extends Response<VotedSBPResponse.Result> {
         }
 
         /**
-         * 获取投票总数
+         * Return number of votes
          *
-         * @return 投票总数，即投票账户余额之和
+         * @return Number of votes, equivalent to account balance
          */
         public BigInteger getVotes() {
             return NumericUtils.stringToBigInteger(votes);

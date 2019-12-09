@@ -6,7 +6,7 @@ import org.vitej.core.utils.NumericUtils;
 import java.math.BigInteger;
 
 /**
- * 超级节点信息
+ * SBP info
  */
 public class SBPInfo {
     private String name;
@@ -19,9 +19,9 @@ public class SBPInfo {
     private Long revokeTime;
 
     /**
-     * 返回超级节点名称
+     * Return name of SBP
      *
-     * @return 超级节点名称
+     * @return Name of SBP
      */
     public String getName() {
         return name;
@@ -32,9 +32,9 @@ public class SBPInfo {
     }
 
     /**
-     * 获取签名快照块的账户地址
+     * Return block producing address
      *
-     * @return 签名快照块的账户地址，即出块地址
+     * @return Block producing address
      */
     public Address getBlockProducingAddress() {
         return Address.stringToAddress(blockProducingAddress);
@@ -49,9 +49,9 @@ public class SBPInfo {
     }
 
     /**
-     * 获取提取奖励地址
+     * Return address of reward withdrawal account
      *
-     * @return 提取奖励地址
+     * @return Address of reward withdrawal account
      */
     public Address getRewardWithdrawAddress() {
         return Address.stringToAddress(rewardWithdrawAddress);
@@ -66,9 +66,9 @@ public class SBPInfo {
     }
 
     /**
-     * 获取抵押账户地址
+     * Return address of registration account
      *
-     * @return 抵押账户地址，即注册账户地址
+     * @return Address of registration account
      */
     public Address getStakeAddress() {
         return Address.stringToAddress(stakeAddress);
@@ -83,9 +83,9 @@ public class SBPInfo {
     }
 
     /**
-     * 获取抵押金额
+     * Return amount of staking
      *
-     * @return 抵押金额
+     * @return Amount of staking
      */
     public BigInteger getStakeAmount() {
         return NumericUtils.stringToBigInteger(stakeAmount);
@@ -100,9 +100,10 @@ public class SBPInfo {
     }
 
     /**
-     * 获取抵押到期高度，到期后可以取消注册并取回抵押
+     * Return target unlocking height. Registered SBP node can be cancelled after the locking
+     * period expires.
      *
-     * @return 抵押到期高度
+     * @return Target unlocking height
      */
     public Long getExpirationHeight() {
         return NumericUtils.stringToLong(expirationHeight);
@@ -117,9 +118,9 @@ public class SBPInfo {
     }
 
     /**
-     * 获取预估抵押到期时间，注意如果抵押未到期，则预估到期时间会随出块率而变化
+     * Return estimated target unlocking time
      *
-     * @return 预估抵押到期时间
+     * @return Estimated target unlocking time
      */
     public Long getExpirationTime() {
         return expirationTime;
@@ -130,9 +131,9 @@ public class SBPInfo {
     }
 
     /**
-     * 获取取消注册时间
+     * Return time of cancellation
      *
-     * @return 取消注册时间，值为 0 时表示当前未取消
+     * @return Time of cancellation. For non-cancelled SBP nodes, 0 is filled
      */
     public Long getRevokeTime() {
         return revokeTime;

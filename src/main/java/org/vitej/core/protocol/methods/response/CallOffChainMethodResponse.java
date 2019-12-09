@@ -4,9 +4,9 @@ import org.vitej.core.utils.BytesUtils;
 
 public class CallOffChainMethodResponse extends Response<String> {
     /**
-     * 获取合约离线方法的返回值，可以用ABI反解析
+     * Return encoded return value. Use decode methods to get decoded value
      *
-     * @return 合约离线方法的返回值
+     * @return Encoded return value
      */
     public byte[] getReturnData() {
         return BytesUtils.base64ToBytes(getResult());

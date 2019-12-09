@@ -6,9 +6,9 @@ import java.math.BigInteger;
 
 public class StakeAmountResponse extends Response<String> {
     /**
-     * 获取抵押金额
+     * Return stake amount
      *
-     * @return 抵押金额
+     * @return Stake amount
      */
     public BigInteger getStakeAmount() {
         return NumericUtils.stringToBigInteger(getResult());

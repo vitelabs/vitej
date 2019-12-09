@@ -4,6 +4,7 @@ import org.vitej.core.protocol.methods.Address;
 import org.vitej.core.utils.abi.Abi;
 
 public class BuiltinContracts {
+    // Address of built-in contract
     public static final Address ADDRESS_QUOTA_CONTRACT = new Address("vite_0000000000000000000000000000000000000003f6af7459b9");
     public static final Address ADDRESS_GOVERNANCE_CONTRACT = new Address("vite_0000000000000000000000000000000000000004d28108e76b");
     public static final Address ADDRESS_ASSET_CONTRACT = new Address("vite_000000000000000000000000000000000000000595292d996d");
@@ -42,6 +43,7 @@ public class BuiltinContracts {
             "{\"type\":\"event\",\"name\":\"disableReIssue\",\"inputs\":[{\"name\":\"tokenId\",\"type\":\"tokenId\",\"indexed\":true}]}" +
             "]";
 
+    // ABI definition of built-in contract
     public static final Abi ABI_QUOTA_CONTRACT = Abi.fromJson(ABI_JSON_QUOTA_CONTRACT);
     public static final Abi ABI_GOVERNANCE_CONTRACT = Abi.fromJson(ABI_JSON_GOVERNANCE_CONTRACT);
     public static final Abi ABI_ASSET_CONTRACT = Abi.fromJson(ABI_JSON_ASSET_CONTRACT);

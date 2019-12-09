@@ -26,13 +26,12 @@ public class NetNodeInfoResponse extends Response<NetNodeInfoResponse.Result> {
         private Integer netId;
         private Integer peerCount;
         private Long height;
-        private Float broadCheckFailedRatio;
         private List<PeerInfo> peers;
 
         /**
-         * 获取本节点的NodeID
+         * Return node id
          *
-         * @return 本节点的NodeID
+         * @return Node id
          */
         public String getId() {
             return id;
@@ -43,9 +42,9 @@ public class NetNodeInfoResponse extends Response<NetNodeInfoResponse.Result> {
         }
 
         /**
-         * 获取本节点的名称，通过 node_config.json 中的 Identity 字段设置
+         * Return node name, configured in Identity field of node_config.json
          *
-         * @return 本节点的名称
+         * @return Node name
          */
         public String getName() {
             return name;
@@ -56,9 +55,9 @@ public class NetNodeInfoResponse extends Response<NetNodeInfoResponse.Result> {
         }
 
         /**
-         * 获取本节点的网络Id
+         * Return the ID of Vite network connected
          *
-         * @return 本节点的网络Id
+         * @return The ID of Vite network connected
          */
         public Integer getNetId() {
             return netId;
@@ -69,9 +68,9 @@ public class NetNodeInfoResponse extends Response<NetNodeInfoResponse.Result> {
         }
 
         /**
-         * 获取本节点所连接的peer数量
+         * Return number of peers connected
          *
-         * @return 本节点所连接的peer数量
+         * @return Number of peers connected
          */
         public Integer getPeerCount() {
             return peerCount;
@@ -82,9 +81,9 @@ public class NetNodeInfoResponse extends Response<NetNodeInfoResponse.Result> {
         }
 
         /**
-         * 获取当前快照链的高度
+         * Return current snapshot chain height
          *
-         * @return 当前快照链的高度
+         * @return Current snapshot chain height
          */
         public Long getHeight() {
             return height;
@@ -95,22 +94,9 @@ public class NetNodeInfoResponse extends Response<NetNodeInfoResponse.Result> {
         }
 
         /**
-         * 获取节点广播失败率
+         * Return information of peers connected
          *
-         * @return 节点广播失败率
-         */
-        public Float getBroadCheckFailedRatio() {
-            return broadCheckFailedRatio;
-        }
-
-        public void setBroadCheckFailedRatio(Float broadCheckFailedRatio) {
-            this.broadCheckFailedRatio = broadCheckFailedRatio;
-        }
-
-        /**
-         * 获取连接的peer信息
-         *
-         * @return 连接的peer信息
+         * @return Information of peers connected
          */
         public List<PeerInfo> getPeers() {
             return peers;
@@ -130,9 +116,9 @@ public class NetNodeInfoResponse extends Response<NetNodeInfoResponse.Result> {
         private List<String> peers;
 
         /**
-         * 获取节点的NodeID
+         * Return node id
          *
-         * @return 节点的NodeID
+         * @return Node id
          */
         public String getId() {
             return id;
@@ -143,9 +129,9 @@ public class NetNodeInfoResponse extends Response<NetNodeInfoResponse.Result> {
         }
 
         /**
-         * 获取节点的名称
+         * Return node name
          *
-         * @return 节点的名称
+         * @return Node name
          */
         public String getName() {
             return name;
@@ -156,9 +142,9 @@ public class NetNodeInfoResponse extends Response<NetNodeInfoResponse.Result> {
         }
 
         /**
-         * 获取节点的当前快照链的高度
+         * Return current snapshot chain height
          *
-         * @return 节点的当前快照链的高度
+         * @return Current snapshot chain height
          */
         public Long getHeight() {
             return height;
@@ -169,9 +155,9 @@ public class NetNodeInfoResponse extends Response<NetNodeInfoResponse.Result> {
         }
 
         /**
-         * 获取节点的地址信息
+         * Return ip address
          *
-         * @return 节点的地址信息
+         * @return Ip address
          */
         public String getAddress() {
             return address;
@@ -182,9 +168,9 @@ public class NetNodeInfoResponse extends Response<NetNodeInfoResponse.Result> {
         }
 
         /**
-         * 获取节点的接入时间
+         * Return the time when this peer connected
          *
-         * @return 节点的接入时间（北京时间），例如"2019-11-26 11:33:02"
+         * @return The time when this peer connected(Beijing time), for example "2019-11-26 11:33:02"
          */
         public String getCreateAt() {
             return createAt;

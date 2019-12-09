@@ -9,20 +9,23 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * vmlog查询筛选参数
+ * Event logs filter params.
  */
 public class VmLogFilter {
     /**
-     * 查询的合约地址和高度范围，格式为：合约地址-{起始高度，结束高度}
+     * Query logs of the specified contract account address with given range. At least one address
+     * must be specified.
      */
     private Map<String, Range> addressHeightRange = new HashMap<>();
     /**
-     * 查询的vmlog索引范围，第一个list表示第几个topic，第二个list表示对应topic的取值范围
-     * 例如，[[],[A],[B,C]]表示查询的vmlog需要同时满足以下几个条件：
-     * 至少有3个topic；
-     * 其中第一个topic取值不限；
-     * 第二个topic值为A；
-     * 第三个topic值为B或C。
+     * Prefix of topics
+     * Topic examples：
+     * {} matches all logs
+     * {{A}} matches the logs having "A" as the first element
+     * {{},{B}} matches the logs having "B" as the second element
+     * {{A},{B}} matches the logs having "A" as the first element and "B" as the second element
+     * {{A,B},{C,D}} matches the logs having "A" or "B" as the first element, and "C" or "D" as the
+     * second element
      */
     private List<List<Hash>> topics = new ArrayList<>();
 
@@ -65,15 +68,15 @@ public class VmLogFilter {
     }
 
     /**
-     * 高度范围
+     * height range
      */
     public static class Range {
         /**
-         * 查询起始高度，默认从账户链上第一个块开始查询
+         * Start height. 0 means starting from the first block
          */
         private String fromHeight = "0";
         /**
-         * 查询结束高度，默认查询到账户链上最新的块
+         * End height. 0 means stopping at the latest block
          */
         private String toHeight = "0";
 

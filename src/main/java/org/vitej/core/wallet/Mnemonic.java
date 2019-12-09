@@ -22,7 +22,6 @@ import static java.util.Collections.unmodifiableMap;
 
 public class Mnemonic {
     private static final SecureRandom SECURE_RANDOM = new SecureRandom();
-    private static String VITE_ACCOUNT_PATH_FORMAT = "m/44'/666666'/%d'";
     private static final String seceret = "ed25519 blake2b seed";
 
     private static byte[] generateSeed(int length) {
@@ -151,6 +150,7 @@ public class Mnemonic {
 
     public static KeyPair deriveKeyPair(String mnemonic, int index) {
         byte[] seed = PBKDF2SHA512.derive(mnemonic, "mnemonic" + "", 2048, 64);
+        String VITE_ACCOUNT_PATH_FORMAT = "m/44'/666666'/%d'";
         String path = VITE_ACCOUNT_PATH_FORMAT.replaceAll("%d", index + "");
         byte[] result = deriveForPath(path, seed);
         Preconditions.checkNotNull(result);

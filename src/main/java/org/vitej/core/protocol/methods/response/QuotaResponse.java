@@ -27,9 +27,9 @@ public class QuotaResponse extends Response<QuotaResponse.Result> {
         private String stakeAmount;
 
         /**
-         * 获取当前可用配额
+         * Return current available quota
          *
-         * @return 当前可用配额
+         * @return Current available quota
          */
         public Long getCurrentQuota() {
             return NumericUtils.stringToLong(currentQuota);
@@ -44,9 +44,9 @@ public class QuotaResponse extends Response<QuotaResponse.Result> {
         }
 
         /**
-         * 获取最大可用配额，即utpe对应的配额
+         * Return max quota, equivalent to UTPE
          *
-         * @return 最大可用配额
+         * @return Max quota
          */
         public Long getMaxQuota() {
             return NumericUtils.stringToLong(maxQuota);
@@ -61,9 +61,9 @@ public class QuotaResponse extends Response<QuotaResponse.Result> {
         }
 
         /**
-         * 获取抵押金额
+         * Return amount of staking
          *
-         * @return 抵押金额
+         * @return Amount of staking
          */
         public BigInteger getStakeAmount() {
             return NumericUtils.stringToBigInteger(stakeAmount);

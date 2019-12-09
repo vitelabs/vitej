@@ -13,25 +13,16 @@ import java.io.IOException;
 
 public class ProtocolUtils {
     /**
-     * 同checkCallContractResult，检查交易是否被接收时默认重试十次
+     * Check call contract result
      *
-     * @param v             vitej client对象
-     * @param sendBlockHash 请求交易哈希
-     * @return true-请求成功，false-请求交易不存在，请求交易长时间不接收，或者接收失败
-     * @throws IOException 本接口会产生网络请求，可能会抛出IOException
-     */
-    public static boolean checkCallContractResult(ViteRpcMethods v, Hash sendBlockHash) throws IOException {
-        return checkCallContractResult(v, sendBlockHash, CommonConstants.RETRY_TIMES);
-    }
-
-    /**
-     * 检查调用合约交易是否成功
-     *
-     * @param v             vitej client对象
-     * @param sendBlockHash 请求交易哈希
-     * @param retryTimes    检查交易是否被接收时的重试次数
-     * @return true-请求成功，false-请求交易不存在，请求交易长时间不接收，或者接收失败
-     * @throws IOException 本接口会产生网络请求，可能会抛出IOException
+     * @param v             Vitej client instance
+     * @param sendBlockHash Send block hash
+     * @param retryTimes    Retry times when checking whether a send block is received by contract,
+     *                      sleep 1 second before each retry
+     * @return True for contract receive success, false for send block not exist or send block
+     * not received by contract within retry times or contract receive fail
+     * @throws IOException Network requests may be performed when filling in transaction fields,
+     *                     which may throws IOException
      */
     public static boolean checkCallContractResult(ViteRpcMethods v, Hash sendBlockHash, int retryTimes) throws IOException {
         AccountBlockResponse response = v.getAccountBlockByHash(sendBlockHash).send();
@@ -75,5 +66,19 @@ public class ProtocolUtils {
             }
             return true;
         }
+    }
+
+    /**
+     * Check call contract result, retry 10 times for default
+     *
+     * @param v             Vitej client instance
+     * @param sendBlockHash Send block hash
+     * @return True for contract receive success, false for send block not exist or send block
+     * not received by contract within retry times or contract receive fail
+     * @throws IOException Network requests may be performed when filling in transaction fields,
+     *                     which may throws IOException
+     */
+    public static boolean checkCallContractResult(ViteRpcMethods v, Hash sendBlockHash) throws IOException {
+        return checkCallContractResult(v, sendBlockHash, CommonConstants.RETRY_TIMES);
     }
 }

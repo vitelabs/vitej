@@ -1,35 +1,36 @@
 package org.vitej.core.protocol.methods.enums;
 
 /**
- * 账户块类型
+ * Block type
  */
+
 public enum EBlockType {
     /**
-     * 创建合约请求交易
+     * Create contract request
      */
     SEND_CREATE(1),
     /**
-     * 转账或者调用合约请求交易
+     * Transfer of call contract request
      */
     SEND_CALL(2),
     /**
-     * 增发代币请求交易，只能由铸币合约发起
+     * Issue token request, only triggered by assert built-in contract
      */
     SEND_ISSUE(3),
     /**
-     * 响应交易
+     * Response
      */
     RECEIVE(4),
     /**
-     * 合约响应交易失败，配额不足导致
+     * Contract response failed
      */
     RECEIVE_ERROR(5),
     /**
-     * 合约退款请求交易
+     * Contract refund request
      */
     SEND_REFUND(6),
     /**
-     * 创世块，属于响应交易
+     * Genesis response
      */
     RECEIVE_GENESIS(7);
 

@@ -7,16 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 智能合约执行过程中产生的event，也叫vmlog
+ * Event logs generated in contract response blocks
  */
 public class Vmlog {
     private List<String> topics;
     private String data;
 
     /**
-     * 获取event签名和索引字段，其中签名可以用ABI定义生成
+     * Return event signature and indexed field. The signature can be generated from ABI
      *
-     * @return event签名和索引字段
+     * @return Event signature and indexed field
      */
     public List<Hash> getTopics() {
         List<Hash> list = new ArrayList<>(topics.size());
@@ -35,9 +35,9 @@ public class Vmlog {
     }
 
     /**
-     * 获取event的非索引字段，可以用ABI定义反解析
+     * Return non-indexed field of event, can be decoded based on ABI
      *
-     * @return event的非索引字段
+     * @return Non-indexed field of event
      */
     public byte[] getData() {
         return BytesUtils.base64ToBytes(data);

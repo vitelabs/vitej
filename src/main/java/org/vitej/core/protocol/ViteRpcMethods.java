@@ -13,444 +13,456 @@ import java.io.IOException;
 import java.math.BigInteger;
 
 /**
- * go-vite提供的rpc接口
+ * go-vite RPC API
  */
 public interface ViteRpcMethods {
 
     /**
-     * 查看节点同步状态
+     * Return sync status of the node
      *
-     * @return 同步状态信息
+     * @return Sync status of the node
      */
     Request<?, NetSyncInfoResponse> netSyncInfo();
 
     /**
-     * 查看同步详情
+     * Return synchron detail
      *
-     * @return 同步状态详细信息
+     * @return Synchron detail
      */
     Request<?, NetSyncDetailResponse> netSyncDetail();
 
     /**
-     * 查看当前节点的信息
+     * Return node info
      *
-     * @return 节点网络信息
+     * @return Node info
      */
     Request<?, NetNodeInfoResponse> netNodeInfo();
 
     /**
-     * 计算PoW
+     * Calculate a PoW nonce based on the given difficulty. Usually this method is called to obtain
+     * an temporary amount quota upon sending a transaction with no staking.
      *
-     * @param difficulty PoW难度，可以通过getPoWDifficulty接口获取
-     * @param data       Blake2b (address + previousHash)，
-     *                   例如，当 address 为 vite_ab24ef68b84e642c0ddca06beec81c9acb1977bbd7da27a87a ，
-     *                   previousHash 为 0000000000000000000000000000000000000000000000000000000000000000 时，
-     *                   结果为 8689fc3e7d0bcad0a1213fd90ab53437ce745408750f7303a16c75bad28da8c3
-     * @return PoW的nonce，对应AccountBlock的nonce字段
+     * @param difficulty PoW difficulty
+     * @param data       Blake2b (address + previousHash),
+     *                   For example,
+     *                   if address is vite_ab24ef68b84e642c0ddca06beec81c9acb1977bbd7da27a87a and
+     *                   previousHash is 0000000000000000000000000000000000000000000000000000000000000000,
+     *                   the hash value is 8689fc3e7d0bcad0a1213fd90ab53437ce745408750f7303a16c75bad28da8c3
+     * @return Nonce
      */
     Request<?, PoWNonceResponse> getPoWNonce(BigInteger difficulty, Hash data);
 
     /**
-     * 根据用户地址查询账户块
+     * Return account blocks in descent order by height
      *
-     * @param address   查询账号地址
-     * @param pageIndex 分页查询 AccountBlocks 的页数，顺序是按 AccountBlocks 的高度从高到低
-     * @param pageSize  分页查询 AccountBlocks 的个数，顺序是按 AccountBlocks 的高度从高到低
-     * @return 账户块列表
+     * @param address   Account address
+     * @param pageIndex Page index, start with 0
+     * @param pageSize  Page size
+     * @return Account blocks
      */
     Request<?, AccountBlocksResponse> getAccountBlocksByAddress(Address address, int pageIndex, int pageSize);
 
     /**
-     * 同getAccountBlocksByAddress，要求初始化vitej时传入keyPair
+     * The same as getAccountBlocksByAddress, keyPair field is required at initialization
      *
-     * @param pageIndex 分页查询AccountBlocks的页数，顺序是按AccountBlocks的高度从高到低
-     * @param pageSize  分页查询AccountBlocks的个数，顺序是按AccountBlocks的高度从高到低
-     * @return 账户块列表
+     * @param pageIndex Page index, start with 0
+     * @param pageSize  Page size
+     * @return Account blocks
      */
     Request<?, AccountBlocksResponse> getSelfAccountBlocksByAddress(int pageIndex, int pageSize);
 
     /**
-     * 根据高度查询账户块
+     * Return account block by height
      *
-     * @param address 查询账号地址
-     * @param height  查询的AccountBlock的高度
-     * @return 用户账户块
+     * @param address Account address
+     * @param height  Height of account block
+     * @return Account block
      */
     Request<?, AccountBlockResponse> getAccountBlockByHeight(Address address, Long height);
 
     /**
-     * 同getAccountBlockByHeight，要求初始化vitej时传入keyPair
+     * The same as getAccountBlockByHeight, keyPair field is required at initialization
      *
-     * @param height 查询的AccountBlock的高度
-     * @return 用户账户块
+     * @param height Height of account block
+     * @return Account block
      */
     Request<?, AccountBlockResponse> getSelfAccountBlockByHeight(Long height);
 
     /**
-     * 根据hash查询账户块
+     * Return account block by hash
      *
-     * @param hash 查询的 AccountBlock 的 Hash
-     * @return 用户账户块
+     * @param hash Hash of account block
+     * @return Account block
      */
     Request<?, AccountBlockResponse> getAccountBlockByHash(Hash hash);
 
     /**
-     * 查询最新的账户块
+     * Return the latest account block
      *
-     * @param address 查询账号地址
-     * @return 用户账户块
+     * @param address Account address
+     * @return Account block
      */
     Request<?, AccountBlockResponse> getLatestAccountBlock(Address address);
 
     /**
-     * getLatestAccountBlock，要求初始化vitej时传入keyPair
+     * getLatestAccountBlock, keyPair field is required at initialization
      *
-     * @return 用户账户块
+     * @return Account block
      */
     Request<?, AccountBlockResponse> getSelfLatestAccountBlock();
 
     /**
-     * 批量查询账户块
+     * Batch return account blocks
      *
-     * @param address        账户地址
-     * @param startBlockHash （可选）查询的起始AccountBlock的Hash。如果填写null，则默认为当前账户最新的AccountBlock的Hash
-     * @param tokenId        （可选）筛选出与TokenTypeId相关的AccountBlocks。如果填写null，则不筛选AccountBlocks
-     * @param count          查询的AccountBlock数量
-     * @return 用户账户块列表
+     * @param address        Account address
+     * @param startBlockHash Hash of account block, optional. For the latest block, filling in null
+     * @param tokenId        Token type id, optional. This is used to get the transactions
+     *                       associated with certain token. Otherwise, filling in null
+     * @param count          Number of account blocks
+     * @return Account blocks
      */
     Request<?, AccountBlocksResponse> getAccountBlocks(Address address, Hash startBlockHash, TokenId tokenId, int count);
 
     /**
-     * 同getAccountBlocks，要求初始化vitej时传入keyPair
+     * The same as getAccountBlocks, keyPair field is required at initialization
      *
-     * @param startBlockHash （可选）查询的起始AccountBlock的Hash。如果填写null，则默认为当前账户最新的AccountBlock的Hash
-     * @param tokenId        （可选）筛选出与TokenTypeId相关的AccountBlocks。如果填写null，则不筛选AccountBlocks
-     * @param count          查询的AccountBlock数量
-     * @return 用户账户块列表
+     * @param startBlockHash Hash of account block, optional. For the latest block, filling in null
+     * @param tokenId        Token type id, optional. This is used to get the transactions
+     *                       associated with certain token. Otherwise, filling in null
+     * @param count          Number of account blocks
+     * @return Account blocks
      */
     Request<?, AccountBlocksResponse> getSelfAccountBlocks(Hash startBlockHash, TokenId tokenId, int count);
 
     /**
-     * 查询账户信息，包括账户余额和账户链高度
+     * Return account info by address
      *
-     * @param address 账户地址
-     * @return 账户信息
+     * @param address Account address
+     * @return Account info
      */
     Request<?, AccountInfoResponse> getAccountInfoByAddress(Address address);
 
     /**
-     * 同getAccountInfoByAddress，要求初始化vitej时传入keyPair
+     * The same asgetAccountInfoByAddress, keyPair field is required at initialization
      *
-     * @return 账户信息
+     * @return Account info
      */
     Request<?, AccountInfoResponse> getSelfAccountInfo();
 
     /**
-     * 查询待接收账户块列表
+     * Return all unreceived transactions by address
      *
-     * @param address   账户地址
-     * @param pageIndex 页码，从 0 开始
-     * @param pageSize  每页大小
-     * @return 待接收账户块列表
+     * @param address   Account address
+     * @param pageIndex Page index, start with 0
+     * @param pageSize  Page size
+     * @return Unreceived transactions
      */
     Request<?, AccountBlocksResponse> getUnreceivedBlocksByAddress(Address address, int pageIndex, int pageSize);
 
     /**
-     * 同getUnreceivedBlocksByAddress，要求初始化vitej时传入keyPair
+     * The same as getUnreceivedBlocksByAddress, keyPair field is required at initialization
      *
-     * @param pageIndex 页码，从 0 开始
-     * @param pageSize  每页大小
-     * @return 待接收账户块列表
+     * @param pageIndex Page index, start with 0
+     * @param pageSize  Page size
+     * @return Unreceived transactions
      */
     Request<?, AccountBlocksResponse> getSelfUnreceivedBlocks(int pageIndex, int pageSize);
 
     /**
-     * 查询待接收账户块信息汇总，包括交易数量和余额
+     * Return unreceived transaction summary by address
      *
-     * @param address 账户地址
-     * @return 待接收账户块信息汇总
+     * @param address Account address
+     * @return Unreceived transaction summary
      */
     Request<?, UnreceivedTransactionSummaryResponse> getUnreceivedTransactionSummaryByAddress(Address address);
 
     /**
-     * 同getUnreceivedTransactionSummaryByAddress，要求初始化vitej时传入keyPair
+     * The same as getUnreceivedTransactionSummaryByAddress, keyPair field is required at initialization
      *
-     * @return 待接收账户块信息汇总
+     * @return Unreceived transaction summary
      */
     Request<?, UnreceivedTransactionSummaryResponse> getSelfUnreceivedTransactionSummary();
 
     /**
-     * 获取最新的快照块hash
+     * Return latest snapshot block hash
      *
-     * @return 最新的快照块hash
+     * @return Latest snapshot block hash
      */
     Request<?, LatestSnapshotHashResponse> getLatestSnapshotHash();
 
     /**
-     * 获取最新的快照块
+     * Return latest snapshot block
      *
-     * @return 最新的快照块
+     * @return Latest snapshot block
      */
     Request<?, SnapshotBlockResponse> getLatestSnapshotBlock();
 
     /**
-     * 获取当前快照链高度
+     * Return current snapshot chain height
      *
-     * @return 快照链高度
+     * @return Current snapshot chain height
      */
     Request<?, SnapshotChainHeightResponse> getSnapshotChainHeight();
 
     /**
-     * 根据hash查询快照块
+     * Return snapshot block by hash
      *
-     * @param hash 快照块hash
-     * @return 快照块
+     * @param hash Hash of snapshot block
+     * @return Snapshot block
      */
     Request<?, SnapshotBlockResponse> getSnapshotBlockByHash(Hash hash);
 
     /**
-     * 根据高度查询快照块
+     * Return snapshot block by height
      *
-     * @param height 快照块高度
-     * @return 快照块
+     * @param height Height of snapshot block
+     * @return Snapshot block
      */
     Request<?, SnapshotBlockResponse> getSnapshotBlockByHeight(Long height);
 
     /**
-     * 批量查询快照块，从起始高度开始往前查
+     * Batch return snapshot blocks in descent order by height
      *
-     * @param height 起始高度
-     * @param count  数量
-     * @return 快照块列表
+     * @param height Start height
+     * @param count  Number of snapshot blocks
+     * @return Snapshot blocks
      */
     Request<?, SnapshotBlocksResponse> getSnapshotBlocks(Long height, int count);
 
     /**
-     * 查询vmlog
+     * Return event logs generated in the given response block of contract
      *
-     * @param hash 账户块hash
-     * @return vmlog
+     * @param hash Hash of contract account block
+     * @return Event logs
      */
     Request<?, VmlogsResponse> getVmlogs(Hash hash);
 
     /**
-     * 批量查询vmlog，返回值按账户块高度从低到高排序
+     * Return event logs generated in contract response blocks by specified height range and topics
      *
-     * @param filter 过滤参数
-     * @return vmlog
+     * @param filter FilterParam
+     * @return Event logs
      */
     Request<?, VmlogInfosResponse> getVmlogsByFilter(VmLogFilter filter);
 
     /**
-     * 创建合约时生成新的合约地址
+     * Create a new contract address
      *
-     * @param address      交易发起方账户地址
-     * @param height       当前账户块高度
-     * @param previousHash 交易发起方账户链上上一个块的哈希
-     * @return 新的合约地址
+     * @param address      Address of creator
+     * @param height       Current height of account chain
+     * @param previousHash Hash of previous account block
+     * @return New contract address
      */
     Request<?, CreateContractAddressResponse> createContractAddress(Address address, Long height, Hash previousHash);
 
     /**
-     * 查询合约信息
+     * Return contract information by address
      *
-     * @param address 合约账户地址
-     * @return 合约信息
+     * @param address Address of contract
+     * @return Contract information
+     * @see <a href="https://mainnet.vite.wiki/zh/tutorial/contract/contract.html">https://mainnet.vite.wiki/zh/tutorial/contract/contract.html</a>
      */
     Request<?, ContractInfoResponse> getContractInfo(Address address);
 
     /**
-     * 离线调用合约的getter方法。
+     * Call contract's offchain method
      *
-     * @param address      合约账户地址
-     * @param offchainCode 用于离线查询的合约代码。即编译代码时指定--bin参数后得到的OffChain Binary代码
-     * @param data         按ABI定义编码后的调用参数，类似调用合约时的交易data
-     * @return getter方法返回值，可以用ABI反解析
+     * @param address      Address of contract
+     * @param offchainCode Binary code for offchain query. This is the value of "OffChain Binary"
+     *                     section generated when compiling the contract with --bin
+     * @param data         Encoded passed-in parameters
+     * @return Encoded return value. Use decode methods to get decoded value
      */
     Request<?, CallOffChainMethodResponse> callOffChainMethod(Address address, byte[] offchainCode, byte[] data);
 
     /**
-     * 查询账户配额
+     * Return quota balance by account
      *
-     * @param address 账户地址
-     * @return 账户配额
+     * @param address Address of account
+     * @return Quota
      */
     Request<?, QuotaResponse> getQuotaByAccount(Address address);
 
     /**
-     * 同getQuotaByAccount，要求初始化vitej时传入keyPair
+     * The same as getQuotaByAccount, keyPair field is required at initialization
      *
-     * @return 账户配额
+     * @return Quota
      */
     Request<?, QuotaResponse> getSelfQuota();
 
     /**
-     * 查询账户的抵押信息列表，按到期快照块高度倒序排序
+     * Return staking records by account, ordered by target unlocking height in descending order
      *
-     * @param address   抵押账户地址
-     * @param pageIndex 页码，从 0 开始
-     * @param pageSize  每页条数
-     * @return 抵押信息列表
+     * @param address   Address of staking account
+     * @param pageIndex Page index, starting from 0
+     * @param pageSize  Page size
+     * @return Staking records
      */
     Request<?, StakeListResponse> getStakeList(Address address, int pageIndex, int pageSize);
 
     /**
-     * 同getStakeList，要求初始化vitej时传入keyPair
+     * The same as getStakeList, keyPair field is required at initialization
      *
-     * @param pageIndex 页码，从 0 开始
-     * @param pageSize  每页条数
-     * @return 抵押信息列表
+     * @param pageIndex Page index, starting from 0
+     * @param pageSize  Page size
+     * @return Staking records
      */
     Request<?, StakeListResponse> getSelfStakeList(int pageIndex, int pageSize);
 
     /**
-     * 根据配额计算最小抵押金额
+     * Return the minimum required amount of staking in order to obtain the given quota
      *
-     * @param quotaPerSnapshotBlock 每秒使用的配额，例如：
-     *                              以 1/75 TPS 的交易频率发不带备注的转账交易，
-     *                              单笔交易消耗的配额为 21000，
-     *                              每秒消耗的配额为 21000/75=280，
-     *                              此时最少需要抵押 134 VITE
-     * @return 最小抵押金额
+     * @param quotaPerSnapshotBlock Quotas accumulated per second. For example, an amount of 21,000
+     *                              quota are consumed to send a transaction with no comment, in
+     *                              this case, to satisfy the minimum 280 (21000/75) quota
+     *                              accumulation per second in an epoch, a staking amount of 134
+     *                              VITE is required
+     * @return The minimum required amount of staking
      */
     Request<?, StakeAmountResponse> getRequiredStakeAmount(Long quotaPerSnapshotBlock);
 
     /**
-     * 查询注册的超级节点列表，包括已取消注册的超级节点，返回结果中未取消在前，已取消在后，按抵押到期高度倒序排列
+     * Return registered SBP list, including historical SBP nodes, ordered by target unlocking
+     * height in descending order
      *
-     * @param stakeAddress 注册账户地址
-     * @return 注册的超级节点列表
+     * @param stakeAddress Address of registration account
+     * @return SBP list
      */
     Request<?, SBPListResponse> getSBPList(Address stakeAddress);
 
     /**
-     * 同getSBPList，要求初始化vitej时传入keyPair
+     * The same as getSBPList, keyPair field is required at initialization
      *
-     * @return 注册的超级节点列表
+     * @return SBP list
      */
     Request<?, SBPListResponse> getSelfSBPList();
 
     /**
-     * 查询超级节点待提取奖励
+     * Return un-retrieved SBP rewards by SBP name
      *
-     * @param sbpName 超级节点名称
-     * @return 待提取奖励
+     * @param sbpName Name of SBP
+     * @return Reward info
      */
     Request<?, SBPRewardResponse> getSBPRewardPendingWithdrawal(String sbpName);
 
     /**
-     * 按周期查询某一天所有超级节点的奖励
+     * Return SBP rewards of all SBP nodes by cycle
      *
-     * @param cycle 周期
-     * @return 该周期内所有超级节点的奖励
+     * @param cycle Index of cycle
+     * @return SBP rewards of all SBP nodes in the cycle
      */
     Request<?, SBPRewardDetailResponse> getSBPRewardByCycle(Long cycle);
 
     /**
-     * 根据名称查询超级节点信息
+     * Return SBP node information
      *
-     * @param sbpName 超级节点名称
-     * @return 超级节点信息
+     * @param sbpName Name of SBP
+     * @return SBP info
      */
     Request<?, SBPResponse> getSBP(String sbpName);
 
     /**
-     * 查询所有超级节点当前获得的投票数
+     * Return current number of votes of all SBP nodes
      *
-     * @return 所有超级节点当前获得的投票数
+     * @return Current number of votes of all SBP nodes
      */
     Request<?, SBPVoteListResponse> getSBPVoteList();
 
     /**
-     * 查询投票信息
+     * Return voting information by account
      *
-     * @param address 账户地址
-     * @return 投票的超级节点和投票信息
+     * @param address Address of voting account
+     * @return Voting information
      */
     Request<?, VotedSBPResponse> getVotedSBP(Address address);
 
     /**
-     * 同getVotedSBP，要求初始化vitej时传入keyPair
+     * The same as getVotedSBP, keyPair field is required at initialization
      *
-     * @return 投票的超级节点和投票信息
+     * @return Voting information
      */
     Request<?, VotedSBPResponse> getSelfVotedSBP();
 
     /**
-     * 按周期查询当天最后一轮共识的超级节点的投票明细
+     * Return voting details of all SBP nodes by cycle
      *
-     * @param cycle 周期
-     * @return 当天最后一轮共识的超级节点的投票明细
+     * @param cycle Index of cycle
+     * @return Voting details of all SBP nodes in last round of the cycle
      */
     Request<?, SBPVoteDetailsResponse> getSBPVoteDetailsByCycle(Long cycle);
 
     /**
-     * 查询代币信息列表
+     * Return a list of all tokens issued
      *
-     * @param pageIndex 页码，从 0 开始
-     * @param pageSize  每页条数
-     * @return 代币信息
+     * @param pageIndex Page index, starting from 0
+     * @param pageSize  Page size
+     * @return Token information list
      */
     Request<?, TokenInfoListWithTotalResponse> getTokenInfoList(int pageIndex, int pageSize);
 
     /**
-     * 查询代币信息
+     * Return token information
      *
-     * @param tokenId 代币id
-     * @return 代币信息
+     * @param tokenId Token id
+     * @return token information
      */
     Request<?, TokenInfoResponse> getTokenInfoById(TokenId tokenId);
 
     /**
-     * 根据代币所有者账户地址查询代币信息列表
+     * Return a list of tokens issued by the given owner
      *
-     * @param address 代币所有者账户地址
-     * @return 代币信息
+     * @param address Address of token owner
+     * @return Token information list
      */
     Request<?, TokenInfoListResponse> getTokenInfoListByOwner(Address address);
 
     /**
-     * 同getTokenInfoListByOwner，要求初始化vitej时传入keyPair
+     * The same as getTokenInfoListByOwner, keyPair field is required at initialization
      *
-     * @return 代币信息
+     * @return Token information list
      */
     Request<?, TokenInfoListResponse> getSelfTokenInfoList();
 
     /**
-     * 发交易
+     * Send a transaction
      *
-     * @param keyPair     签名账户的地址和私钥
-     * @param transaction 发送的交易内容，只需要填写基本的交易字段
-     * @param autoPoW     是否自动计算PoW
-     * @return 完整的交易信息
-     * @throws IOException 填充交易内容时会产生网络请求，可能会抛出IOException
+     * @param keyPair     Key pair to sign the transaction
+     * @param transaction Transaction information
+     * @param autoPoW     Calculate PoW automatically when quota of the account is not enough
+     *                    to send the transaction
+     * @return Send transaction result
+     * @throws IOException Network requests may be performed when filling in transaction fields,
+     *                     which may throws IOException
      */
     Request<?, EmptyResponse> sendTransaction(KeyPair keyPair, TransactionParams transaction, Boolean autoPoW) throws IOException;
 
     /**
-     * 发交易，要求初始化vitej时传入keyPair
+     * The same as sendTransaction, keyPair field is required at initialization
      *
-     * @param transaction 发送的交易内容，只需要填写基本的交易字段
-     * @param autoPoW     是否自动计算PoW
-     * @return 完整的交易信息
-     * @throws IOException 填充交易内容时会产生网络请求，可能会抛出IOException
+     * @param transaction Transaction information
+     * @param autoPoW     Calculate PoW automatically when quota of the account is not enough
+     *                    to send the transaction
+     * @return Send transaction result
+     * @throws IOException Network requests may be performed when filling in transaction fields,
+     *                     which may throws IOException
      */
     Request<?, EmptyResponse> selfSendTransaction(TransactionParams transaction, Boolean autoPoW) throws IOException;
 
     /**
-     * 计算交易所需配额和是否需要计算PoW
+     * Return PoW difficulty for sending transaction
      *
-     * @param transaction 交易内容，只需要填写基本的交易信息
-     * @return 交易所所需配额和是否需要计算PoW
-     * @throws IOException 填充交易内容时会产生网络请求，可能会抛出IOException
+     * @param transaction Transaction information
+     * @return Quota required for sending the transaction and PoW difficulty
+     * @throws IOException Network requests may be performed when filling in transaction fields,
+     *                     which may throws IOException
      */
     Request<?, PoWDifficultyResponse> getPoWDifficulty(TransactionParams transaction) throws IOException;
 
     /**
-     * 计算交易所需配额
+     * Return quota required for sending the transaction
      *
-     * @param transaction 交易内容，只需要填写基本的交易信息
-     * @return 交易所所需配额
+     * @param transaction Transaction information
+     * @return Quota required for sending the transaction
      */
     Request<?, RequiredQuotaResponse> getRequiredQuota(TransactionParams transaction);
 }

@@ -20,6 +20,9 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 
+/**
+ * An implementation of vite RPC APIs
+ */
 public class Vitej implements ViteRpcMethods {
     private final RpcService rpcService;
     private KeyPair keyPair;
