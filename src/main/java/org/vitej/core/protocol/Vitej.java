@@ -142,7 +142,7 @@ public class Vitej implements ViteRpcMethods {
     public Request<?, AccountBlocksResponse> getAccountBlocks(Address address, Hash startBlockHash, TokenId tokenId, int count) {
         return new Request<>(
                 "ledger_getAccountBlocks",
-                Arrays.asList(address.toString(), startBlockHash.toString(), tokenId == null ? null : tokenId.toString(), count),
+                Arrays.asList(address.toString(), startBlockHash == null ? null : startBlockHash.toString(), tokenId == null ? null : tokenId.toString(), count),
                 rpcService,
                 AccountBlocksResponse.class);
     }
@@ -184,16 +184,16 @@ public class Vitej implements ViteRpcMethods {
     }
 
     @Override
-    public Request<?, UnreceivedTransactionSummaryResponse> getUnreceivedTransactionSummaryByAddress(Address address) {
+    public Request<?, AccountInfoResponse> getUnreceivedTransactionSummaryByAddress(Address address) {
         return new Request<>(
                 "ledger_getUnreceivedTransactionSummaryByAddress",
                 Arrays.asList(address.toString()),
                 rpcService,
-                UnreceivedTransactionSummaryResponse.class);
+                AccountInfoResponse.class);
     }
 
     @Override
-    public Request<?, UnreceivedTransactionSummaryResponse> getSelfUnreceivedTransactionSummary() {
+    public Request<?, AccountInfoResponse> getSelfUnreceivedTransactionSummary() {
         Preconditions.checkNotNull(keyPair);
         return getUnreceivedTransactionSummaryByAddress(keyPair.getAddress());
     }

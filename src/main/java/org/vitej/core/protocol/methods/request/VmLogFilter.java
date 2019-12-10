@@ -29,6 +29,9 @@ public class VmLogFilter {
      */
     private List<List<Hash>> topics = new ArrayList<>();
 
+    public VmLogFilter() {
+    }
+
     public VmLogFilter(Address address) {
         addressHeightRange.put(address.toString(), new Range());
     }

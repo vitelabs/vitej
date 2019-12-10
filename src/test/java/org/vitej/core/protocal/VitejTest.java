@@ -338,7 +338,7 @@ public class VitejTest {
     @Test
     public void testGetUnReceivedTransactionSummaryByAddress() {
         try {
-            UnreceivedTransactionSummaryResponse response = vitej.getUnreceivedTransactionSummaryByAddress(
+            AccountInfoResponse response = vitej.getUnreceivedTransactionSummaryByAddress(
                     new Address("vite_ab24ef68b84e642c0ddca06beec81c9acb1977bbd7da27a87a")
             ).send();
             Assert.assertNull(response.getError());

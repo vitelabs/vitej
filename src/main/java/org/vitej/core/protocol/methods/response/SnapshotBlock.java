@@ -173,6 +173,9 @@ public class SnapshotBlock {
      * @return Snapshot content
      */
     public Map<Address, HashHeight> getSnapshotData() {
+        if (snapshotData == null) {
+            return null;
+        }
         Map<Address, HashHeight> map = new HashMap<>(snapshotData.size());
         snapshotData.forEach((key, value) -> {
             map.put(new Address(key), value);

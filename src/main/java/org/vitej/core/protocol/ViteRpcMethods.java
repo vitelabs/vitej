@@ -174,14 +174,14 @@ public interface ViteRpcMethods {
      * @param address Account address
      * @return Unreceived transaction summary
      */
-    Request<?, UnreceivedTransactionSummaryResponse> getUnreceivedTransactionSummaryByAddress(Address address);
+    Request<?, AccountInfoResponse> getUnreceivedTransactionSummaryByAddress(Address address);
 
     /**
      * The same as getUnreceivedTransactionSummaryByAddress, keyPair field is required at initialization
      *
      * @return Unreceived transaction summary
      */
-    Request<?, UnreceivedTransactionSummaryResponse> getSelfUnreceivedTransactionSummary();
+    Request<?, AccountInfoResponse> getSelfUnreceivedTransactionSummary();
 
     /**
      * Return latest snapshot block hash
