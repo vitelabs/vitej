@@ -4,9 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.vitej</groupId>
+    <groupId>org.vite</groupId>
     <artifactId>vitej-dependencies</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <name>${project.groupId}:${project.artifactId}</name>
+    <version>1.0.0</version>
     <description>Vite java sdk dependencies</description>
     <url>https://github.com/vitelabs/vitej</url>
     <packaging>pom</packaging>
@@ -20,10 +21,10 @@
 
     <scm>
         <connection>
-            scm:git:https://github.com/vitelabs/vitej.git
+            https://github.com/vitelabs/vitej.git
         </connection>
         <developerConnection>
-            scm:git:https://github.com/vitelabs/vitej.git
+            https://github.com/viteLiz
         </developerConnection>
         <url>https://github.com/vitelabs/vitej</url>
         <tag>master</tag>
