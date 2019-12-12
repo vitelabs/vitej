@@ -486,6 +486,9 @@ public class Vitej implements ViteRpcMethods {
                     "to address");
             transaction.setToAddress(CommonConstants.EMPTY_ADDRESS);
             Preconditions.checkNotNull(transaction.getSendBlockHashRaw(), "send block hash");
+            AccountBlockResponse sendBlockResponse = getAccountBlockByHash(transaction.getSendBlockHashRaw()).send();
+            Preconditions.checkState(sendBlockResponse.getError() == null && sendBlockResponse.getResult() != null, "send block not exist");
+            Preconditions.checkState(sendBlockResponse.getResult().getToAddress().equals(transaction.getAddressRaw()), "send block toAddress and key pair address not match");
             Preconditions.checkArgument(
                     transaction.getTokenIdRaw() == null
                             || transaction.getTokenIdRaw().equals(CommonConstants.EMPTY_TOKENID),
