@@ -1,14 +1,24 @@
 # vitej
 go-vite java sdk
 
+## 文档
+
+[wiki](https://vite.wiki/zh/api/javasdk_v2/)
+[demo](https://github.com/vitelabs/vitej-demo)
+
 ## 添加maven依赖
-1. 本地拉取本仓库代码，在代码目录下执行`mvn install`，安装到本地maven仓库
-2. 在项目`pom.xml`中添加依赖
+在项目`pom.xml`中添加依赖
 ```
 <dependency>
-  <groupId>org.vitej</groupId>
+  <groupId>org.vite</groupId>
   <artifactId>vitej</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version></version>
+</dependency>
+<dependency>
+   <groupId>org.vite</groupId>
+   <artifactId>vitej-dependencies</artifactId>
+   <version>1.0.0</version>
+   <type>pom</type>
 </dependency>
 ```
 
@@ -53,7 +63,7 @@ Request<?, EmptyResponse> request = vitej.sendTransaction(
     new TransactionParams()
             .setToAddress(new Address("vite_0996e651f3885e6e6b83dfba8caa095ff7aa248e4a429db7bd"))
             .setAmount(new BigInteger("100")),
-    true);
+    false);
 sendBlockHash = ((TransactionParams) request.getParams().get(0)).getHashRaw();
 request.send();
 ```
