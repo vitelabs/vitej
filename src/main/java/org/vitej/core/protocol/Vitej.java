@@ -542,9 +542,19 @@ public class Vitej implements ViteRpcMethods {
     }
 
     @Override
+    public Request<?, EmptyResponse> sendTransaction(KeyPair keyPair, TransactionParams transaction) throws IOException {
+        return sendTransaction(keyPair, transaction, false);
+    }
+
+    @Override
     public Request<?, EmptyResponse> selfSendTransaction(TransactionParams transaction, Boolean autoPoW) throws IOException {
         Preconditions.checkNotNull(keyPair);
         return sendTransaction(keyPair, transaction, autoPoW);
+    }
+
+    @Override
+    public Request<?, EmptyResponse> selfSendTransaction(TransactionParams transaction) throws IOException {
+        return selfSendTransaction(transaction, false);
     }
 
     @Override

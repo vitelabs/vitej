@@ -437,6 +437,17 @@ public interface ViteRpcMethods {
     Request<?, EmptyResponse> sendTransaction(KeyPair keyPair, TransactionParams transaction, Boolean autoPoW) throws IOException;
 
     /**
+     * Send a transaction
+     *
+     * @param keyPair     Key pair to sign the transaction
+     * @param transaction Transaction information
+     * @return Send transaction result
+     * @throws IOException Network requests may be performed when filling in transaction fields,
+     *                     which may throws IOException
+     */
+    Request<?, EmptyResponse> sendTransaction(KeyPair keyPair, TransactionParams transaction) throws IOException;
+
+    /**
      * The same as sendTransaction, keyPair field is required at initialization
      *
      * @param transaction Transaction information
@@ -447,6 +458,16 @@ public interface ViteRpcMethods {
      *                     which may throws IOException
      */
     Request<?, EmptyResponse> selfSendTransaction(TransactionParams transaction, Boolean autoPoW) throws IOException;
+
+    /**
+     * The same as sendTransaction, keyPair field is required at initialization
+     *
+     * @param transaction Transaction information
+     * @return Send transaction result
+     * @throws IOException Network requests may be performed when filling in transaction fields,
+     *                     which may throws IOException
+     */
+    Request<?, EmptyResponse> selfSendTransaction(TransactionParams transaction) throws IOException;
 
     /**
      * Return PoW difficulty for sending transaction
