@@ -76,6 +76,7 @@ AccountBlocksResponse response = vitej.getAccountBlocksByAddress(
 ```
 
 ## TODO
-1. ws client
-2. subscribe
-3. 内置合约相关接口包装
+1. 自动签收交易
+2. ws client
+3. subscribe
+4. 内置合约相关接口包装
