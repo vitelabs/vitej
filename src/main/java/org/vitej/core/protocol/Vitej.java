@@ -582,6 +582,15 @@ public class Vitej implements ViteRpcMethods {
                 RequiredQuotaResponse.class);
     }
 
+    @Override
+    public Request<?, CommonResponse> commonMethod(String methodName, Object... methodParams) {
+        return new Request<>(
+                methodName,
+                Arrays.asList(methodParams),
+                rpcService,
+                CommonResponse.class);
+    }
+
     private void updateTransactionPreviousHashAndHeight(TransactionParams transaction) throws IOException {
         if (transaction.getHeightRaw() == null && transaction.getPreviousHashRaw() == null) {
             AccountBlockResponse response = getLatestAccountBlock(transaction.getAddressRaw()).send();

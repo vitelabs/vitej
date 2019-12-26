@@ -1,7 +1,9 @@
 package org.vitej.core.wallet;
 
+import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -33,7 +35,18 @@ public class Wallet {
      * @param mnemonic Mnemonic phrase
      */
     public Wallet(List<String> mnemonic) {
+        Preconditions.checkArgument(Mnemonic.isValid(mnemonic, Mnemonic.MnemonicLanguage.ENGLISH), "Invalid mnemonic");
         this.mnemonic = mnemonic;
+    }
+
+    /**
+     * Initialize a wallet instance by mnemonic phrase
+     *
+     * @param mnemonic Mnemonic phrase, join with space
+     */
+    public Wallet(String mnemonic) {
+        this.mnemonic = Arrays.asList(mnemonic.split(" "));
+        Preconditions.checkArgument(Mnemonic.isValid(this.mnemonic, Mnemonic.MnemonicLanguage.ENGLISH), "Invalid mnemonic");
     }
 
     @Override

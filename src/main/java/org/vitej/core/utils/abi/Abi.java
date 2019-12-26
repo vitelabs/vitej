@@ -6,9 +6,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.collections4.Predicate;
+import org.vitej.core.protocol.methods.Hash;
 import org.vitej.core.utils.BytesUtils;
 import org.vitej.core.wallet.Crypto;
 
@@ -111,6 +113,24 @@ public class Abi extends ArrayList<Abi.Entry> {
         }
     }
 
+    public List<?> decodeEvent(byte[] data, List<Hash> topics) {
+        if (CollectionUtils.isEmpty(topics)) {
+            return null;
+        }
+        return decodeEvent(data, convertTopics(topics));
+    }
+
+    private byte[][] convertTopics(List<Hash> topics) {
+        if (topics == null) {
+            return null;
+        }
+        byte[][] topicsBytes = new byte[topics.size()][];
+        for (int i = 0; i < topics.size(); i++) {
+            topicsBytes[i] = topics.get(i).getBytes();
+        }
+        return topicsBytes;
+    }
+
     private <T extends Abi.Entry> T find(Class<T> resultClass, final Abi.Entry.Type type, final Predicate<T> searchPredicate) {
         return (T) IterableUtils.find(this, entry -> entry.type == type && searchPredicate.evaluate((T) entry));
     }
@@ -155,6 +175,23 @@ public class Abi extends ArrayList<Abi.Entry> {
         }
     }
 
+    public Event findEventByTopics(List<Hash> topics) {
+        return findEventByTopics(convertTopics(topics));
+    }
+
+    public Event findEventByTopics(byte[][] topics) {
+        if (topics == null || topics.length == 0) {
+            return null;
+        }
+        Predicate<Event> p = (v1) -> Arrays.equals(v1.encodeSignature(), topics[0]);
+        Abi.Event e = find(Event.class, Entry.Type.event, p);
+        if (e != null) {
+            return e;
+        } else {
+            return null;
+        }
+    }
+
     @Override
     public String toString() {
         try {
@@ -172,7 +209,8 @@ public class Abi extends ArrayList<Abi.Entry> {
             function,
             event,
             fallback,
-            offchain
+            offchain,
+            message
         }
 
         @JsonInclude(Include.NON_NULL)
@@ -250,8 +288,9 @@ public class Abi extends ArrayList<Abi.Entry> {
                     result = new Constructor(inputs);
                     break;
                 case function:
+                case message:
                 case fallback:
-                    result = new Function(name, inputs, payable);
+                    result = new Function(name, inputs, payable, type);
                     break;
                 case event:
                     result = new Event(anonymous, name, inputs);
@@ -360,8 +399,8 @@ public class Abi extends ArrayList<Abi.Entry> {
 
         private static final int ENCODED_SIGN_LENGTH = 4;
 
-        public Function(String name, List<Param> inputs, Boolean payable) {
-            super(null, name, inputs, null, Type.function, payable);
+        public Function(String name, List<Param> inputs, Boolean payable, Type type) {
+            super(null, name, inputs, null, type, payable);
         }
 
         public List<?> decode(byte[] encoded) {

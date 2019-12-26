@@ -486,4 +486,6 @@ public interface ViteRpcMethods {
      * @return Quota required for sending the transaction
      */
     Request<?, RequiredQuotaResponse> getRequiredQuota(TransactionParams transaction);
+
+    Request<?, CommonResponse> commonMethod(String methodName, Object... methodParams);
 }
