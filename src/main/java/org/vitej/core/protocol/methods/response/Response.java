@@ -13,7 +13,6 @@ public class Response<T> {
     private String jsonrpc;
     private T result;
     private Error error;
-    private String rawResponse;
 
     public long getId() {
         return id;
@@ -47,13 +46,6 @@ public class Response<T> {
         this.error = error;
     }
 
-    public String getRawResponse() {
-        return rawResponse;
-    }
-
-    public void setRawResponse(String rawResponse) {
-        this.rawResponse = rawResponse;
-    }
 
     public static class Error {
         private int code;
