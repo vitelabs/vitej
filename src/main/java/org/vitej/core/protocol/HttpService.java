@@ -21,7 +21,7 @@ public class HttpService extends Service {
     }
 
     public HttpService(String url) {
-        this(url, createOkHttpClient());
+        this(url, ProtocolHelper.getClient());
     }
 
     public HttpService(String url, OkHttpClient httpClient) {
@@ -32,10 +32,6 @@ public class HttpService extends Service {
 
     @Override
     public void close() throws IOException {
-    }
-
-    private static OkHttpClient createOkHttpClient() {
-        return new OkHttpClient.Builder().build();
     }
 
     public static final MediaType JSON_MEDIA_TYPE =

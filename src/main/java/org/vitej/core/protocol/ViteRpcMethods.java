@@ -487,5 +487,13 @@ public interface ViteRpcMethods {
      */
     Request<?, RequiredQuotaResponse> getRequiredQuota(TransactionParams transaction);
 
+    /**
+     * Call go-vite RPC method which is not listed above
+     *
+     * @param methodName   RPC method name
+     * @param methodParams RPC method params
+     * @return Call method response
+     * @see <a href="https://vite.wiki/api/rpc">https://vite.wiki/api/rpc</a>
+     */
     Request<?, CommonResponse> commonMethod(String methodName, Object... methodParams);
 }

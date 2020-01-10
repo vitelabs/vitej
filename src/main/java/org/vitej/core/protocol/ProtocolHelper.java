@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
+import okhttp3.OkHttpClient;
 
 public class ProtocolHelper {
     private static final ObjectMapper DEFAULT_OBJECT_MAPPER = new ObjectMapper();
@@ -19,5 +20,11 @@ public class ProtocolHelper {
 
     public static ObjectReader getObjectReader() {
         return DEFAULT_OBJECT_MAPPER.reader();
+    }
+
+    private static final OkHttpClient client = new OkHttpClient.Builder().build();
+
+    public static OkHttpClient getClient() {
+        return client;
     }
 }
