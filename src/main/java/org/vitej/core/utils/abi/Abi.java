@@ -26,13 +26,21 @@ import static org.apache.commons.lang3.StringUtils.join;
 import static org.apache.commons.lang3.StringUtils.stripEnd;
 
 /**
- * Abi utils
+ * Contract abi utils
  */
 public class Abi extends ArrayList<Abi.Entry> {
     private final static ObjectMapper DEFAULT_MAPPER = new ObjectMapper()
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
             .enable(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL);
 
+    /**
+     * Parse json abi definition string into Abi instance.
+     *
+     * @param json Json abi definition, for example:
+     *             "[{\"type\":\"function\",\"name\":\"VoteForSBP\",
+     *             \"inputs\":[{\"name\":\"sbpName\",\"type\":\"string\"}]}]"
+     * @return Abi instance
+     */
     public static Abi fromJson(String json) {
         try {
             return DEFAULT_MAPPER.readValue(json, Abi.class);
@@ -41,6 +49,13 @@ public class Abi extends ArrayList<Abi.Entry> {
         }
     }
 
+    /**
+     * Encode function id and function params
+     *
+     * @param name Function name, for example: VoteForSBP
+     * @param args Function params, for example: ViteSBP_01
+     * @return Encoded function data, can be used in call contract request block data.
+     */
     public byte[] encodeFunction(String name, Object... args) {
         Function f = findFunctionByName(name);
         if (f == null) {
@@ -49,6 +64,12 @@ public class Abi extends ArrayList<Abi.Entry> {
         return f.encode(args);
     }
 
+    /**
+     * Decode function id and function params. Reverse of encodeFunction method
+     *
+     * @param encoded Encoded function data
+     * @return Decoded function params
+     */
     public List<?> decodeFunction(byte[] encoded) {
         Predicate<Function> p = (v1) -> Arrays.equals(v1.encodeSignature(), Function.extractSignature(encoded));
         Abi.Function f = find(Function.class, Abi.Entry.Type.function, p);
@@ -59,6 +80,13 @@ public class Abi extends ArrayList<Abi.Entry> {
         }
     }
 
+    /**
+     * Encode constructor params
+     *
+     * @param args Constructor method params
+     * @return Encoded constructor method data, can be used to generate create contract
+     * request block data
+     */
     public byte[] encodeConstructor(Object... args) {
         Constructor c = find(Constructor.class, Entry.Type.constructor, object -> true);
         if (c != null) {
@@ -67,6 +95,12 @@ public class Abi extends ArrayList<Abi.Entry> {
         return null;
     }
 
+    /**
+     * Decode constructor method params. Reverse of encodeConstructor method
+     *
+     * @param encoded Encoded constructor method data
+     * @return Encoded constructor method params
+     */
     public List<?> decodeConstructor(byte[] encoded) {
         Constructor c = find(Constructor.class, Entry.Type.constructor, object -> true);
         if (c != null) {
@@ -75,6 +109,13 @@ public class Abi extends ArrayList<Abi.Entry> {
         return null;
     }
 
+    /**
+     * Encode offchain function id and function params
+     *
+     * @param name Offchain function name
+     * @param args Offchain function params
+     * @return Encoded offchain function data, can be used to call offchain method
+     */
     public byte[] encodeOffchain(String name, Object... args) {
         Offchain f = findOffchainByName(name);
         if (f == null) {
@@ -83,6 +124,13 @@ public class Abi extends ArrayList<Abi.Entry> {
         return f.encode(args);
     }
 
+    /**
+     * Decode offchain function outputs
+     *
+     * @param name    Offchain function name
+     * @param encoded Encoded offchain function params, return value of callOffChainMethod
+     * @return Decoded offchain function outputs
+     */
     public List<?> decodeOffchainOutput(String name, byte[] encoded) {
         Predicate<Offchain> p = (v1) -> v1.name.equals(name);
         Abi.Offchain f = find(Offchain.class, Abi.Entry.Type.offchain, p);
@@ -113,6 +161,13 @@ public class Abi extends ArrayList<Abi.Entry> {
         }
     }
 
+    /**
+     * Decode vmlog
+     *
+     * @param data   Vmlog data to decode
+     * @param topics Vmlog topics, the first element of topics is used as event id
+     * @return Decoded vmlog input params
+     */
     public List<?> decodeEvent(byte[] data, List<Hash> topics) {
         if (CollectionUtils.isEmpty(topics)) {
             return null;
@@ -120,7 +175,7 @@ public class Abi extends ArrayList<Abi.Entry> {
         return decodeEvent(data, convertTopics(topics));
     }
 
-    private byte[][] convertTopics(List<Hash> topics) {
+    private static byte[][] convertTopics(List<Hash> topics) {
         if (topics == null) {
             return null;
         }
@@ -135,6 +190,12 @@ public class Abi extends ArrayList<Abi.Entry> {
         return (T) IterableUtils.find(this, entry -> entry.type == type && searchPredicate.evaluate((T) entry));
     }
 
+    /**
+     * Find function by encoded function id
+     *
+     * @param encoded Function id or call contract request block data
+     * @return Function instance which matches the encoded data
+     */
     public Function findFunctionByData(byte[] encoded) {
         Predicate<Function> p = (v1) -> Arrays.equals(v1.encodeSignature(), Function.extractSignature(encoded));
         Abi.Function f = find(Function.class, Abi.Entry.Type.function, p);
@@ -145,6 +206,12 @@ public class Abi extends ArrayList<Abi.Entry> {
         }
     }
 
+    /**
+     * Find function by name
+     *
+     * @param name Function name
+     * @return Function instance which matches the function name
+     */
     public Function findFunctionByName(String name) {
         Predicate<Function> p = (v1) -> v1.name.equals(name);
         Abi.Function f = find(Function.class, Abi.Entry.Type.function, p);
@@ -155,6 +222,12 @@ public class Abi extends ArrayList<Abi.Entry> {
         }
     }
 
+    /**
+     * Find offchain function by name
+     *
+     * @param name Offchain function name
+     * @return Offchain function instance which matches the function name
+     */
     public Offchain findOffchainByName(String name) {
         Predicate<Offchain> p = (v1) -> v1.name.equals(name);
         Abi.Offchain f = find(Offchain.class, Abi.Entry.Type.offchain, p);
@@ -165,6 +238,12 @@ public class Abi extends ArrayList<Abi.Entry> {
         }
     }
 
+    /**
+     * Find vmlog by name
+     *
+     * @param name Vmlog name
+     * @return Vmlog instance which matches the name
+     */
     public Event findEventByName(String name) {
         Predicate<Event> p = (v1) -> v1.name.equals(name);
         Abi.Event e = find(Event.class, Entry.Type.event, p);
@@ -175,6 +254,12 @@ public class Abi extends ArrayList<Abi.Entry> {
         }
     }
 
+    /**
+     * Find vmlog by topics
+     *
+     * @param topics The first element is used as event id
+     * @return Vmlog instance which matches the topics
+     */
     public Event findEventByTopics(List<Hash> topics) {
         return findEventByTopics(convertTopics(topics));
     }
@@ -444,6 +529,13 @@ public class Abi extends ArrayList<Abi.Entry> {
             }
 
             return result;
+        }
+
+        public List<?> decode(byte[] data, List<Hash> topics) {
+            if (CollectionUtils.isEmpty(topics)) {
+                return null;
+            }
+            return decode(data, convertTopics(topics));
         }
 
         private List<Param> filteredInputs(final boolean indexed) {

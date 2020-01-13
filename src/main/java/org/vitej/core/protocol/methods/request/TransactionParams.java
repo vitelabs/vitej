@@ -10,7 +10,7 @@ import org.vitej.core.utils.BytesUtils;
 import java.math.BigInteger;
 
 /**
- * 交易参数
+ * Transaction params
  */
 public class TransactionParams {
     /**

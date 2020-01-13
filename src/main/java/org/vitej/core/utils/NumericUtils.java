@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigInteger;
 
-public class NumericUtils {
+public final class NumericUtils {
     /**
      * Convert string value to BigInteger
      *

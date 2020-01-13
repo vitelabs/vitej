@@ -3,6 +3,8 @@ package org.vitej.core.constants;
 import org.vitej.core.protocol.methods.Address;
 import org.vitej.core.utils.abi.Abi;
 
+import java.math.BigInteger;
+
 public class BuiltinContracts {
     // Address of built-in contract
     public static final Address ADDRESS_QUOTA_CONTRACT = new Address("vite_0000000000000000000000000000000000000003f6af7459b9");
@@ -47,4 +49,10 @@ public class BuiltinContracts {
     public static final Abi ABI_QUOTA_CONTRACT = Abi.fromJson(ABI_JSON_QUOTA_CONTRACT);
     public static final Abi ABI_GOVERNANCE_CONTRACT = Abi.fromJson(ABI_JSON_GOVERNANCE_CONTRACT);
     public static final Abi ABI_ASSET_CONTRACT = Abi.fromJson(ABI_JSON_ASSET_CONTRACT);
+
+    public static final BigInteger MINIMUM_STAKE_FOR_QUOTA_AMOUNT = new BigInteger("134000000000000000000");
+
+    public static final BigInteger REGISTER_SBP_STAKE_AMOUNT = new BigInteger("1000000000000000000000000");
+
+    public static final BigInteger ISSUE_TOKEN_FEE = new BigInteger("1000000000000000000000");
 }
