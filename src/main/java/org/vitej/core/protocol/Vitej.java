@@ -1,6 +1,7 @@
 package org.vitej.core.protocol;
 
 import com.google.common.base.Preconditions;
+import io.reactivex.Flowable;
 import org.apache.commons.lang3.StringUtils;
 import org.vitej.core.constants.BuiltinContracts;
 import org.vitej.core.constants.CommonConstants;
@@ -23,7 +24,7 @@ import java.util.Collections;
 /**
  * An implementation of vite RPC APIs
  */
-public class Vitej implements ViteRpcMethods {
+public class Vitej implements ViteRpcMethods, ViteSubscribeMethods {
     private final RpcService rpcService;
     private KeyPair keyPair;
 
@@ -790,5 +791,50 @@ public class Vitej implements ViteRpcMethods {
                 transaction.setHeight(1L);
             }
         }
+    }
+
+    @Override
+    public Flowable<SnapshotBlockNotification> snapshotBlockFlowable() {
+        return rpcService.subscribe(new Request(
+                "subscribe_subscribe",
+                Collections.singletonList("createSnapshotBlockSubscription"),
+                rpcService,
+                SnapshotBlockNotification.class));
+    }
+
+    @Override
+    public Flowable<AccountBlockNotification> accountBlockFlowable() {
+        return rpcService.subscribe(new Request(
+                "subscribe_subscribe",
+                Collections.singletonList("createAccountBlockSubscription"),
+                rpcService,
+                AccountBlockNotification.class));
+    }
+
+    @Override
+    public Flowable<AccountBlockWithHeightNotification> accountBlockByAddressFlowable(Address address) {
+        return rpcService.subscribe(new Request(
+                "subscribe_subscribe",
+                Arrays.asList("createAccountBlockSubscriptionByAddress", address.toString()),
+                rpcService,
+                AccountBlockWithHeightNotification.class));
+    }
+
+    @Override
+    public Flowable<UnreceivedBlockNotification> unreceivedBlockFlowable(Address address) {
+        return rpcService.subscribe(new Request(
+                "subscribe_subscribe",
+                Arrays.asList("createUnreceivedBlockSubscriptionByAddress", address.toString()),
+                rpcService,
+                UnreceivedBlockNotification.class));
+    }
+
+    @Override
+    public Flowable<VmlogNotification> vmlogFlowable(VmLogFilter filter) {
+        return rpcService.subscribe(new Request(
+                "subscribe_subscribe",
+                Arrays.asList("createVmlogSubscription", filter),
+                rpcService,
+                VmlogNotification.class));
     }
 }

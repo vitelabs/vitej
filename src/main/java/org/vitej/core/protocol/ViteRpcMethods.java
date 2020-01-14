@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 
 /**
- * go-vite RPC API
+ * Go-vite RPC API
  */
 public interface ViteRpcMethods {
 

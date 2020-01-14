@@ -73,4 +73,8 @@ public class Request<S, T extends Response> {
     public void setParams(List<S> params) {
         this.params = params;
     }
+
+    public Class<T> getResponseType() {
+        return responseType;
+    }
 }

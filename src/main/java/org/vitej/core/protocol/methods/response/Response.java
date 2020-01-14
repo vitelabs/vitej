@@ -46,6 +46,9 @@ public class Response<T> {
         this.error = error;
     }
 
+    public boolean hasError() {
+        return error != null;
+    }
 
     public static class Error {
         private int code;
