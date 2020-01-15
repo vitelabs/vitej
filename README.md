@@ -74,3 +74,9 @@ AccountBlocksResponse response = vitej.getAccountBlocksByAddress(
         new Address("vite_ab24ef68b84e642c0ddca06beec81c9acb1977bbd7da27a87a"), 0, 10
     ).send();
 ```
+#### 订阅快照块事件
+```
+vitej.snapshotBlockFlowable().subscribe(msg -> {
+            System.out.println("snapshotBlock: " + JSON.toJSONString(msg));
+        });
+```
