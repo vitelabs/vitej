@@ -12,12 +12,12 @@ go-vite java sdk
 <dependency>
   <groupId>org.vite</groupId>
   <artifactId>vitej</artifactId>
-  <version>1.0.0</version>
+  <version>${release-version}</version>
 </dependency>
 <dependency>
    <groupId>org.vite</groupId>
    <artifactId>vitej-dependencies</artifactId>
-   <version>1.0.0</version>
+   <version>${release-version}</version>
    <type>pom</type>
 </dependency>
 ```
@@ -74,9 +74,3 @@ AccountBlocksResponse response = vitej.getAccountBlocksByAddress(
         new Address("vite_ab24ef68b84e642c0ddca06beec81c9acb1977bbd7da27a87a"), 0, 10
     ).send();
 ```
-
-## TODO
-1. 自动签收交易
-2. ws client
-3. subscribe
-4. 内置合约相关接口包装
