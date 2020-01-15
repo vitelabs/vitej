@@ -43,8 +43,8 @@ public interface ViteSubscribeMethods {
     /**
      * Start listening for new logs.
      *
-     * @param filter
-     * @return
+     * @param filter Filter param
+     * @return Vmlog dataflow matches the specified filter param
      */
     Flowable<VmlogNotification> vmlogFlowable(VmLogFilter filter);
 }
