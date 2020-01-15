@@ -137,7 +137,7 @@ public class TokenInfo {
         return isReIssuable;
     }
 
-    public void setReIssuable(Boolean reIssuable) {
+    public void setIsReIssuable(Boolean reIssuable) {
         isReIssuable = reIssuable;
     }
 

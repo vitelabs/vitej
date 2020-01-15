@@ -4,7 +4,7 @@ import org.vitej.core.protocol.methods.Address;
 import org.vitej.core.protocol.methods.request.TransactionParams;
 import org.vitej.core.wallet.Crypto;
 
-public class ContractUtils {
+public final class ContractUtils {
     /**
      * Generate contract address by create request transaction parameters
      *

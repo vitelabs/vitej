@@ -3,6 +3,7 @@ package org.vitej.core.protocol;
 import org.vitej.core.protocol.methods.Address;
 import org.vitej.core.protocol.methods.Hash;
 import org.vitej.core.protocol.methods.TokenId;
+import org.vitej.core.protocol.methods.request.IssueTokenParams;
 import org.vitej.core.protocol.methods.request.Request;
 import org.vitej.core.protocol.methods.request.TransactionParams;
 import org.vitej.core.protocol.methods.request.VmLogFilter;
@@ -13,7 +14,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 
 /**
- * go-vite RPC API
+ * Go-vite RPC API
  */
 public interface ViteRpcMethods {
 
@@ -95,6 +96,15 @@ public interface ViteRpcMethods {
      * @return Account block
      */
     Request<?, AccountBlockResponse> getAccountBlockByHash(Hash hash);
+
+    /**
+     * Return complete account block by hash
+     *
+     * @param hash Hash of account block
+     * @return Complete account block. If account block is contract send block, returns
+     * relative receive block and send blocks
+     */
+    Request<?, AccountBlockResponse> getCompleteAccountBlockByHash(Hash hash);
 
     /**
      * Return the latest account block
@@ -487,5 +497,212 @@ public interface ViteRpcMethods {
      */
     Request<?, RequiredQuotaResponse> getRequiredQuota(TransactionParams transaction);
 
+    /**
+     * Call go-vite RPC method which is not listed above
+     *
+     * @param methodName   RPC method name
+     * @param methodParams RPC method params
+     * @return Call method response
+     * @see <a href="https://vite.wiki/api/rpc">https://vite.wiki/api/rpc</a>
+     */
     Request<?, CommonResponse> commonMethod(String methodName, Object... methodParams);
+
+    /**
+     * Send a transaction to built-in quota contract to obtain quota. The VITE staked will be
+     * temporarily deducted from user's balance and cannot be transferred during staking period.
+     * The staking account is able to retrieve staked tokens after 259,200 snapshot blocks
+     * (about 3 days) by sending a cancel-staking transaction.
+     *
+     * @param keyPair     Key pair to pay the tokens and sign the transaction
+     * @param beneficiary The address of the account who receives quota. This is not limited to
+     *                    the staking account but can be any other account. In other words, you
+     *                    can stake for others.
+     * @param amount      The minimum staking amount is 134 VITE
+     * @return Send transaction result
+     * @throws IOException Network requests may be performed when filling in transaction fields,
+     *                     which may throws IOException
+     */
+    Request<?, EmptyResponse> stakeForQuota(KeyPair keyPair, Address beneficiary, BigInteger amount) throws IOException;
+
+    /**
+     * Send a transaction to built-in quota contract to retrieve staked tokens. As a result, the
+     * beneficiary account will lose the quota correspondingly.
+     *
+     * @param keyPair       Key pair who payed the tokens and to sign the transaction
+     * @param sendBlockHash Send block hash of stakeForQuota transaction
+     * @return Send transaction result
+     * @throws IOException Network requests may be performed when filling in transaction fields,
+     *                     which may throws IOException
+     */
+    Request<?, EmptyResponse> cancelQuotaStaking(KeyPair keyPair, Hash sendBlockHash) throws IOException;
+
+    /**
+     * Send a transaction to built-in governance contract to become a snapshot block producer.
+     * 1,000,000 VITE staking is required. Staking cannot be retrieved immediately after
+     * registration. The lock-up period is approximately 3 months (7776000 snapshot blocks).
+     * After the locking period expires, the SBP's owner (registration account) can cancel the
+     * SBP registration and retrieve staked VITE tokens.
+     *
+     * @param keyPair               Key pair to pay the tokens and sign the transaction
+     * @param sbpName               String of 1-40 characters, uppercase and lowercase letters,
+     *                              numbers, space, underscores and dots. Duplicated names are
+     *                              not allowed. SBP name is mainly used for voting.
+     * @param blockProducingAddress It is highly recommended to use a different address from SBP
+     *                              registration address for security reason. Block producing
+     *                              address can be changed by sending an updateSBPBlockProducingAddress
+     *                              transaction by registration account.
+     * @param rewardWithdrawAddress An authorized address to withdraw SBP rewards except the
+     *                              registration account.
+     * @return Send transaction result
+     * @throws IOException Network requests may be performed when filling in transaction fields,
+     *                     which may throws IOException
+     */
+    Request<?, EmptyResponse> registerSBP(KeyPair keyPair, String sbpName, Address blockProducingAddress, Address rewardWithdrawAddress) throws IOException;
+
+    /**
+     * Send a transaction to built-in governance contract to update SBP producing address.
+     *
+     * @param keyPair               Key pair of the registration account and to sign the transaction.
+     * @param sbpName               SBP name
+     * @param blockProducingAddress The new block producing address
+     * @return Send transaction result
+     * @throws IOException Network requests may be performed when filling in transaction fields,
+     *                     which may throws IOException
+     */
+    Request<?, EmptyResponse> updateSBPBlockProducingAddress(KeyPair keyPair, String sbpName, Address blockProducingAddress) throws IOException;
+
+    /**
+     * Send a transaction to built-in governance contract to update SBP reward withdraw address.
+     * The new address is authorized to withdraw SBP reward of the certain SBP producer. Meanwhile
+     * the old reward withdraw address is unauthorized.
+     *
+     * @param keyPair               Key pair of the registration account and to sign the transaction.
+     * @param sbpName               SBP name
+     * @param rewardWithdrawAddress The new reward withdraw address
+     * @return Send transaction result
+     * @throws IOException Network requests may be performed when filling in transaction fields,
+     *                     which may throws IOException
+     */
+    Request<?, EmptyResponse> updateSBPRewardWithdrawAddress(KeyPair keyPair, String sbpName, Address rewardWithdrawAddress) throws IOException;
+
+    /**
+     * Send a transaction to built-in governance contract to cancel a SBP. The node will be removed
+     * from SBP list once the transaction is confirmed.
+     *
+     * @param keyPair Key pair of the registration account and to sign the transaction.
+     * @param sbpName SBP name to perform the cancellation
+     * @return Send transaction result
+     * @throws IOException Network requests may be performed when filling in transaction fields,
+     *                     which may throws IOException
+     */
+    Request<?, EmptyResponse> revokeSBP(KeyPair keyPair, String sbpName) throws IOException;
+
+    /**
+     * Send a transaction to built-in governance contract to withdraw SBP rewards. All available
+     * rewards will be withdrawn. Available rewards are the rewards allocated since the time of
+     * last withdrawal till one hour ago.
+     *
+     * @param keyPair        Key pair of the registration account or the authorized reward withdraw
+     *                       address and to sign the transaction.
+     * @param sbpName        SBP name to withdraw reward
+     * @param receiveAddress Withdrawn rewards will be sent to this address
+     * @return Send transaction result
+     * @throws IOException Network requests may be performed when filling in transaction fields,
+     *                     which may throws IOException
+     */
+    Request<?, EmptyResponse> withdrawSBPReward(KeyPair keyPair, String sbpName, Address receiveAddress) throws IOException;
+
+    /**
+     * Send a transaction to built-in governance contract to vote for SBP. An account can only
+     * vote for one SBP.
+     * Votes are calculated every round. The delegated nodes for next round will be elected based
+     * on the voting result at the time being.
+     *
+     * @param keyPair Key pair to vote and to sign the transaction
+     * @param sbpName SBP name to vote for
+     * @return Send transaction result
+     * @throws IOException Network requests may be performed when filling in transaction fields,
+     *                     which may throws IOException
+     */
+    Request<?, EmptyResponse> voteForSBP(KeyPair keyPair, String sbpName) throws IOException;
+
+    /**
+     * Send a transaction to built-in governance contract to cancel SBP voting.
+     *
+     * @param keyPair Key pair to cancel voting and to sign the transaction
+     * @return Send transaction result
+     * @throws IOException Network requests may be performed when filling in transaction fields,
+     *                     which may throws IOException
+     */
+    Request<?, EmptyResponse> cancelSBPVoting(KeyPair keyPair) throws IOException;
+
+    /**
+     * Send a transaction to built-in asset contract to issue a token. Issue token transaction will
+     * burn 1000 VITE. Once the transaction is processed successfully, a total supply amount of
+     * tokens will be sent to the issuer's account and the issuer is assigned as owner.
+     *
+     * @param keyPair Key pair to pay the issue fee and to sign the transaction
+     * @param params  Issue token params, including token name, token symbol, total supply,
+     *                decimals and token type.
+     * @return Send transaction result
+     * @throws IOException Network requests may be performed when filling in transaction fields,
+     *                     which may throws IOException
+     */
+    Request<?, EmptyResponse> issueToken(KeyPair keyPair, IssueTokenParams params) throws IOException;
+
+    /**
+     * Send a transaction to built-in asset contract to reissue token. Once the transaction is
+     * processed successfully, asset contract will transfer the newly issued tokens to the
+     * specified account.
+     *
+     * @param keyPair        Key pair of token owner and to sign the transaction
+     * @param tokenId        Reissue token id
+     * @param amount         Reissue amount
+     * @param receiveAddress Account address to receive newly issued tokens
+     * @return Send transaction result
+     * @throws IOException Network requests may be performed when filling in transaction fields,
+     *                     which may throws IOException
+     */
+    Request<?, EmptyResponse> reIssue(KeyPair keyPair, TokenId tokenId, BigInteger amount, Address receiveAddress) throws IOException;
+
+    /**
+     * Send a transaction to built-in asset contract to burn token. The token burned will be
+     * deducted from user's balance. Once the transaction is processed successfully by the
+     * contract, the token's total supply will be reduced to reflect the change.
+     *
+     * @param keyPair Key pair to burn the token and to sign the transaction.
+     * @param tokenId Burn token id
+     * @param amount  Burn token amount
+     * @return Send transaction result
+     * @throws IOException Network requests may be performed when filling in transaction fields,
+     *                     which may throws IOException
+     */
+    Request<?, EmptyResponse> burn(KeyPair keyPair, TokenId tokenId, BigInteger amount) throws IOException;
+
+    /**
+     * Send a transaction to built-in asset contract to transfer token ownership to a new owner.
+     * A certain token can have only one owner at a moment. Only re-issuable token ownership can
+     * be transfered.
+     *
+     * @param keyPair  Key pair of old token owner and to sign the transaction.
+     * @param tokenId  Token id to be transfered ownership
+     * @param newOwner New owner of the token
+     * @return Send transaction result
+     * @throws IOException Network requests may be performed when filling in transaction fields,
+     *                     which may throws IOException
+     */
+    Request<?, EmptyResponse> transferOwnership(KeyPair keyPair, TokenId tokenId, Address newOwner) throws IOException;
+
+    /**
+     * Send a transaction to built-in asset contract to change token type. Re-issuable tokens can
+     * be changed to non-reissuable, or fixed-supply, tokens. However, this process is one-way
+     * only, meaning once the type is changed, it cannot be changed back.
+     *
+     * @param keyPair Key pair of old token owner and to sign the transaction.
+     * @param tokenId Token id
+     * @return Send transaction result
+     * @throws IOException Network requests may be performed when filling in transaction fields,
+     *                     which may throws IOException
+     */
+    Request<?, EmptyResponse> disableReIssue(KeyPair keyPair, TokenId tokenId) throws IOException;
 }

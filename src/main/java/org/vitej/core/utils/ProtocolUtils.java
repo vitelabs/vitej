@@ -11,7 +11,7 @@ import org.vitej.core.protocol.methods.response.AccountBlockResponse;
 
 import java.io.IOException;
 
-public class ProtocolUtils {
+public final class ProtocolUtils {
     /**
      * Check call contract result
      *

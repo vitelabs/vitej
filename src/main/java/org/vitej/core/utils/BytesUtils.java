@@ -7,7 +7,7 @@ import org.bouncycastle.util.encoders.Hex;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-public class BytesUtils {
+public final class BytesUtils {
     private static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
 
     /**

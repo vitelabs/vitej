@@ -20,4 +20,7 @@ public class CommonConstants {
 
     // Create contract fee: 10 VITE
     public static final BigInteger CREATE_CONTRACT_FEE = new BigInteger("10000000000000000000");
+
+    public static final BigInteger TT256 = BigInteger.valueOf(2L).pow(256);
+    public static final BigInteger TT256M1 = TT256.subtract(BigInteger.ONE);
 }

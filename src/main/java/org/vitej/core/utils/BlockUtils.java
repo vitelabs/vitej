@@ -8,7 +8,7 @@ import org.vitej.core.protocol.methods.enums.EBlockType;
 import org.vitej.core.protocol.methods.request.TransactionParams;
 import org.vitej.core.wallet.KeyPair;
 
-public class BlockUtils {
+public final class BlockUtils {
     /**
      * Check whether a block type is a send block
      *

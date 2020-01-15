@@ -1,17 +1,18 @@
 package org.vitej.core.protocol;
 
 import com.google.common.base.Preconditions;
+import io.reactivex.Flowable;
+import org.apache.commons.lang3.StringUtils;
+import org.vitej.core.constants.BuiltinContracts;
 import org.vitej.core.constants.CommonConstants;
 import org.vitej.core.protocol.methods.Address;
 import org.vitej.core.protocol.methods.Hash;
 import org.vitej.core.protocol.methods.TokenId;
 import org.vitej.core.protocol.methods.enums.EBlockType;
-import org.vitej.core.protocol.methods.request.CallOffChainMethodParams;
-import org.vitej.core.protocol.methods.request.Request;
-import org.vitej.core.protocol.methods.request.TransactionParams;
-import org.vitej.core.protocol.methods.request.VmLogFilter;
+import org.vitej.core.protocol.methods.request.*;
 import org.vitej.core.protocol.methods.response.*;
 import org.vitej.core.utils.BlockUtils;
+import org.vitej.core.utils.BuiltinContractUtils;
 import org.vitej.core.utils.ContractUtils;
 import org.vitej.core.wallet.KeyPair;
 
@@ -23,7 +24,7 @@ import java.util.Collections;
 /**
  * An implementation of vite RPC APIs
  */
-public class Vitej implements ViteRpcMethods {
+public class Vitej implements ViteRpcMethods, ViteSubscribeMethods {
     private final RpcService rpcService;
     private KeyPair keyPair;
 
@@ -118,6 +119,15 @@ public class Vitej implements ViteRpcMethods {
     public Request<?, AccountBlockResponse> getAccountBlockByHash(Hash hash) {
         return new Request<>(
                 "ledger_getAccountBlockByHash",
+                Arrays.asList(hash.toString()),
+                rpcService,
+                AccountBlockResponse.class);
+    }
+
+    @Override
+    public Request<?, AccountBlockResponse> getCompleteAccountBlockByHash(Hash hash) {
+        return new Request<>(
+                "ledger_getCompleteBlockByHash",
                 Arrays.asList(hash.toString()),
                 rpcService,
                 AccountBlockResponse.class);
@@ -591,6 +601,166 @@ public class Vitej implements ViteRpcMethods {
                 CommonResponse.class);
     }
 
+    @Override
+    public Request<?, EmptyResponse> stakeForQuota(KeyPair keyPair, Address beneficiary, BigInteger amount) throws IOException {
+        Preconditions.checkArgument(amount.compareTo(BuiltinContracts.MINIMUM_STAKE_FOR_QUOTA_AMOUNT) >= 0);
+        return sendTransaction(keyPair,
+                new TransactionParams(
+                        BuiltinContracts.ADDRESS_QUOTA_CONTRACT,
+                        CommonConstants.VITE_TOKEN_ID,
+                        amount,
+                        BuiltinContracts.ABI_QUOTA_CONTRACT.encodeFunction("StakeForQuota", beneficiary)));
+    }
+
+    @Override
+    public Request<?, EmptyResponse> cancelQuotaStaking(KeyPair keyPair, Hash sendBlockHash) throws IOException {
+        return sendTransaction(keyPair,
+                new TransactionParams(
+                        BuiltinContracts.ADDRESS_QUOTA_CONTRACT,
+                        CommonConstants.VITE_TOKEN_ID,
+                        BigInteger.ZERO,
+                        BuiltinContracts.ABI_QUOTA_CONTRACT.encodeFunction("CancelQuotaStaking", sendBlockHash.toString())));
+    }
+
+    @Override
+    public Request<?, EmptyResponse> registerSBP(KeyPair keyPair, String sbpName, Address blockProducingAddress, Address rewardWithdrawAddress) throws IOException {
+        String checkResult = BuiltinContractUtils.checkSBPName(sbpName);
+        Preconditions.checkArgument(StringUtils.isEmpty(checkResult), checkResult);
+        return sendTransaction(keyPair,
+                new TransactionParams(
+                        BuiltinContracts.ADDRESS_GOVERNANCE_CONTRACT,
+                        CommonConstants.VITE_TOKEN_ID,
+                        BuiltinContracts.REGISTER_SBP_STAKE_AMOUNT,
+                        BuiltinContracts.ABI_GOVERNANCE_CONTRACT.encodeFunction("RegisterSBP", sbpName, blockProducingAddress, rewardWithdrawAddress)));
+    }
+
+    @Override
+    public Request<?, EmptyResponse> updateSBPBlockProducingAddress(KeyPair keyPair, String sbpName, Address blockProducingAddress) throws IOException {
+        return sendTransaction(keyPair,
+                new TransactionParams(
+                        BuiltinContracts.ADDRESS_GOVERNANCE_CONTRACT,
+                        CommonConstants.VITE_TOKEN_ID,
+                        BigInteger.ZERO,
+                        BuiltinContracts.ABI_GOVERNANCE_CONTRACT.encodeFunction("UpdateSBPBlockProducingAddress", sbpName, blockProducingAddress)));
+    }
+
+    @Override
+    public Request<?, EmptyResponse> updateSBPRewardWithdrawAddress(KeyPair keyPair, String sbpName, Address rewardWithdrawAddress) throws IOException {
+        return sendTransaction(keyPair,
+                new TransactionParams(
+                        BuiltinContracts.ADDRESS_GOVERNANCE_CONTRACT,
+                        CommonConstants.VITE_TOKEN_ID,
+                        BigInteger.ZERO,
+                        BuiltinContracts.ABI_GOVERNANCE_CONTRACT.encodeFunction("UpdateSBPRewardWithdrawAddress", sbpName, rewardWithdrawAddress)));
+    }
+
+    @Override
+    public Request<?, EmptyResponse> revokeSBP(KeyPair keyPair, String sbpName) throws IOException {
+        return sendTransaction(keyPair,
+                new TransactionParams(
+                        BuiltinContracts.ADDRESS_GOVERNANCE_CONTRACT,
+                        CommonConstants.VITE_TOKEN_ID,
+                        BigInteger.ZERO,
+                        BuiltinContracts.ABI_GOVERNANCE_CONTRACT.encodeFunction("RevokeSBP", sbpName)));
+    }
+
+    @Override
+    public Request<?, EmptyResponse> withdrawSBPReward(KeyPair keyPair, String sbpName, Address receiveAddress) throws IOException {
+        return sendTransaction(keyPair,
+                new TransactionParams(
+                        BuiltinContracts.ADDRESS_GOVERNANCE_CONTRACT,
+                        CommonConstants.VITE_TOKEN_ID,
+                        BigInteger.ZERO,
+                        BuiltinContracts.ABI_GOVERNANCE_CONTRACT.encodeFunction("WithdrawSBPReward", sbpName, receiveAddress)));
+    }
+
+    @Override
+    public Request<?, EmptyResponse> voteForSBP(KeyPair keyPair, String sbpName) throws IOException {
+        return sendTransaction(keyPair,
+                new TransactionParams(
+                        BuiltinContracts.ADDRESS_GOVERNANCE_CONTRACT,
+                        CommonConstants.VITE_TOKEN_ID,
+                        BigInteger.ZERO,
+                        BuiltinContracts.ABI_GOVERNANCE_CONTRACT.encodeFunction("VoteForSBP", sbpName)));
+    }
+
+    @Override
+    public Request<?, EmptyResponse> cancelSBPVoting(KeyPair keyPair) throws IOException {
+        return sendTransaction(keyPair,
+                new TransactionParams()
+                        .setBlockType(EBlockType.SEND_CALL.getValue())
+                        .setToAddress(BuiltinContracts.ADDRESS_GOVERNANCE_CONTRACT)
+                        .setAmount(BigInteger.ZERO)
+                        .setTokenId(CommonConstants.VITE_TOKEN_ID)
+                        .setData(BuiltinContracts.ABI_GOVERNANCE_CONTRACT.encodeFunction("CancelSBPVoting")));
+    }
+
+    @Override
+    public Request<?, EmptyResponse> issueToken(KeyPair keyPair, IssueTokenParams params) throws IOException {
+        String checkResult = BuiltinContractUtils.checkIssueTokenParams(params);
+        Preconditions.checkArgument(StringUtils.isEmpty(checkResult), checkResult);
+        return sendTransaction(keyPair,
+                new TransactionParams()
+                        .setBlockType(EBlockType.SEND_CALL.getValue())
+                        .setToAddress(BuiltinContracts.ADDRESS_ASSET_CONTRACT)
+                        .setAmount(BigInteger.ZERO)
+                        .setTokenId(CommonConstants.VITE_TOKEN_ID)
+                        .setFee(BuiltinContracts.ISSUE_TOKEN_FEE)
+                        .setData(BuiltinContracts.ABI_ASSET_CONTRACT.encodeFunction(
+                                "IssueToken",
+                                params.isReIssuable(),
+                                params.getTokenName(),
+                                params.getTokenSymbol(),
+                                params.getTotalSupply(),
+                                params.getDecimals(),
+                                params.getMaxSupply(),
+                                params.isOwnerBurnOnly())));
+    }
+
+    @Override
+    public Request<?, EmptyResponse> reIssue(KeyPair keyPair, TokenId tokenId, BigInteger amount, Address receiveAddress) throws IOException {
+        return sendTransaction(keyPair,
+                new TransactionParams()
+                        .setBlockType(EBlockType.SEND_CALL.getValue())
+                        .setToAddress(BuiltinContracts.ADDRESS_ASSET_CONTRACT)
+                        .setAmount(BigInteger.ZERO)
+                        .setTokenId(CommonConstants.VITE_TOKEN_ID)
+                        .setData(BuiltinContracts.ABI_ASSET_CONTRACT.encodeFunction("ReIssue", tokenId, amount, receiveAddress)));
+    }
+
+    @Override
+    public Request<?, EmptyResponse> burn(KeyPair keyPair, TokenId tokenId, BigInteger amount) throws IOException {
+        return sendTransaction(keyPair,
+                new TransactionParams()
+                        .setBlockType(EBlockType.SEND_CALL.getValue())
+                        .setToAddress(BuiltinContracts.ADDRESS_ASSET_CONTRACT)
+                        .setAmount(amount)
+                        .setTokenId(tokenId)
+                        .setData(BuiltinContracts.ABI_ASSET_CONTRACT.encodeFunction("Burn")));
+    }
+
+    @Override
+    public Request<?, EmptyResponse> transferOwnership(KeyPair keyPair, TokenId tokenId, Address newOwner) throws IOException {
+        return sendTransaction(keyPair,
+                new TransactionParams()
+                        .setBlockType(EBlockType.SEND_CALL.getValue())
+                        .setToAddress(BuiltinContracts.ADDRESS_ASSET_CONTRACT)
+                        .setAmount(BigInteger.ZERO)
+                        .setTokenId(CommonConstants.VITE_TOKEN_ID)
+                        .setData(BuiltinContracts.ABI_ASSET_CONTRACT.encodeFunction("TransferOwnership", tokenId, newOwner)));
+    }
+
+    @Override
+    public Request<?, EmptyResponse> disableReIssue(KeyPair keyPair, TokenId tokenId) throws IOException {
+        return sendTransaction(keyPair,
+                new TransactionParams()
+                        .setBlockType(EBlockType.SEND_CALL.getValue())
+                        .setToAddress(BuiltinContracts.ADDRESS_ASSET_CONTRACT)
+                        .setAmount(BigInteger.ZERO)
+                        .setTokenId(CommonConstants.VITE_TOKEN_ID)
+                        .setData(BuiltinContracts.ABI_ASSET_CONTRACT.encodeFunction("DisableReIssue", tokenId)));
+    }
+
     private void updateTransactionPreviousHashAndHeight(TransactionParams transaction) throws IOException {
         if (transaction.getHeightRaw() == null && transaction.getPreviousHashRaw() == null) {
             AccountBlockResponse response = getLatestAccountBlock(transaction.getAddressRaw()).send();
@@ -602,7 +772,7 @@ public class Vitej implements ViteRpcMethods {
                 transaction.setHeight(1L);
                 transaction.setPreviousHash(CommonConstants.EMPTY_HASH);
             }
-        } else if (transaction.getHeightRaw() != null) {
+        } else if (transaction.getPreviousHashRaw() == null) {
             if (transaction.getHeightRaw() > 1) {
                 AccountBlockResponse response = getAccountBlockByHeight(transaction.getAddressRaw(), transaction.getHeightRaw() - 1).send();
                 Preconditions.checkArgument(response.getError() == null, response.getError());
@@ -611,7 +781,7 @@ public class Vitej implements ViteRpcMethods {
             } else {
                 transaction.setPreviousHash(CommonConstants.EMPTY_HASH);
             }
-        } else if (transaction.getPreviousHashRaw() != null) {
+        } else if (transaction.getHashRaw() == null) {
             if (!transaction.getPreviousHashRaw().equals(CommonConstants.EMPTY_HASH)) {
                 AccountBlockResponse response = getAccountBlockByHash(transaction.getPreviousHashRaw()).send();
                 Preconditions.checkArgument(response.getError() == null, response.getError());
@@ -621,5 +791,50 @@ public class Vitej implements ViteRpcMethods {
                 transaction.setHeight(1L);
             }
         }
+    }
+
+    @Override
+    public Flowable<SnapshotBlockNotification> snapshotBlockFlowable() {
+        return rpcService.subscribe(new Request(
+                "subscribe_subscribe",
+                Collections.singletonList("createSnapshotBlockSubscription"),
+                rpcService,
+                SnapshotBlockNotification.class));
+    }
+
+    @Override
+    public Flowable<AccountBlockNotification> accountBlockFlowable() {
+        return rpcService.subscribe(new Request(
+                "subscribe_subscribe",
+                Collections.singletonList("createAccountBlockSubscription"),
+                rpcService,
+                AccountBlockNotification.class));
+    }
+
+    @Override
+    public Flowable<AccountBlockWithHeightNotification> accountBlockByAddressFlowable(Address address) {
+        return rpcService.subscribe(new Request(
+                "subscribe_subscribe",
+                Arrays.asList("createAccountBlockSubscriptionByAddress", address.toString()),
+                rpcService,
+                AccountBlockWithHeightNotification.class));
+    }
+
+    @Override
+    public Flowable<UnreceivedBlockNotification> unreceivedBlockFlowable(Address address) {
+        return rpcService.subscribe(new Request(
+                "subscribe_subscribe",
+                Arrays.asList("createUnreceivedBlockSubscriptionByAddress", address.toString()),
+                rpcService,
+                UnreceivedBlockNotification.class));
+    }
+
+    @Override
+    public Flowable<VmlogNotification> vmlogFlowable(VmLogFilter filter) {
+        return rpcService.subscribe(new Request(
+                "subscribe_subscribe",
+                Arrays.asList("createVmlogSubscription", filter),
+                rpcService,
+                VmlogNotification.class));
     }
 }
