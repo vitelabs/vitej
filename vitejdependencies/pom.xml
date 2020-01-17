@@ -6,7 +6,7 @@
 
     <groupId>org.vite</groupId>
     <artifactId>vitej-dependencies</artifactId>
-    <name>${project.groupId}:${project.artifactId}</name>
+    <name>org.vite:vitej-dependencies</name>
     <version>1.1.0</version>
     <description>Vite java sdk dependencies</description>
     <url>https://github.com/vitelabs/vitej</url>
