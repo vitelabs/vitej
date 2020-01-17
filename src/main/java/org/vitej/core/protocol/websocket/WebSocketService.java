@@ -69,7 +69,7 @@ public class WebSocketService implements RpcService {
                         try {
                             onWebSocketMessage(text);
                         } catch (IOException e) {
-                            log.error("Failed to deal with WebSocket message, {}", text);
+                            log.error("Failed to deal with WebSocket message, {}", text, e);
                             throw new RuntimeException("Failed to deal with WebSocket message", e);
                         }
                         onMessage.accept(text);
@@ -155,10 +155,11 @@ public class WebSocketService implements RpcService {
             JsonNode replyJson = objectMapper.readTree(messageStr);
             if (isReply(replyJson)) {
                 long replyId = getReplyId(replyJson);
-                if (!requestForId.containsKey(replyId)) {
-                    throw new IOException(String.format("Received reply for unexpected request id: %d", replyId));
-                }
                 WebSocketRequest request = requestForId.remove(replyId);
+                if (request == null) {
+                    log.error("Received reply for unexpected request id: {}", replyId);
+                    return;
+                }
                 try {
                     Object reply = objectMapper.convertValue(replyJson, request.getResponseType());
                     if (reply instanceof SubscribeResponse) {
@@ -194,9 +195,11 @@ public class WebSocketService implements RpcService {
     }
 
     private void closeRequest(long requestId, Exception e) {
-        CompletableFuture result = requestForId.get(requestId).getOnReply();
-        requestForId.remove(requestId);
-        result.completeExceptionally(e);
+        if (requestForId.containsKey(requestId)) {
+            CompletableFuture result = requestForId.get(requestId).getOnReply();
+            requestForId.remove(requestId);
+            result.completeExceptionally(e);
+        }
     }
 
     private <T extends Notification<?>> String getSubscriptionId(BehaviorSubject<T> subject) {
