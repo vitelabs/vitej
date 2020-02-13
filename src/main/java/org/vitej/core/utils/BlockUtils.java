@@ -71,12 +71,12 @@ public final class BlockUtils {
         if (ArrayUtils.isNotEmpty(transaction.getDataRaw())) {
             source = BytesUtils.merge(source, Hash.dataToHash(transaction.getDataRaw()).getBytes());
         }
-        source = BytesUtils.merge(source, BytesUtils.bigIntegerToBytes(transaction.getFeeRaw(), 32));
-        if (transaction.getNonce() != null) {
-            source = BytesUtils.merge(source, BytesUtils.leftPadBytes(transaction.getNonceRaw(), 8));
-        } else {
-            source = BytesUtils.merge(source, CommonConstants.EMPTY_BYTES_8);
-        }
+//        source = BytesUtils.merge(source, BytesUtils.bigIntegerToBytes(transaction.getFeeRaw(), 32));
+//        if (transaction.getNonce() != null) {
+//            source = BytesUtils.merge(source, BytesUtils.leftPadBytes(transaction.getNonceRaw(), 8));
+//        } else {
+//            source = BytesUtils.merge(source, CommonConstants.EMPTY_BYTES_8);
+//        }
         return Hash.dataToHash(source);
     }
 
