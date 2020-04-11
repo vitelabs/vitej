@@ -466,9 +466,7 @@ public class Vitej implements ViteRpcMethods, ViteSubscribeMethods {
         if (transaction.getBlockType() == null) {
             transaction.setBlockType(EBlockType.SEND_CALL.getValue());
         }
-        if (transaction.getPreviousHashRaw() == null && transaction.getHeightRaw() == null) {
-            updateTransactionPreviousHashAndHeight(transaction);
-        }
+        updateTransactionPreviousHashAndHeight(transaction);
 
         if (BlockUtils.isSendBlock(transaction.getBlockType())) {
             if (EBlockType.SEND_CREATE.getValue() == transaction.getBlockType()) {
