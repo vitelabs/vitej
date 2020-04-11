@@ -19,6 +19,9 @@
 *.tar.gz
 *.rar
 
+# IntelliJ
+/out/
+.idea
 *.iml
 target/
 
