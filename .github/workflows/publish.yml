@@ -23,6 +23,7 @@ jobs:
         with:
           maven_goals_phases: clean deploy
           maven_args: -DskipTests
+          server_id: sonatype_releases
           gpg_private_key: ${{ secrets.gpg_private_key }}
           gpg_passphrase: ${{ secrets.gpg_passphrase }}
           nexus_username: ${{ secrets.nexus_username }}
