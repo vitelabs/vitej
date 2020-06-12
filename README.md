@@ -4,6 +4,7 @@ Vite Java SDK
 ## 文档
 
 [wiki](https://vite.wiki/zh/api/javasdk_v2/)
+
 [demo](https://github.com/vitelabs/vitej-demo)
 
 ## 添加maven依赖
