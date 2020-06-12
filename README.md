@@ -1,5 +1,5 @@
 # vitej
-go-vite java sdk
+Vite Java SDK
 
 ## 文档
 
