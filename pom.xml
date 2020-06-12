@@ -212,6 +212,7 @@
                             <goal>jar</goal>
                         </goals>
                         <configuration>
+                            <detectJavaApiLink>false</detectJavaApiLink>
                             <additionalparam>-Xdoclint:none</additionalparam>
                         </configuration>
                     </execution>
