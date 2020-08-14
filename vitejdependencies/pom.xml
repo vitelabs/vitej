@@ -7,7 +7,7 @@
     <groupId>org.vite</groupId>
     <artifactId>vitej-dependencies</artifactId>
     <name>org.vite:vitej-dependencies</name>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
     <description>Vite java sdk dependencies</description>
     <url>https://github.com/vitelabs/vitej</url>
     <packaging>pom</packaging>
@@ -120,7 +120,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.9.10.1</version>
+            <version>2.9.10.5</version>
         </dependency>
 
         <dependency>
