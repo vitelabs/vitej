@@ -434,6 +434,15 @@ public interface ViteRpcMethods {
     Request<?, TokenInfoListResponse> getSelfTokenInfoList();
 
     /**
+     * Send a signed transaction
+     *
+     * @param transaction Signed transaction information
+     *                    to send the transaction
+     * @return Send transaction result
+     */
+    Request<?, EmptyResponse> sendRawTransaction(TransactionParams transaction);
+
+    /**
      * Send a transaction
      *
      * @param keyPair     Key pair to sign the transaction

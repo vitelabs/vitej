@@ -27,6 +27,8 @@ import java.util.Collections;
 public class Vitej implements ViteRpcMethods, ViteSubscribeMethods {
     private final RpcService rpcService;
     private KeyPair keyPair;
+    private byte[] pubKey;
+    private Address address;
 
     public Vitej(RpcService rpcService) {
         this.rpcService = rpcService;
@@ -35,6 +37,14 @@ public class Vitej implements ViteRpcMethods, ViteSubscribeMethods {
     public Vitej(RpcService rpcService, KeyPair keyPair) {
         this.rpcService = rpcService;
         this.keyPair = keyPair;
+        this.address = keyPair.getAddress();
+        this.pubKey = keyPair.getPublicKey();
+    }
+
+    public Vitej(RpcService rpcService, byte[] pubKey) {
+        this.rpcService = rpcService;
+        this.address = Address.publicKeyToAddress(pubKey);
+        this.pubKey = pubKey;
     }
 
     public RpcService getRpcService() {
@@ -454,15 +464,13 @@ public class Vitej implements ViteRpcMethods, ViteSubscribeMethods {
         return getTokenInfoListByOwner(keyPair.getAddress());
     }
 
-    @Override
-    public Request<?, EmptyResponse> sendTransaction(
-            KeyPair keyPair,
-            TransactionParams transaction,
-            Boolean autoPoW)
-            throws IOException {
-        Preconditions.checkNotNull(keyPair, "key pair");
-        transaction.setAddress(keyPair.getAddress());
-        transaction.setPublicKey(keyPair.getPublicKey());
+    public TransactionParams generateTransaction(TransactionParams transaction, byte[] pubKey) throws IOException {
+        return generateTransaction(transaction, pubKey, false);
+    }
+
+    public TransactionParams generateTransaction(TransactionParams transaction, byte[] pubKey, Boolean autoPoW) throws IOException {
+        transaction.setAddress(Address.publicKeyToAddress(pubKey));
+        transaction.setPublicKey(pubKey);
         if (transaction.getBlockType() == null) {
             transaction.setBlockType(EBlockType.SEND_CALL.getValue());
         }
@@ -544,13 +552,29 @@ public class Vitej implements ViteRpcMethods, ViteSubscribeMethods {
             }
         }
         transaction.setHash(BlockUtils.computeHash(transaction));
-        transaction.setSignature(BlockUtils.computeSigunature(keyPair, transaction));
+        return transaction;
+    }
 
+    @Override
+    public Request<?, EmptyResponse> sendRawTransaction(TransactionParams transaction) {
+        Preconditions.checkNotNull(transaction.getSignatureRaw(), "sig can't be null.");
         return new Request<>(
                 "ledger_sendRawTransaction",
                 Arrays.asList(transaction),
                 rpcService,
                 EmptyResponse.class);
+    }
+
+    @Override
+    public Request<?, EmptyResponse> sendTransaction(
+            KeyPair keyPair,
+            TransactionParams transaction,
+            Boolean autoPoW)
+            throws IOException {
+        Preconditions.checkNotNull(keyPair, "key pair");
+        transaction = generateTransaction(transaction, keyPair.getPublicKey(), autoPoW);
+        transaction.setSignature(BlockUtils.computeSigunature(keyPair, transaction));
+        return sendRawTransaction(transaction);
     }
 
     @Override
