@@ -1,7 +1,3 @@
----
-sidebarDepth: 4
----
-
 # Quota API
 
 ## Stake for Quota

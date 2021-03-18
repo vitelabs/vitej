@@ -1,7 +1,3 @@
----
-sidebarDepth: 4
----
-
 # Utility API
 
 ## Determine Block Type

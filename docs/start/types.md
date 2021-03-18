@@ -1,7 +1,3 @@
----
-sidebarDepth: 4
----
-
 # Common Types
 
 ## Class

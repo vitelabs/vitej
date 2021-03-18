@@ -1,7 +1,3 @@
----
-sidebarDepth: 4
----
-
 # SBP & Voting API
 
 ## Register New SBP

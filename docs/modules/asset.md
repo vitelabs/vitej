@@ -1,7 +1,3 @@
----
-sidebarDepth: 4
----
-
 # Asset & Token Issuance API
 
 ## Issue New Token

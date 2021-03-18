@@ -1,7 +1,3 @@
----
-sidebarDepth: 4
----
-
 # Subscription API
 
 You must enable WebSocket service (default port 41420) on the node in order to use subscription API. 

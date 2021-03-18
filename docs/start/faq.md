@@ -1,7 +1,3 @@
----
-sidebarDepth: 4
----
-
 # Useful Links
 
 ## Development Node

@@ -1,7 +1,3 @@
----
-sidebarDepth: 4
----
-
 # Wallet
 
 In ViteJ, a wallet instance contains a mnemonic phrase, and is able to derive up to 100 public/private key pairs. One private key uniquely determines a Vite address.
