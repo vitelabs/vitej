@@ -1,6 +1,3 @@
----
-sidebarDepth: 4
----
 # Vite JAVA SDK
 
 > [Documentation](https://docs.vite.org/vitej/)
