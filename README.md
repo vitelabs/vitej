@@ -14,7 +14,7 @@ Download [ViteJ SDK](https://github.com/vitelabs/vitej)
 <dependency>
   <groupId>org.vite</groupId>
   <artifactId>vitej</artifactId>
-  <version>1.1.0</version>
+  <version>1.1.4</version>
 </dependency>
 <dependency>
   <groupId>org.vite</groupId>
