@@ -1,22 +1,41 @@
 package org.vitej.core.wallet;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
+import java.io.IOException;
 import java.util.List;
 
 /**
  * Vite wallet, a wallet is initialized by mnemonic phrase, contains 10 key pairs.
  */
-public class Wallet {
-    private List<String> mnemonic;
+public final class Wallet {
+    private final ImmutableList<String> mnemonic;
 
     /**
      * Create a new wallet
      */
     public Wallet() {
-        this.mnemonic = Mnemonic.createBip39Mnemonic(24, Mnemonic.MnemonicLanguage.ENGLISH);
+        this.mnemonic = ImmutableList.copyOf(Mnemonic.createBip39Mnemonic(24, Mnemonic.MnemonicLanguage.ENGLISH));
+    }
+
+    /**
+     * Initialize a wallet instance by entropy file and password
+     * 
+     * @param filename entropy file path
+     * @param password 
+     */
+    public Wallet(String filename, String password) {
+        try {
+            byte[] entropy = EntropyFile.loadFromFile(filename, password);
+            String mnemonic = Entropy.toMnemonic(entropy);
+
+            this.mnemonic = ImmutableList.copyOf(mnemonic.split(" "));
+            Preconditions.checkArgument(Mnemonic.isValid(this.mnemonic, Mnemonic.MnemonicLanguage.ENGLISH), "Invalid mnemonic");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -26,7 +45,7 @@ public class Wallet {
      * @param language Mnemonic phrase language, only English is supported now
      */
     public Wallet(int length, Mnemonic.MnemonicLanguage language) {
-        this.mnemonic = Mnemonic.createBip39Mnemonic(length, language);
+        this.mnemonic = ImmutableList.copyOf(Mnemonic.createBip39Mnemonic(length, language));
     }
 
     /**
@@ -36,7 +55,7 @@ public class Wallet {
      */
     public Wallet(List<String> mnemonic) {
         Preconditions.checkArgument(Mnemonic.isValid(mnemonic, Mnemonic.MnemonicLanguage.ENGLISH), "Invalid mnemonic");
-        this.mnemonic = mnemonic;
+        this.mnemonic = ImmutableList.copyOf(mnemonic);
     }
 
     /**
@@ -45,7 +64,7 @@ public class Wallet {
      * @param mnemonic Mnemonic phrase, join with space
      */
     public Wallet(String mnemonic) {
-        this.mnemonic = Arrays.asList(mnemonic.split(" "));
+        this.mnemonic = ImmutableList.copyOf(mnemonic.split(" "));
         Preconditions.checkArgument(Mnemonic.isValid(this.mnemonic, Mnemonic.MnemonicLanguage.ENGLISH), "Invalid mnemonic");
     }
 
@@ -80,5 +99,18 @@ public class Wallet {
      */
     public KeyPair deriveKeyPair(int index) {
         return Mnemonic.deriveKeyPair(toString(), index);
+    }
+
+    /**
+     * save to entropy filename
+     * 
+     * @param filename
+     * @param password
+     * @throws IOException
+     */
+    public void saveToFile(String filename, String password) throws IOException {
+        byte[] entropy = Entropy.fromMnemonic(toString());
+        String address = deriveKeyPair().getAddress().toString();
+        EntropyFile.saveToFile(address, entropy, filename, password);
     }
 }

@@ -5,6 +5,8 @@ import org.junit.Test;
 import org.vitej.core.protocol.methods.Address;
 import org.vitej.core.utils.BytesUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -108,4 +110,24 @@ public class WalletTest {
             Assert.fail("Got exception");
         }
     }
+
+    @Test
+    public void TestSaveToFile() throws IOException {
+        String password = "123456";
+
+        try {
+            File file = File.createTempFile("wallet", "test");
+            file.delete();
+            Wallet wallet = new Wallet();
+            wallet.saveToFile(file.getAbsolutePath(), password);
+            String expectedAddress = wallet.deriveKeyPair().getAddress().toString();
+            Wallet recoveredWallet = new Wallet(file.getAbsolutePath(), password);
+            Assert.assertEquals(expectedAddress, recoveredWallet.deriveKeyPair().getAddress().toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail("Got exception");
+        }
+    }
 }
+
+

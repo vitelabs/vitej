@@ -17,9 +17,12 @@ public final class BytesUtils {
      * @return Byte array value
      */
     public static byte[] hexStringToBytes(String data) {
-        if (data == null) return EMPTY_BYTE_ARRAY;
-        if (data.startsWith("0x")) data = data.substring(2);
-        if (data.length() % 2 == 1) data = "0" + data;
+        if (data == null)
+            return EMPTY_BYTE_ARRAY;
+        if (data.startsWith("0x"))
+            data = data.substring(2);
+        if (data.length() % 2 == 1)
+            data = "0" + data;
         return Hex.decode(data);
     }
 

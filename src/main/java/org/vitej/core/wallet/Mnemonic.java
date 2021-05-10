@@ -14,7 +14,11 @@ import java.io.InputStreamReader;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static java.util.Arrays.copyOf;
 import static java.util.Collections.unmodifiableList;
@@ -122,7 +126,8 @@ public class Mnemonic {
                 ((int) bytes[skip + 1] & 0xff) << 8 |
                 (lowerBitsToRemove < 8
                         ? (int) bytes[skip + 2] & 0xff
-                        : 0)) >> lowerBitsToRemove & (1 << 11) - 1;
+                        : 0)) >> lowerBitsToRemove
+                & (1 << 11) - 1;
     }
 
     private static void writeNext11Bits(byte[] bytes, int value, int offset) {
