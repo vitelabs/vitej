@@ -24,7 +24,7 @@ public final class Wallet {
      * Initialize a wallet instance by entropy file and password
      * 
      * @param filename entropy file path
-     * @param password 
+     * @param password  password
      */
     public Wallet(String filename, String password) {
         try {
@@ -104,9 +104,9 @@ public final class Wallet {
     /**
      * save to entropy filename
      * 
-     * @param filename
-     * @param password
-     * @throws IOException
+     * @param filename file name 
+     * @param password password
+     * @throws IOException when file not exist
      */
     public void saveToFile(String filename, String password) throws IOException {
         byte[] entropy = Entropy.fromMnemonic(toString());
