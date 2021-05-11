@@ -62,7 +62,6 @@ public class VitejTest {
 
     @Test
     public void testSendTransaction() {
-        Hash sendBlockHash = null;
         try {
             String[] nn =
                     "main uncle palace wing carpet dutch electric kingdom gasp much ancient inquiry offer piece limit eager base bar tonight barrel prosper hundred man slice"
@@ -79,7 +78,7 @@ public class VitejTest {
                     true);
             Assert.assertTrue(request.getParams().size() == 1
                     && ((TransactionParams) request.getParams().get(0)).getHashRaw() != null);
-            sendBlockHash = ((TransactionParams) request.getParams().get(0)).getHashRaw();
+            ((TransactionParams) request.getParams().get(0)).getHashRaw();
             EmptyResponse response = request.send();
             Assert.assertNull(response.getError());
             System.out.println(response);

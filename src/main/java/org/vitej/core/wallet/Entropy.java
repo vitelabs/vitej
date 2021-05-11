@@ -96,10 +96,6 @@ public class Entropy {
         return Mnemonic.MnemonicLanguage.ENGLISH.getDictionary();
     }
 
-    private static boolean isMnemonicEmpty(String mnemonic) {
-        return mnemonic == null || mnemonic.trim().isEmpty();
-    }
-
     private static boolean[] nextElevenBits(boolean[] bits, int i) {
         int from = i * 11;
         int to = from + 11;
