@@ -9,8 +9,49 @@ import org.vitej.core.protocol.methods.Address;
 import org.vitej.core.protocol.methods.Hash;
 import org.vitej.core.protocol.methods.TokenId;
 import org.vitej.core.protocol.methods.enums.EBlockType;
-import org.vitej.core.protocol.methods.request.*;
-import org.vitej.core.protocol.methods.response.*;
+import org.vitej.core.protocol.methods.request.CallOffChainMethodParams;
+import org.vitej.core.protocol.methods.request.IssueTokenParams;
+import org.vitej.core.protocol.methods.request.Request;
+import org.vitej.core.protocol.methods.request.TransactionParams;
+import org.vitej.core.protocol.methods.request.VmLogFilter;
+import org.vitej.core.protocol.methods.response.AccountBlockNotification;
+import org.vitej.core.protocol.methods.response.AccountBlockResponse;
+import org.vitej.core.protocol.methods.response.AccountBlockWithHeightNotification;
+import org.vitej.core.protocol.methods.response.AccountBlocksResponse;
+import org.vitej.core.protocol.methods.response.AccountInfoResponse;
+import org.vitej.core.protocol.methods.response.CallOffChainMethodResponse;
+import org.vitej.core.protocol.methods.response.CommonResponse;
+import org.vitej.core.protocol.methods.response.ContractInfoResponse;
+import org.vitej.core.protocol.methods.response.CreateContractAddressResponse;
+import org.vitej.core.protocol.methods.response.EmptyResponse;
+import org.vitej.core.protocol.methods.response.LatestSnapshotHashResponse;
+import org.vitej.core.protocol.methods.response.NetNodeInfoResponse;
+import org.vitej.core.protocol.methods.response.NetSyncDetailResponse;
+import org.vitej.core.protocol.methods.response.NetSyncInfoResponse;
+import org.vitej.core.protocol.methods.response.PoWDifficultyResponse;
+import org.vitej.core.protocol.methods.response.PoWNonceResponse;
+import org.vitej.core.protocol.methods.response.QuotaResponse;
+import org.vitej.core.protocol.methods.response.RequiredQuotaResponse;
+import org.vitej.core.protocol.methods.response.SBPListResponse;
+import org.vitej.core.protocol.methods.response.SBPResponse;
+import org.vitej.core.protocol.methods.response.SBPRewardDetailResponse;
+import org.vitej.core.protocol.methods.response.SBPRewardResponse;
+import org.vitej.core.protocol.methods.response.SBPVoteDetailsResponse;
+import org.vitej.core.protocol.methods.response.SBPVoteListResponse;
+import org.vitej.core.protocol.methods.response.SnapshotBlockNotification;
+import org.vitej.core.protocol.methods.response.SnapshotBlockResponse;
+import org.vitej.core.protocol.methods.response.SnapshotBlocksResponse;
+import org.vitej.core.protocol.methods.response.SnapshotChainHeightResponse;
+import org.vitej.core.protocol.methods.response.StakeAmountResponse;
+import org.vitej.core.protocol.methods.response.StakeListResponse;
+import org.vitej.core.protocol.methods.response.TokenInfoListResponse;
+import org.vitej.core.protocol.methods.response.TokenInfoListWithTotalResponse;
+import org.vitej.core.protocol.methods.response.TokenInfoResponse;
+import org.vitej.core.protocol.methods.response.UnreceivedBlockNotification;
+import org.vitej.core.protocol.methods.response.VmlogInfosResponse;
+import org.vitej.core.protocol.methods.response.VmlogNotification;
+import org.vitej.core.protocol.methods.response.VmlogsResponse;
+import org.vitej.core.protocol.methods.response.VotedSBPResponse;
 import org.vitej.core.utils.BlockUtils;
 import org.vitej.core.utils.BuiltinContractUtils;
 import org.vitej.core.utils.ContractUtils;
@@ -159,10 +200,12 @@ public class Vitej implements ViteRpcMethods, ViteSubscribeMethods {
     }
 
     @Override
-    public Request<?, AccountBlocksResponse> getAccountBlocks(Address address, Hash startBlockHash, TokenId tokenId, int count) {
+    public Request<?, AccountBlocksResponse> getAccountBlocks(Address address, Hash startBlockHash, TokenId tokenId,
+            int count) {
         return new Request<>(
                 "ledger_getAccountBlocks",
-                Arrays.asList(address.toString(), startBlockHash == null ? null : startBlockHash.toString(), tokenId == null ? null : tokenId.toString(), count),
+                Arrays.asList(address.toString(), startBlockHash == null ? null : startBlockHash.toString(),
+                        tokenId == null ? null : tokenId.toString(), count),
                 rpcService,
                 AccountBlocksResponse.class);
     }
@@ -257,7 +300,7 @@ public class Vitej implements ViteRpcMethods, ViteSubscribeMethods {
     @Override
     public Request<?, SnapshotBlockResponse> getSnapshotBlockByHeight(Long height) {
         return new Request<>(
-                "ledger_getLatestSnapshotBlock",
+                "ledger_getSnapshotBlockByHeight",
                 Arrays.asList(height),
                 rpcService,
                 SnapshotBlockResponse.class);
@@ -291,7 +334,8 @@ public class Vitej implements ViteRpcMethods, ViteSubscribeMethods {
     }
 
     @Override
-    public Request<?, CreateContractAddressResponse> createContractAddress(Address address, Long height, Hash previousHash) {
+    public Request<?, CreateContractAddressResponse> createContractAddress(Address address, Long height,
+            Hash previousHash) {
         return new Request<>(
                 "contract_createContractAddress",
                 Arrays.asList(address.toString(), height.toString(), previousHash.toString()),
@@ -309,7 +353,8 @@ public class Vitej implements ViteRpcMethods, ViteSubscribeMethods {
     }
 
     @Override
-    public Request<?, CallOffChainMethodResponse> callOffChainMethod(Address address, byte[] offchainCode, byte[] data) {
+    public Request<?, CallOffChainMethodResponse> callOffChainMethod(Address address, byte[] offchainCode,
+            byte[] data) {
         return new Request<>(
                 "contract_callOffChainMethod",
                 Arrays.asList(new CallOffChainMethodParams(address, offchainCode, data)),
@@ -468,7 +513,8 @@ public class Vitej implements ViteRpcMethods, ViteSubscribeMethods {
         return generateTransaction(transaction, pubKey, false);
     }
 
-    public TransactionParams generateTransaction(TransactionParams transaction, byte[] pubKey, Boolean autoPoW) throws IOException {
+    public TransactionParams generateTransaction(TransactionParams transaction, byte[] pubKey, Boolean autoPoW)
+            throws IOException {
         transaction.setAddress(Address.publicKeyToAddress(pubKey));
         transaction.setPublicKey(pubKey);
         if (transaction.getBlockType() == null) {
@@ -482,7 +528,7 @@ public class Vitej implements ViteRpcMethods, ViteSubscribeMethods {
             if (EBlockType.SEND_CREATE.getValue() == transaction.getBlockType()) {
                 Address contractAddress = ContractUtils.getNewContractAddress(transaction);
                 Preconditions.checkArgument(transaction.getToAddressRaw() == null
-                                || contractAddress.equals(transaction.getToAddressRaw()),
+                        || contractAddress.equals(transaction.getToAddressRaw()),
                         "to address");
                 transaction.setToAddress(contractAddress);
                 transaction.setFee(CommonConstants.CREATE_CONTRACT_FEE);
@@ -507,8 +553,10 @@ public class Vitej implements ViteRpcMethods, ViteSubscribeMethods {
             transaction.setToAddress(CommonConstants.EMPTY_ADDRESS);
             Preconditions.checkNotNull(transaction.getSendBlockHashRaw(), "send block hash");
             AccountBlockResponse sendBlockResponse = getAccountBlockByHash(transaction.getSendBlockHashRaw()).send();
-            Preconditions.checkState(sendBlockResponse.getError() == null && sendBlockResponse.getResult() != null, "send block not exist");
-            Preconditions.checkState(sendBlockResponse.getResult().getToAddress().equals(transaction.getAddressRaw()), "send block toAddress and key pair address not match");
+            Preconditions.checkState(sendBlockResponse.getError() == null && sendBlockResponse.getResult() != null,
+                    "send block not exist");
+            Preconditions.checkState(sendBlockResponse.getResult().getToAddress().equals(transaction.getAddressRaw()),
+                    "send block toAddress and key pair address not match");
             Preconditions.checkArgument(
                     transaction.getTokenIdRaw() == null
                             || transaction.getTokenIdRaw().equals(CommonConstants.EMPTY_TOKENID),
@@ -533,7 +581,7 @@ public class Vitej implements ViteRpcMethods, ViteSubscribeMethods {
             transaction.setFee(BigInteger.ZERO);
         }
         if (transaction.getDataRaw() == null) {
-            transaction.setData(new byte[]{});
+            transaction.setData(new byte[] {});
         }
         Preconditions.checkArgument(
                 (transaction.getDifficultyRaw() == null && transaction.getNonceRaw() == null)
@@ -545,7 +593,8 @@ public class Vitej implements ViteRpcMethods, ViteSubscribeMethods {
                 Preconditions.checkArgument(response.getError() == null, response.getError());
                 if (response.getResult().getDifficulty() != null) {
                     transaction.setDifficulty(response.getResult().getDifficulty());
-                    PoWNonceResponse nonceResponse = getPoWNonce(transaction.getDifficultyRaw(), BlockUtils.getPoWData(transaction)).send();
+                    PoWNonceResponse nonceResponse =
+                            getPoWNonce(transaction.getDifficultyRaw(), BlockUtils.getPoWData(transaction)).send();
                     Preconditions.checkArgument(nonceResponse.getError() == null, nonceResponse.getError());
                     transaction.setNonce(nonceResponse.getNonce());
                 }
@@ -578,12 +627,14 @@ public class Vitej implements ViteRpcMethods, ViteSubscribeMethods {
     }
 
     @Override
-    public Request<?, EmptyResponse> sendTransaction(KeyPair keyPair, TransactionParams transaction) throws IOException {
+    public Request<?, EmptyResponse> sendTransaction(KeyPair keyPair, TransactionParams transaction)
+            throws IOException {
         return sendTransaction(keyPair, transaction, false);
     }
 
     @Override
-    public Request<?, EmptyResponse> selfSendTransaction(TransactionParams transaction, Boolean autoPoW) throws IOException {
+    public Request<?, EmptyResponse> selfSendTransaction(TransactionParams transaction, Boolean autoPoW)
+            throws IOException {
         Preconditions.checkNotNull(keyPair);
         return sendTransaction(keyPair, transaction, autoPoW);
     }
@@ -594,7 +645,8 @@ public class Vitej implements ViteRpcMethods, ViteSubscribeMethods {
     }
 
     @Override
-    public Request<?, PoWDifficultyResponse> getPoWDifficulty(TransactionParams transaction) throws IOException, IllegalArgumentException {
+    public Request<?, PoWDifficultyResponse> getPoWDifficulty(TransactionParams transaction)
+            throws IOException, IllegalArgumentException {
         if (transaction.getBlockType() == null) {
             transaction.setBlockType(EBlockType.SEND_CALL.getValue());
         }
@@ -628,7 +680,8 @@ public class Vitej implements ViteRpcMethods, ViteSubscribeMethods {
     }
 
     @Override
-    public Request<?, EmptyResponse> stakeForQuota(KeyPair keyPair, Address beneficiary, BigInteger amount) throws IOException {
+    public Request<?, EmptyResponse> stakeForQuota(KeyPair keyPair, Address beneficiary, BigInteger amount)
+            throws IOException {
         Preconditions.checkArgument(amount.compareTo(BuiltinContracts.MINIMUM_STAKE_FOR_QUOTA_AMOUNT) >= 0);
         return sendTransaction(keyPair,
                 new TransactionParams(
@@ -645,11 +698,13 @@ public class Vitej implements ViteRpcMethods, ViteSubscribeMethods {
                         BuiltinContracts.ADDRESS_QUOTA_CONTRACT,
                         CommonConstants.VITE_TOKEN_ID,
                         BigInteger.ZERO,
-                        BuiltinContracts.ABI_QUOTA_CONTRACT.encodeFunction("CancelQuotaStaking", sendBlockHash.toString())));
+                        BuiltinContracts.ABI_QUOTA_CONTRACT.encodeFunction("CancelQuotaStaking",
+                                sendBlockHash.toString())));
     }
 
     @Override
-    public Request<?, EmptyResponse> registerSBP(KeyPair keyPair, String sbpName, Address blockProducingAddress, Address rewardWithdrawAddress) throws IOException {
+    public Request<?, EmptyResponse> registerSBP(KeyPair keyPair, String sbpName, Address blockProducingAddress,
+            Address rewardWithdrawAddress) throws IOException {
         String checkResult = BuiltinContractUtils.checkSBPName(sbpName);
         Preconditions.checkArgument(StringUtils.isEmpty(checkResult), checkResult);
         return sendTransaction(keyPair,
@@ -657,27 +712,32 @@ public class Vitej implements ViteRpcMethods, ViteSubscribeMethods {
                         BuiltinContracts.ADDRESS_GOVERNANCE_CONTRACT,
                         CommonConstants.VITE_TOKEN_ID,
                         BuiltinContracts.REGISTER_SBP_STAKE_AMOUNT,
-                        BuiltinContracts.ABI_GOVERNANCE_CONTRACT.encodeFunction("RegisterSBP", sbpName, blockProducingAddress, rewardWithdrawAddress)));
+                        BuiltinContracts.ABI_GOVERNANCE_CONTRACT.encodeFunction("RegisterSBP", sbpName,
+                                blockProducingAddress, rewardWithdrawAddress)));
     }
 
     @Override
-    public Request<?, EmptyResponse> updateSBPBlockProducingAddress(KeyPair keyPair, String sbpName, Address blockProducingAddress) throws IOException {
+    public Request<?, EmptyResponse> updateSBPBlockProducingAddress(KeyPair keyPair, String sbpName,
+            Address blockProducingAddress) throws IOException {
         return sendTransaction(keyPair,
                 new TransactionParams(
                         BuiltinContracts.ADDRESS_GOVERNANCE_CONTRACT,
                         CommonConstants.VITE_TOKEN_ID,
                         BigInteger.ZERO,
-                        BuiltinContracts.ABI_GOVERNANCE_CONTRACT.encodeFunction("UpdateSBPBlockProducingAddress", sbpName, blockProducingAddress)));
+                        BuiltinContracts.ABI_GOVERNANCE_CONTRACT.encodeFunction("UpdateSBPBlockProducingAddress",
+                                sbpName, blockProducingAddress)));
     }
 
     @Override
-    public Request<?, EmptyResponse> updateSBPRewardWithdrawAddress(KeyPair keyPair, String sbpName, Address rewardWithdrawAddress) throws IOException {
+    public Request<?, EmptyResponse> updateSBPRewardWithdrawAddress(KeyPair keyPair, String sbpName,
+            Address rewardWithdrawAddress) throws IOException {
         return sendTransaction(keyPair,
                 new TransactionParams(
                         BuiltinContracts.ADDRESS_GOVERNANCE_CONTRACT,
                         CommonConstants.VITE_TOKEN_ID,
                         BigInteger.ZERO,
-                        BuiltinContracts.ABI_GOVERNANCE_CONTRACT.encodeFunction("UpdateSBPRewardWithdrawAddress", sbpName, rewardWithdrawAddress)));
+                        BuiltinContracts.ABI_GOVERNANCE_CONTRACT.encodeFunction("UpdateSBPRewardWithdrawAddress",
+                                sbpName, rewardWithdrawAddress)));
     }
 
     @Override
@@ -691,13 +751,15 @@ public class Vitej implements ViteRpcMethods, ViteSubscribeMethods {
     }
 
     @Override
-    public Request<?, EmptyResponse> withdrawSBPReward(KeyPair keyPair, String sbpName, Address receiveAddress) throws IOException {
+    public Request<?, EmptyResponse> withdrawSBPReward(KeyPair keyPair, String sbpName, Address receiveAddress)
+            throws IOException {
         return sendTransaction(keyPair,
                 new TransactionParams(
                         BuiltinContracts.ADDRESS_GOVERNANCE_CONTRACT,
                         CommonConstants.VITE_TOKEN_ID,
                         BigInteger.ZERO,
-                        BuiltinContracts.ABI_GOVERNANCE_CONTRACT.encodeFunction("WithdrawSBPReward", sbpName, receiveAddress)));
+                        BuiltinContracts.ABI_GOVERNANCE_CONTRACT.encodeFunction("WithdrawSBPReward", sbpName,
+                                receiveAddress)));
     }
 
     @Override
@@ -744,14 +806,16 @@ public class Vitej implements ViteRpcMethods, ViteSubscribeMethods {
     }
 
     @Override
-    public Request<?, EmptyResponse> reIssue(KeyPair keyPair, TokenId tokenId, BigInteger amount, Address receiveAddress) throws IOException {
+    public Request<?, EmptyResponse> reIssue(KeyPair keyPair, TokenId tokenId, BigInteger amount,
+            Address receiveAddress) throws IOException {
         return sendTransaction(keyPair,
                 new TransactionParams()
                         .setBlockType(EBlockType.SEND_CALL.getValue())
                         .setToAddress(BuiltinContracts.ADDRESS_ASSET_CONTRACT)
                         .setAmount(BigInteger.ZERO)
                         .setTokenId(CommonConstants.VITE_TOKEN_ID)
-                        .setData(BuiltinContracts.ABI_ASSET_CONTRACT.encodeFunction("ReIssue", tokenId, amount, receiveAddress)));
+                        .setData(BuiltinContracts.ABI_ASSET_CONTRACT.encodeFunction("ReIssue", tokenId, amount,
+                                receiveAddress)));
     }
 
     @Override
@@ -766,14 +830,16 @@ public class Vitej implements ViteRpcMethods, ViteSubscribeMethods {
     }
 
     @Override
-    public Request<?, EmptyResponse> transferOwnership(KeyPair keyPair, TokenId tokenId, Address newOwner) throws IOException {
+    public Request<?, EmptyResponse> transferOwnership(KeyPair keyPair, TokenId tokenId, Address newOwner)
+            throws IOException {
         return sendTransaction(keyPair,
                 new TransactionParams()
                         .setBlockType(EBlockType.SEND_CALL.getValue())
                         .setToAddress(BuiltinContracts.ADDRESS_ASSET_CONTRACT)
                         .setAmount(BigInteger.ZERO)
                         .setTokenId(CommonConstants.VITE_TOKEN_ID)
-                        .setData(BuiltinContracts.ABI_ASSET_CONTRACT.encodeFunction("TransferOwnership", tokenId, newOwner)));
+                        .setData(BuiltinContracts.ABI_ASSET_CONTRACT.encodeFunction("TransferOwnership", tokenId,
+                                newOwner)));
     }
 
     @Override
@@ -800,7 +866,8 @@ public class Vitej implements ViteRpcMethods, ViteSubscribeMethods {
             }
         } else if (transaction.getPreviousHashRaw() == null) {
             if (transaction.getHeightRaw() > 1) {
-                AccountBlockResponse response = getAccountBlockByHeight(transaction.getAddressRaw(), transaction.getHeightRaw() - 1).send();
+                AccountBlockResponse response =
+                        getAccountBlockByHeight(transaction.getAddressRaw(), transaction.getHeightRaw() - 1).send();
                 Preconditions.checkArgument(response.getError() == null, response.getError());
                 Preconditions.checkNotNull(response.getResult(), "invalid account height");
                 transaction.setPreviousHash(response.getResult().getHash());
