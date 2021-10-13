@@ -1,7 +1,7 @@
 # Useful Links
 
 ## Development Node
-See [Run a Local Dev Node](../../tutorial/contract/testnode.html) - a guide to setup a local development node.
+See [Run a Local Dev Node](../../go-vite/tutorial/node/install.html) - a guide to setup a local development node.
 
 ## DAG Ledger
 
