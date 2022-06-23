@@ -27,7 +27,7 @@ Download [ViteJ SDK](https://github.com/vitelabs/vitej)
 ### Gradle
 
 ```
-implementation 'org.vite:vitej:1.1.0'
+implementation 'org.vite:vitej:1.1.4'
 implementation 'org.vite:vitej-dependencies:1.1.0'
 ```
 
