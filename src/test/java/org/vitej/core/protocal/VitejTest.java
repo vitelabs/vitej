@@ -433,7 +433,7 @@ public class VitejTest {
     @Test
     public void testGetSnapshotBlockByHeight() {
         try {
-            SnapshotBlockResponse response = vitej.getSnapshotBlockByHeight(1L).send();
+            SnapshotBlockResponse response = vitej.getSnapshotBlockByHeight(2L).send();
             Assert.assertNull(response.getError());
         } catch (Exception e) {
             e.printStackTrace();
