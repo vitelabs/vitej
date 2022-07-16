@@ -128,12 +128,29 @@ public class Abi extends ArrayList<Abi.Entry> {
      * Decode offchain function outputs
      *
      * @param name    Offchain function name
-     * @param encoded Encoded offchain function params, return value of callOffChainMethod
+     * @param encoded Encoded offchain function output params. It's the return value of Vitej.callOffChainMethod
      * @return Decoded offchain function outputs
      */
     public List<?> decodeOffchainOutput(String name, byte[] encoded) {
         Predicate<Offchain> p = (v1) -> v1.name.equals(name);
         Abi.Offchain f = find(Offchain.class, Abi.Entry.Type.offchain, p);
+        if (f != null) {
+            return f.decodeOutput(encoded);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Decode view function outputs
+     *
+     * @param name    Function name. Must be a view or pure function.
+     * @param encoded Encoded function's output params. It's the return value of Vitej.queryContractState
+     * @return Decoded function outputs
+     */
+    public List<?> decodeFunctionOutput(String name, byte[] encoded) {
+        Predicate<Function> p = (v1) -> v1.name.equals(name);
+        Abi.Function f = find(Function.class, Entry.Type.function, p);
         if (f != null) {
             return f.decodeOutput(encoded);
         } else {
@@ -375,7 +392,7 @@ public class Abi extends ArrayList<Abi.Entry> {
                 case function:
                 case message:
                 case fallback:
-                    result = new Function(name, inputs, payable, type);
+                    result = new Function(name, inputs, outputs, payable, type);
                     break;
                 case event:
                     result = new Event(anonymous, name, inputs);
@@ -484,12 +501,16 @@ public class Abi extends ArrayList<Abi.Entry> {
 
         private static final int ENCODED_SIGN_LENGTH = 4;
 
-        public Function(String name, List<Param> inputs, Boolean payable, Type type) {
-            super(null, name, inputs, null, type, payable);
+        public Function(String name, List<Param> inputs, List<Param> outputs, Boolean payable, Type type) {
+            super(null, name, inputs, outputs, type, payable);
         }
 
         public List<?> decode(byte[] encoded) {
             return Param.decodeList(inputs, subarray(encoded, ENCODED_SIGN_LENGTH, encoded.length));
+        }
+
+        public List<?> decodeOutput(byte[] encoded) {
+            return Param.decodeList(outputs, encoded);
         }
 
         public byte[] encode(Object... args) {
@@ -507,7 +528,7 @@ public class Abi extends ArrayList<Abi.Entry> {
 
         @Override
         public String toString() {
-            return format("onMessage %s(%s)", name, join(inputs, ", "));
+            return format("function %s(%s)", name, join(inputs, ", "));
         }
     }
 

@@ -74,9 +74,9 @@ public abstract class SolidityType {
 
     public static abstract class ArrayType extends SolidityType {
         public static ArrayType getType(String typeName) {
-            int idx1 = typeName.indexOf("[");
-            int idx2 = typeName.indexOf("]", idx1);
-            if (idx1 + 1 == idx2) {
+            int idx1 = typeName.lastIndexOf("]");
+            int idx2 = typeName.lastIndexOf("[", idx1);
+            if (idx1 - 1 == idx2) {
                 return new DynamicArrayType(typeName);
             } else {
                 return new StaticArrayType(typeName);
@@ -87,11 +87,9 @@ public abstract class SolidityType {
 
         public ArrayType(String name) {
             super(name);
-            int idx = name.indexOf("[");
-            String st = name.substring(0, idx);
-            int idx2 = name.indexOf("]", idx);
-            String subDim = idx2 + 1 == name.length() ? "" : name.substring(idx2 + 1);
-            elementType = SolidityType.getType(st + subDim);
+            int idx = name.lastIndexOf("[");
+            String sub = name.substring(0, idx);
+            elementType = SolidityType.getType(sub);
         }
 
         public SolidityType getElementType() {
@@ -168,9 +166,9 @@ public abstract class SolidityType {
 
         public StaticArrayType(String name) {
             super(name);
-            int idx1 = name.indexOf("[");
-            int idx2 = name.indexOf("]", idx1);
-            String dim = name.substring(idx1 + 1, idx2);
+            int idx1 = name.lastIndexOf("]");
+            int idx2 = name.lastIndexOf("[", idx1);
+            String dim = name.substring(idx2 + 1, idx1);
             size = Integer.parseInt(dim);
         }
 
@@ -187,10 +185,16 @@ public abstract class SolidityType {
         }
 
         @Override
-        public Object[] decode(byte[] encoded, int offset) {
+        public Object[] decode(byte[] encoded, int origOffset) {
             Object[] result = new Object[size];
+            int offset = origOffset;
             for (int i = 0; i < size; i++) {
-                result[i] = elementType.decode(encoded, offset + i * elementType.getFixedSize());
+                if (elementType.isDynamicType()) {
+                    result[i] = elementType.decode(encoded, origOffset + IntType.decodeInt(encoded, offset).intValue());
+                } else {
+                    result[i] = elementType.decode(encoded, offset);
+                }
+                offset += elementType.getFixedSize();
             }
 
             return result;
@@ -198,8 +202,16 @@ public abstract class SolidityType {
 
         @Override
         public int getFixedSize() {
-            // return negative if elementType is dynamic
-            return elementType.getFixedSize() * size;
+            if (elementType.isDynamicType()) {
+                return super.getFixedSize();
+            } else {
+                return elementType.getFixedSize() * size;
+            }
+        }
+
+        @Override
+        public boolean isDynamicType() {
+            return elementType.isDynamicType();
         }
     }
 
