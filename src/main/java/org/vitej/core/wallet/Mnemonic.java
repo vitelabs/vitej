@@ -1,6 +1,7 @@
 package org.vitej.core.wallet;
 
 import com.google.common.base.Preconditions;
+import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.crypto.digests.SHA512Digest;
 import org.bouncycastle.crypto.macs.HMac;
 import org.bouncycastle.crypto.params.KeyParameter;
@@ -35,7 +36,7 @@ public class Mnemonic {
     }
 
     public static List<String> createBip39Mnemonic(int length, MnemonicLanguage language) {
-        Preconditions.checkArgument(length == 24, "Invalid seed length");
+        Preconditions.checkArgument(length == 12 || length == 24, "Invalid seed length. Only 12 or 24 word mnemonic is supported.");
 
         byte[] seed = generateSeed(32 * length / 3 / 8);
 
@@ -73,15 +74,11 @@ public class Mnemonic {
             return false;
         }
 
-        byte[] seedWithChecksum = extractSeedWithChecksum(mnemonic, language);
-        byte[] seed = extractSeed(seedWithChecksum);
-
-        byte expectedChecksum = checksum(seed);
         try {
-            return expectedChecksum == seedWithChecksum[seedWithChecksum.length - 1];
-        } finally {
-            wipe(seedWithChecksum);
-            wipe(seed);
+            Entropy.fromMnemonic(StringUtils.join(mnemonic, " "));
+            return true;
+        } catch (Exception ex) {
+            return false;
         }
     }
 
