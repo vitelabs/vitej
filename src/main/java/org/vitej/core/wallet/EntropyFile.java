@@ -79,8 +79,8 @@ public class EntropyFile {
 
         byte[] encryptKey = Arrays.copyOfRange(derivedKey, 0, 32);
 
-        byte[] cipherText = performCipherOperation(Cipher.ENCRYPT_MODE, iv, encryptKey, BytesUtils.leftPadBytes(entropy, 32));
-
+//        byte[] cipherText = performCipherOperation(Cipher.ENCRYPT_MODE, iv, encryptKey, BytesUtils.leftPadBytes(entropy, 32));
+        byte[] cipherText = performCipherOperation(Cipher.ENCRYPT_MODE, iv, encryptKey, entropy);
 
         ScryptParams scryptParams = new ScryptParams()
                 .setN(StandardScryptN)

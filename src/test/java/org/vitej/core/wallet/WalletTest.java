@@ -34,7 +34,50 @@ public class WalletTest {
     }
 
     @Test
-    public void testNewWalletFromMnemonic() {
+    public void testNewWalletWith12Mnemonic() {
+        try {
+            Wallet w = new Wallet(12, Mnemonic.MnemonicLanguage.ENGLISH);
+            Assert.assertNotNull(w);
+            KeyPair keyPairDefault = w.deriveKeyPair();
+            Assert.assertNotNull(keyPairDefault);
+            Assert.assertTrue(Address.isValid(keyPairDefault.getAddress().toString()));
+            Assert.assertTrue(keyPairDefault.getPrivateKey().length > 0);
+            Assert.assertTrue(keyPairDefault.getPublicKey().length > 0);
+            KeyPair keyPair0 = w.deriveKeyPair(0);
+            Assert.assertEquals(keyPair0.getAddress().toString(),
+                    keyPairDefault.getAddress().toString());
+            KeyPair keyPair1 = w.deriveKeyPair(1);
+            Assert.assertNotEquals(keyPair0.getAddress().toString(),
+                    keyPair1.getAddress().toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail("Got exception");
+        }
+    }
+
+    @Test
+    public void testNewWalletFrom12Mnemonic() {
+        try {
+            List<String> mnemonic = Arrays.asList("tank", "you", "unfold", "keen", "weapon", "world",
+                    "robust", "sustain", "nothing", "orphan", "divide", "subway");
+            Wallet w = new Wallet(mnemonic);
+            Assert.assertNotNull(w);
+            KeyPair keyPairDefault = w.deriveKeyPair(1);
+            Assert.assertNotNull(keyPairDefault);
+            Assert.assertEquals("vite_1345dddcfa6e375b874c046555ed3b0eebbb2a2f0f2ceadf57",
+                    keyPairDefault.getAddress().toString());
+            Assert.assertEquals("c33a5e6274b6d0f0107b290b79d322fda6424ffef0cf41ab7a3e1151194d091c",
+                    BytesUtils.bytesToHexString(keyPairDefault.getPrivateKey()));
+            Assert.assertEquals("86c58e2e8251f215b6821ed0f9732f7d47de3de7884c8e5f60c1335a4df0a4a2",
+                    BytesUtils.bytesToHexString(keyPairDefault.getPublicKey()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail("Got exception");
+        }
+    }
+
+    @Test
+    public void testNewWalletFrom24Mnemonic() {
         try {
             List<String> mnemonic = Arrays.asList("alarm", "canal", "scheme", "actor", "left",
                     "length", "bracket", "slush", "tuna", "garage", "prepare", "scout", "school",
@@ -122,6 +165,31 @@ public class WalletTest {
             wallet.saveToFile(file.getAbsolutePath(), password);
             String expectedAddress = wallet.deriveKeyPair().getAddress().toString();
             Wallet recoveredWallet = new Wallet(file.getAbsolutePath(), password);
+            Assert.assertEquals(expectedAddress, recoveredWallet.deriveKeyPair().getAddress().toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail("Got exception");
+        }
+    }
+
+    @Test
+    public void TestSaveToFileWith12Mnemonic() throws IOException {
+        String password = "123456";
+
+        try {
+            File file = File.createTempFile("wallet", "test");
+            file.delete();
+            Wallet wallet = new Wallet(12, Mnemonic.MnemonicLanguage.ENGLISH);
+            wallet.saveToFile(file.getAbsolutePath(), password);
+            byte[] entropy = Entropy.fromMnemonic(wallet.toString());
+            byte[] privateKey = wallet.deriveKeyPair().getPrivateKey();
+            byte[] publicKey = wallet.deriveKeyPair().getPublicKey();
+            String expectedAddress = wallet.deriveKeyPair().getAddress().toString();
+
+            Wallet recoveredWallet = new Wallet(file.getAbsolutePath(), password);
+            Assert.assertArrayEquals(entropy, EntropyFile.loadFromFile(file.getAbsolutePath(), password));
+            Assert.assertArrayEquals(privateKey, recoveredWallet.deriveKeyPair().getPrivateKey());
+            Assert.assertArrayEquals(publicKey, recoveredWallet.deriveKeyPair().getPublicKey());
             Assert.assertEquals(expectedAddress, recoveredWallet.deriveKeyPair().getAddress().toString());
         } catch (Exception e) {
             e.printStackTrace();
