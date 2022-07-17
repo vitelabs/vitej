@@ -286,6 +286,14 @@ public interface ViteRpcMethods {
     Request<?, CallOffChainMethodResponse> callOffChainMethod(Address address, byte[] offchainCode, byte[] data);
 
     /**
+     * Query contract's public state or call a view function
+     *
+     * @param address      Address of contract
+     * @return Encoded return value. Use decode methods to get decoded value
+     */
+    public Request<?, QueryContractResponse> queryContractState(Address address, byte[] data);
+
+    /**
      * Return quota balance by account
      *
      * @param address Address of account

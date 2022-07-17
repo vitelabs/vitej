@@ -14,44 +14,7 @@ import org.vitej.core.protocol.methods.request.IssueTokenParams;
 import org.vitej.core.protocol.methods.request.Request;
 import org.vitej.core.protocol.methods.request.TransactionParams;
 import org.vitej.core.protocol.methods.request.VmLogFilter;
-import org.vitej.core.protocol.methods.response.AccountBlockNotification;
-import org.vitej.core.protocol.methods.response.AccountBlockResponse;
-import org.vitej.core.protocol.methods.response.AccountBlockWithHeightNotification;
-import org.vitej.core.protocol.methods.response.AccountBlocksResponse;
-import org.vitej.core.protocol.methods.response.AccountInfoResponse;
-import org.vitej.core.protocol.methods.response.CallOffChainMethodResponse;
-import org.vitej.core.protocol.methods.response.CommonResponse;
-import org.vitej.core.protocol.methods.response.ContractInfoResponse;
-import org.vitej.core.protocol.methods.response.CreateContractAddressResponse;
-import org.vitej.core.protocol.methods.response.EmptyResponse;
-import org.vitej.core.protocol.methods.response.LatestSnapshotHashResponse;
-import org.vitej.core.protocol.methods.response.NetNodeInfoResponse;
-import org.vitej.core.protocol.methods.response.NetSyncDetailResponse;
-import org.vitej.core.protocol.methods.response.NetSyncInfoResponse;
-import org.vitej.core.protocol.methods.response.PoWDifficultyResponse;
-import org.vitej.core.protocol.methods.response.PoWNonceResponse;
-import org.vitej.core.protocol.methods.response.QuotaResponse;
-import org.vitej.core.protocol.methods.response.RequiredQuotaResponse;
-import org.vitej.core.protocol.methods.response.SBPListResponse;
-import org.vitej.core.protocol.methods.response.SBPResponse;
-import org.vitej.core.protocol.methods.response.SBPRewardDetailResponse;
-import org.vitej.core.protocol.methods.response.SBPRewardResponse;
-import org.vitej.core.protocol.methods.response.SBPVoteDetailsResponse;
-import org.vitej.core.protocol.methods.response.SBPVoteListResponse;
-import org.vitej.core.protocol.methods.response.SnapshotBlockNotification;
-import org.vitej.core.protocol.methods.response.SnapshotBlockResponse;
-import org.vitej.core.protocol.methods.response.SnapshotBlocksResponse;
-import org.vitej.core.protocol.methods.response.SnapshotChainHeightResponse;
-import org.vitej.core.protocol.methods.response.StakeAmountResponse;
-import org.vitej.core.protocol.methods.response.StakeListResponse;
-import org.vitej.core.protocol.methods.response.TokenInfoListResponse;
-import org.vitej.core.protocol.methods.response.TokenInfoListWithTotalResponse;
-import org.vitej.core.protocol.methods.response.TokenInfoResponse;
-import org.vitej.core.protocol.methods.response.UnreceivedBlockNotification;
-import org.vitej.core.protocol.methods.response.VmlogInfosResponse;
-import org.vitej.core.protocol.methods.response.VmlogNotification;
-import org.vitej.core.protocol.methods.response.VmlogsResponse;
-import org.vitej.core.protocol.methods.response.VotedSBPResponse;
+import org.vitej.core.protocol.methods.response.*;
 import org.vitej.core.utils.BlockUtils;
 import org.vitej.core.utils.BuiltinContractUtils;
 import org.vitej.core.utils.ContractUtils;
@@ -360,6 +323,16 @@ public class Vitej implements ViteRpcMethods, ViteSubscribeMethods {
                 Arrays.asList(new CallOffChainMethodParams(address, offchainCode, data)),
                 rpcService,
                 CallOffChainMethodResponse.class);
+    }
+
+
+    @Override
+    public Request<?, QueryContractResponse> queryContractState(Address address, byte[] data) {
+        return new Request<>(
+                "contract_query",
+                Arrays.asList(new CallOffChainMethodParams(address, null, data)),
+                rpcService,
+                QueryContractResponse.class);
     }
 
     @Override
