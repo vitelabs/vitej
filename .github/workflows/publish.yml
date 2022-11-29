@@ -2,11 +2,19 @@ name: Publish
 
 # Run workflow on commits to the `master` branch
 on:
-  push:
-    branches:
-      - master
-    paths-ignore:
-      - 'docs/**'
+#  push:
+#    branches:
+#      - master
+#    paths-ignore:
+#      - 'docs/**'
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Choose an branch to deploy'
+        required: true
+        default: 'master'
+      paths-ignore:
+        - 'docs/**'
 
 jobs:
   release:
