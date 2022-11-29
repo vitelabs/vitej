@@ -31,8 +31,8 @@ public class AbiTest {
         Abi abi = Abi.fromJson(
                 "[{ \"type\" : \"function\", \"name\" : \"send\", \"constant\" : false, \"inputs\" : [ { \"name\" : \"amount\", \"type\" : \"uint256\" } ] }]");
         byte[] encodedParams = BytesUtils.hexStringToBytes(
-                "d6f47d63000000000000000000000000000000000000000000000000000000000000007b");
-        BigInteger amount = new BigInteger("123");
+                "d6f47d6300000000000000000000000000000000000000000000000006f05b59d3b20000");
+        BigInteger amount = new BigInteger("500000000000000000");
         Assert.assertArrayEquals(
                 encodedParams,
                 abi.encodeFunction("send", amount));
@@ -1276,6 +1276,26 @@ public class AbiTest {
         List<?> decodedOutputParams = abi.decodeFunctionOutput("strArr3DStaticWithInput", encodedOutputParams);
         Assert.assertTrue(decodedOutputParams.size() == 1);
         Assert.assertArrayEquals(name, (Object[]) decodedOutputParams.get(0));
+    }
+
+    @Test
+    public void testAbi_SimpleStructNotSupport_EncodeAndDecode() {
+        Assert.assertThrows("Unknown type: tuple", Exception.class, () -> {
+            Abi abi = Abi.fromJson("[{\"inputs\":[],\"name\":\"getBet\",\"outputs\":[{\"components\":[{\"internalType\":\"uint256\",\"name\":\"lowerLimit\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"upperLimit\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"tipPer\",\"type\":\"uint256\"}],\"internalType\":\"struct Hello.BetLimit\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"pure\",\"type\":\"function\"}]");
+            String[][][] name = { { { "alice" }, { "alice" }, { "alice" } },
+                    { { "alice" }, { "alice" }, { "alice" } } };
+            byte[] encodedOutputParams = BytesUtils.hexStringToBytes(
+                    "0000000000000000000000000000000000000000000000000000000000000001" +
+                            "0000000000000000000000000000000000000000000000000000000000000001" +
+                            "0000000000000000000000000000000000000000000000000000000000000001");
+            Abi.Function f = abi.findFunctionByName("getBet");
+            byte[] encodedArgument = f.encodeArguments(Arrays.asList(name));
+//            System.out.println(BytesUtils.bytesToHexString(encodedArgument));
+            Assert.assertArrayEquals(encodedOutputParams, encodedArgument);
+            List<?> decodedOutputParams = abi.decodeFunctionOutput("getBet", encodedOutputParams);
+//            Assert.assertTrue(decodedOutputParams.size() == 1);
+//            Assert.assertArrayEquals(name, (Object[]) decodedOutputParams.get(0));
+        });
     }
 
     @Test
